@@ -116,6 +116,34 @@ const NEURAL: [number, number][] = [
   [5, 8]
 ];
 
+const VISUAL_VERTS = VERTS;
+const DENSE_EDGES = EDGES;
+const BEAM_COLORS = [
+  [255, 78, 78],
+  [255, 151, 54],
+  [255, 213, 79],
+  [91, 220, 119],
+  [71, 200, 255],
+  [117, 117, 255],
+  [207, 98, 255]
+] as const;
+
+function rgbaColor([r, g, b]: readonly [number, number, number], alpha: number) {
+  return `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
+}
+
+function normalizeVector([x, y, z]: [number, number, number]): [number, number, number] {
+  const length = Math.hypot(x, y, z) || 1;
+  return [x / length, y / length, z / length];
+}
+
+function crossVector(
+  [ax, ay, az]: [number, number, number],
+  [bx, by, bz]: [number, number, number]
+): [number, number, number] {
+  return [ay * bz - az * by, az * bx - ax * bz, ax * by - ay * bx];
+}
+
 function rotateY(v: [number, number, number], angle: number): [number, number, number] {
   const [x, y, z] = v;
   return [x * Math.cos(angle) + z * Math.sin(angle), y, -x * Math.sin(angle) + z * Math.cos(angle)];
@@ -129,7 +157,10 @@ function rotateX(v: [number, number, number], angle: number): [number, number, n
 function GeometricArtifact() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isInteractingRef = useRef(false);
+  const isDraggingRef = useRef(false);
   const cursorTargetRef = useRef({ x: 0, y: 0 });
+  const lastPointerRef = useRef({ x: 0, y: 0 });
+  const rotationVelocityRef = useRef({ x: 0, y: 0 });
   const scrollVelocityRef = useRef(0);
 
   useEffect(() => {
@@ -152,8 +183,45 @@ function GeometricArtifact() {
 
     ctx.scale(dpr, dpr);
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const pulses: { edge: number; life: number }[] = [];
-    let nextPulse = 60;
+    const beamEdges = [...DENSE_EDGES, ...NEURAL];
+    const vertexMotion = VISUAL_VERTS.map((vertex, index) => {
+      const radialAxis = normalizeVector(vertex);
+      const seedAxis: [number, number, number] = Math.abs(radialAxis[1]) > 0.82 ? [1, 0, 0] : [0, 1, 0];
+      const tangentA = normalizeVector(crossVector(radialAxis, seedAxis));
+      const tangentB = normalizeVector(crossVector(radialAxis, tangentA));
+      const direction = index % 2 === 0 ? 1 : -1;
+
+      return {
+        phase: Math.random() * Math.PI * 2,
+        secondaryPhase: Math.random() * Math.PI * 2,
+        orbitPhase: Math.random() * Math.PI * 2,
+        driftPhaseX: Math.random() * Math.PI * 2,
+        driftPhaseY: Math.random() * Math.PI * 2,
+        driftPhaseZ: Math.random() * Math.PI * 2,
+        amp: 0.075 + Math.random() * 0.08,
+        orbitAmp: 0.085 + Math.random() * 0.075,
+        drift: 0.006 + Math.random() * 0.012,
+        speed: 1.05 + Math.random() * 1.35,
+        orbitSpeed: (1.05 + Math.random() * 1.1) * direction,
+        breatheSpeed: 0.7 + Math.random() * 0.55,
+        driftSpeed: 0.7 + Math.random() * 0.82,
+        tangentA,
+        tangentB
+      };
+    });
+    const pulses: {
+      edge: number;
+      progress: number;
+      speed: number;
+      width: number;
+      hitFired: boolean;
+      colorIndex: number;
+    }[] = [];
+    const vertexBursts = VISUAL_VERTS.map(() => 0);
+    const vertexBurstTargets = VISUAL_VERTS.map(() => 0);
+    const vertexBurstColorIndexes = VISUAL_VERTS.map(() => 0);
+    let nextPulse = 18;
+    let nextPulseColorIndex = 0;
     let t = 0;
     let ryCurrent = 0;
     let rxCurrent = 0.22;
@@ -172,18 +240,48 @@ function GeometricArtifact() {
       ctx.clearRect(0, 0, size, size);
 
       ryCurrent += scrollVelocityRef.current;
+      ryCurrent += rotationVelocityRef.current.y;
+      rxCurrent += rotationVelocityRef.current.x;
       scrollVelocityRef.current *= 0.84;
+      rotationVelocityRef.current.x *= 0.91;
+      rotationVelocityRef.current.y *= 0.91;
+      rxCurrent = Math.max(-1.05, Math.min(1.16, rxCurrent));
 
-      if (isInteractingRef.current) {
+      if (isInteractingRef.current && !isDraggingRef.current) {
         const targetRy = cursorTargetRef.current.x * 1.15;
         const targetRx = 0.22 - cursorTargetRef.current.y * 0.75;
         ryCurrent += (targetRy - ryCurrent) * 0.12;
         rxCurrent += (targetRx - rxCurrent) * 0.12;
       }
 
-      const ry = ryCurrent + t * 0.28;
-      const rx = rxCurrent + Math.sin(t * 0.11) * 0.32;
-      const proj = VERTS.map((v) => {
+      const ry = ryCurrent + t * 0.2;
+      const rx = rxCurrent + Math.sin(t * 0.11) * 0.18;
+      const movingVerts = VISUAL_VERTS.map(([x, y, z], index) => {
+        const motion = vertexMotion[index];
+        const radial =
+          1 +
+          Math.sin(t * motion.speed + motion.phase) * motion.amp +
+          Math.sin(t * motion.speed * 0.45 + motion.secondaryPhase) * 0.038;
+        const orbitAngle = t * motion.orbitSpeed + motion.orbitPhase;
+        const orbitRadius = motion.orbitAmp * (0.78 + Math.sin(t * motion.breatheSpeed + motion.phase) * 0.22);
+        const orbitA = Math.cos(orbitAngle) * orbitRadius;
+        const orbitB = Math.sin(orbitAngle) * orbitRadius;
+        return [
+          x * radial +
+            motion.tangentA[0] * orbitA +
+            motion.tangentB[0] * orbitB +
+            Math.sin(t * motion.driftSpeed + motion.driftPhaseX) * motion.drift,
+          y * radial +
+            motion.tangentA[1] * orbitA +
+            motion.tangentB[1] * orbitB +
+            Math.sin(t * motion.driftSpeed + motion.driftPhaseY) * motion.drift,
+          z * radial +
+            motion.tangentA[2] * orbitA +
+            motion.tangentB[2] * orbitB +
+            Math.sin(t * motion.driftSpeed + motion.driftPhaseZ) * motion.drift
+        ] as [number, number, number];
+      });
+      const proj = movingVerts.map((v) => {
         const r = rotateX(rotateY(v, ry), rx);
         const fov = 2.8;
         const z = r[2] + fov;
@@ -226,44 +324,115 @@ function GeometricArtifact() {
       });
 
       ctx.setLineDash([]);
-      EDGES.forEach(([a, b], index) => {
+      DENSE_EDGES.forEach(([a, b]) => {
         const avg = (proj[a].z + proj[b].z) / 2;
         const baseOpacity = Math.max(0.06, (avg + 1) * 0.22 + 0.08);
-        const pulse = pulses.find((item) => item.edge === index);
-        const pulseBoost = pulse ? pulse.life / 40 : 0;
-        const opacity = Math.min(1, baseOpacity + pulseBoost * 0.7);
-        const gold = pulseBoost > 0.1;
 
-        ctx.strokeStyle = gold
-          ? `rgba(200,169,110,${opacity.toFixed(3)})`
-          : `rgba(240,237,230,${opacity.toFixed(3)})`;
-        ctx.lineWidth = gold ? 1.1 : 0.7;
+        ctx.strokeStyle = `rgba(240,237,230,${baseOpacity.toFixed(3)})`;
+        ctx.lineWidth = 0.75;
         ctx.beginPath();
         ctx.moveTo(proj[a].x, proj[a].y);
         ctx.lineTo(proj[b].x, proj[b].y);
         ctx.stroke();
       });
 
-      VERTS.forEach((_, index) => {
-        const point = proj[index];
-        const opacity = Math.max(0.1, (point.z + 1) * 0.28 + 0.1);
-        ctx.fillStyle = `rgba(240,237,230,${opacity.toFixed(3)})`;
+      pulses.forEach((pulse) => {
+        const [a, b] = beamEdges[pulse.edge];
+        const beamColor = BEAM_COLORS[pulse.colorIndex % BEAM_COLORS.length];
+        const start = Math.max(0, pulse.progress - pulse.width);
+        const end = Math.min(1, pulse.progress);
+        if (end <= 0 || start >= 1) {
+          return;
+        }
+
+        const from = {
+          x: proj[a].x + (proj[b].x - proj[a].x) * start,
+          y: proj[a].y + (proj[b].y - proj[a].y) * start
+        };
+        const head = {
+          x: proj[a].x + (proj[b].x - proj[a].x) * end,
+          y: proj[a].y + (proj[b].y - proj[a].y) * end
+        };
+        const gradient = ctx.createLinearGradient(from.x, from.y, head.x, head.y);
+        gradient.addColorStop(0, rgbaColor(beamColor, 0));
+        gradient.addColorStop(0.45, rgbaColor(beamColor, 0.42));
+        gradient.addColorStop(1, rgbaColor(beamColor, 0.94));
+
+        ctx.setLineDash([]);
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 1.15;
         ctx.beginPath();
-        ctx.arc(point.x, point.y, 1.4, 0, Math.PI * 2);
+        ctx.moveTo(from.x, from.y);
+        ctx.lineTo(head.x, head.y);
+        ctx.stroke();
+
+        ctx.fillStyle = rgbaColor(beamColor, 0.78);
+        ctx.beginPath();
+        ctx.arc(head.x, head.y, 1.45, 0, Math.PI * 2);
         ctx.fill();
       });
 
+      VISUAL_VERTS.forEach((_, index) => {
+        const point = proj[index];
+        const targetBurst = vertexBurstTargets[index];
+        const previousBurst = vertexBursts[index];
+        const burstEase = targetBurst > previousBurst ? 0.16 : 0.075;
+        const burst = previousBurst + (targetBurst - previousBurst) * burstEase;
+        const baseOpacity = Math.max(0.1, (point.z + 1) * 0.28 + 0.1);
+        const burstColor = BEAM_COLORS[vertexBurstColorIndexes[index] % BEAM_COLORS.length];
+
+        if (burst > 0.008) {
+          const haloRadius = 5.2 + burst * 14.5;
+          const halo = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, haloRadius);
+          halo.addColorStop(0, rgbaColor(burstColor, burst * 0.3));
+          halo.addColorStop(0.28, rgbaColor(burstColor, burst * 0.2));
+          halo.addColorStop(0.66, rgbaColor(burstColor, burst * 0.072));
+          halo.addColorStop(1, rgbaColor(burstColor, 0));
+          ctx.fillStyle = halo;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, haloRadius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        const pointOpacity = Math.min(0.96, baseOpacity + burst * 0.36);
+        const pointRadius = 1.55 + burst * 2.8;
+        ctx.fillStyle = `rgba(240,237,230,${pointOpacity.toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, pointRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        vertexBursts[index] = burst > 0.006 ? burst : 0;
+        vertexBurstTargets[index] = targetBurst > 0.006 ? targetBurst * 0.91 : 0;
+      });
+
       for (let index = pulses.length - 1; index >= 0; index -= 1) {
-        pulses[index].life -= 1;
-        if (pulses[index].life <= 0) {
+        const pulse = pulses[index];
+        pulse.progress += pulse.speed;
+        if (!pulse.hitFired && pulse.progress >= 1) {
+          const [, target] = beamEdges[pulse.edge];
+          vertexBurstTargets[target] = Math.max(vertexBurstTargets[target], 1.08);
+          vertexBurstColorIndexes[target] = pulse.colorIndex;
+          pulse.hitFired = true;
+        }
+
+        if (pulse.progress > 1.1) {
           pulses.splice(index, 1);
         }
       }
 
       nextPulse -= 1;
       if (nextPulse <= 0) {
-        pulses.push({ edge: Math.floor(Math.random() * EDGES.length), life: 40 });
-        nextPulse = 55 + Math.floor(Math.random() * 90);
+        const colorIndex = nextPulseColorIndex;
+        nextPulseColorIndex = (nextPulseColorIndex + 1) % BEAM_COLORS.length;
+        pulses.push({
+          edge: Math.floor(Math.random() * beamEdges.length),
+          progress: 0,
+          speed: 0.018 + Math.random() * 0.018,
+          width: 0.11 + Math.random() * 0.09,
+          hitFired: false,
+          colorIndex
+        });
+        nextPulse = 18 + Math.floor(Math.random() * 34);
       }
 
       t += 0.004;
@@ -298,20 +467,36 @@ function GeometricArtifact() {
       }}
       onPointerMove={(event) => {
         isInteractingRef.current = true;
-        updateCursorTarget(event);
+        if (isDraggingRef.current) {
+          const dx = event.clientX - lastPointerRef.current.x;
+          const dy = event.clientY - lastPointerRef.current.y;
+          rotationVelocityRef.current.y += dx * 0.006;
+          rotationVelocityRef.current.x += dy * 0.006;
+          lastPointerRef.current = { x: event.clientX, y: event.clientY };
+        } else {
+          updateCursorTarget(event);
+        }
       }}
       onPointerLeave={() => {
-        isInteractingRef.current = false;
+        if (!isDraggingRef.current) {
+          isInteractingRef.current = false;
+        }
       }}
       onPointerDown={(event) => {
         isInteractingRef.current = true;
-        updateCursorTarget(event);
+        isDraggingRef.current = true;
+        lastPointerRef.current = { x: event.clientX, y: event.clientY };
+        event.currentTarget.setPointerCapture(event.pointerId);
       }}
-      onPointerUp={() => {
+      onPointerUp={(event) => {
+        isDraggingRef.current = false;
         isInteractingRef.current = false;
+        event.currentTarget.releasePointerCapture(event.pointerId);
       }}
-      onPointerCancel={() => {
+      onPointerCancel={(event) => {
+        isDraggingRef.current = false;
         isInteractingRef.current = false;
+        event.currentTarget.releasePointerCapture(event.pointerId);
       }}
     />
   );

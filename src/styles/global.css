@@ -172,7 +172,7 @@ select {
   display: block;
   cursor: pointer;
   opacity: 0.9;
-  touch-action: manipulation;
+  touch-action: none;
 }
 
 .figma-piano-wrap {
@@ -325,12 +325,17 @@ select {
     padding: 5rem 1.25rem 6rem;
   }
 
+  .figma-artifact-wrap {
+    min-height: 320px;
+    margin: -2.25rem 0 3rem;
+  }
+
   .figma-artifact-scale {
-    transform: scale(1.25);
+    transform: scale(1.65);
   }
 
   .figma-artifact-inner-scale {
-    transform: scale(1.25);
+    transform: scale(1.55);
   }
 
   .figma-piano-wrap {
