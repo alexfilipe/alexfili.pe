@@ -325,6 +325,10 @@ select {
     padding: 5rem 1.25rem 6rem;
   }
 
+  .figma-role {
+    margin-bottom: 1.25rem;
+  }
+
   .figma-artifact-wrap {
     min-height: 320px;
     margin: -2.25rem 0 3rem;
@@ -339,7 +343,7 @@ select {
   }
 
   .figma-piano-wrap {
-    margin-top: 3.75rem;
+    margin-top: 1rem;
   }
 
   .figma-bio p {

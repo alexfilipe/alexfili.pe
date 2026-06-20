@@ -119,17 +119,22 @@ const NEURAL: [number, number][] = [
 const VISUAL_VERTS = VERTS;
 const DENSE_EDGES = EDGES;
 const BEAM_COLORS = [
-  [255, 78, 78],
-  [255, 151, 54],
-  [255, 213, 79],
-  [91, 220, 119],
-  [71, 200, 255],
-  [117, 117, 255],
-  [207, 98, 255]
+  [255, 42, 42],
+  [255, 126, 24],
+  [255, 226, 32],
+  [48, 238, 88],
+  [25, 203, 255],
+  [91, 78, 255],
+  [226, 54, 255]
 ] as const;
 
 function rgbaColor([r, g, b]: readonly [number, number, number], alpha: number) {
   return `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
+}
+
+function smoothStep(edge0: number, edge1: number, value: number) {
+  const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
+  return t * t * (3 - 2 * t);
 }
 
 function normalizeVector([x, y, z]: [number, number, number]): [number, number, number] {
@@ -339,7 +344,9 @@ function GeometricArtifact() {
       pulses.forEach((pulse) => {
         const [a, b] = beamEdges[pulse.edge];
         const beamColor = BEAM_COLORS[pulse.colorIndex % BEAM_COLORS.length];
-        const start = Math.max(0, pulse.progress - pulse.width);
+        const charge = 0.14 + smoothStep(0.08, 0.48, pulse.progress) * 0.86;
+        const visibleWidth = pulse.width * (0.18 + charge * 0.82);
+        const start = Math.max(0, pulse.progress - visibleWidth);
         const end = Math.min(1, pulse.progress);
         if (end <= 0 || start >= 1) {
           return;
@@ -355,20 +362,20 @@ function GeometricArtifact() {
         };
         const gradient = ctx.createLinearGradient(from.x, from.y, head.x, head.y);
         gradient.addColorStop(0, rgbaColor(beamColor, 0));
-        gradient.addColorStop(0.45, rgbaColor(beamColor, 0.42));
-        gradient.addColorStop(1, rgbaColor(beamColor, 0.94));
+        gradient.addColorStop(0.45, rgbaColor(beamColor, 0.42 * charge));
+        gradient.addColorStop(1, rgbaColor(beamColor, 0.94 * charge));
 
         ctx.setLineDash([]);
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = 1.15;
+        ctx.lineWidth = 0.45 + charge * 0.7;
         ctx.beginPath();
         ctx.moveTo(from.x, from.y);
         ctx.lineTo(head.x, head.y);
         ctx.stroke();
 
-        ctx.fillStyle = rgbaColor(beamColor, 0.78);
+        ctx.fillStyle = rgbaColor(beamColor, 0.2 + charge * 0.58);
         ctx.beginPath();
-        ctx.arc(head.x, head.y, 1.45, 0, Math.PI * 2);
+        ctx.arc(head.x, head.y, 0.55 + charge * 0.9, 0, Math.PI * 2);
         ctx.fill();
       });
 
@@ -384,9 +391,9 @@ function GeometricArtifact() {
         if (burst > 0.008) {
           const haloRadius = 5.2 + burst * 14.5;
           const halo = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, haloRadius);
-          halo.addColorStop(0, rgbaColor(burstColor, burst * 0.3));
-          halo.addColorStop(0.28, rgbaColor(burstColor, burst * 0.2));
-          halo.addColorStop(0.66, rgbaColor(burstColor, burst * 0.072));
+          halo.addColorStop(0, rgbaColor(burstColor, burst * 0.46));
+          halo.addColorStop(0.28, rgbaColor(burstColor, burst * 0.34));
+          halo.addColorStop(0.66, rgbaColor(burstColor, burst * 0.13));
           halo.addColorStop(1, rgbaColor(burstColor, 0));
           ctx.fillStyle = halo;
           ctx.beginPath();
