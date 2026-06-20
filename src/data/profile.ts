@@ -1,0 +1,16 @@
+export const profile = {
+  name: "Álex Filipe Santos",
+  shortName: "Álex Filipe",
+  domain: "alexfili.pe",
+  tagline: "The architecture of intelligence.",
+  role: "Software & AI Engineer guided by mathematical thought and classical musicianship.",
+  email: "hello@alexfili.pe",
+  github: "https://github.com/",
+  linkedin: "https://linkedin.com/",
+  location: "San Francisco, California",
+  bio: [
+    "Brazilian by birth and San Franciscan by heart, I build intelligent systems where thoughtful design matters as much as technical execution.",
+    "Classical music has shaped the way I listen. Through piano, violin, and conducting, I keep returning to the same question that draws me to systems built with care: what makes structure feel meaningful."
+  ],
+  availability: "Open to thoughtful engineering, AI, and music collaborations."
+};

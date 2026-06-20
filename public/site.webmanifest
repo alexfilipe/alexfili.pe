@@ -1,0 +1,9 @@
+{
+  "name": "Álex Filipe Santos",
+  "short_name": "Álex Filipe",
+  "description": "Software & AI engineer and classical musician.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050504",
+  "theme_color": "#050504"
+}

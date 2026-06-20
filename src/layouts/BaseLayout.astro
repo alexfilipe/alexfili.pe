@@ -1,0 +1,98 @@
+---
+import { ClientRouter } from "astro:transitions";
+import { profile } from "@/data/profile";
+import "@/styles/global.css";
+
+type Props = {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  hideChrome?: boolean;
+};
+
+const {
+  title = profile.name,
+  description = profile.role,
+  canonical = Astro.url.pathname,
+  hideChrome = false
+} = Astro.props;
+
+const pageTitle = title === profile.name ? title : `${title} | ${profile.name}`;
+const canonicalUrl = new URL(canonical, Astro.site ?? "https://alexfili.pe").toString();
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/music/", label: "Music" },
+  { href: "/writings/", label: "Writings" },
+  { href: "/#contact", label: "Contact" }
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050504" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content="/og.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>{pageTitle}</title>
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class:list={["site-shell", hideChrome && "site-shell--bare"]}>
+      {
+        !hideChrome && (
+          <header class="site-header">
+            <nav class="site-nav" aria-label="Primary navigation">
+              <a class="site-mark" href="/" aria-label={`${profile.name} home`}>
+                {profile.shortName}
+              </a>
+              <div class="nav-links">
+                {navItems.map((item) => (
+                  <a
+                    href={item.href}
+                    aria-current={
+                      item.href !== "/#contact" &&
+                      (currentPath === item.href || currentPath === item.href.replace(/\/$/, ""))
+                        ? "page"
+                        : undefined
+                    }
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            </nav>
+          </header>
+        )
+      }
+      <main id="main">
+        <slot />
+      </main>
+      {
+        !hideChrome && (
+          <footer class="site-footer">
+            <div class="footer-inner">
+              <span>© {new Date().getFullYear()} {profile.name}. Built with Astro.</span>
+              <div class="footer-links">
+                <a href={profile.github}>GitHub</a>
+                <a href={profile.linkedin}>LinkedIn</a>
+                <a href={`mailto:${profile.email}`}>Email</a>
+              </div>
+            </div>
+          </footer>
+        )
+      }
+    </div>
+  </body>
+</html>

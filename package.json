@@ -1,0 +1,30 @@
+{
+  "name": "alexfilipe-personal-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "start": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/mdx": "^6.0.3",
+    "@astrojs/react": "^5.0.7",
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource-variable/cormorant": "^5.2.8",
+    "@fontsource-variable/instrument-sans": "^5.2.8",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource/gloock": "^5.2.8",
+    "@types/three": "^0.184.1",
+    "astro": "^6.4.8",
+    "lucide-react": "^1.21.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "three": "^0.184.0",
+    "typescript": "^6.0.3"
+  }
+}

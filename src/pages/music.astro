@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content";
+import MusicPlayer, { type Recording } from "@/components/MusicPlayer";
+import PianoStaff from "@/components/PianoStaff.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const recordings: Recording[] = (await getCollection("recordings"))
+  .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || b.data.year - a.data.year)
+  .map((entry) => ({
+    id: entry.id,
+    ...entry.data
+  }));
+---
+
+<BaseLayout
+  title="Music"
+  description="Recordings, repertoire notes, and classical music practice from Álex Filipe Santos."
+>
+  <div class="page-motif">
+    <section class="page-hero" aria-labelledby="music-page-title">
+      <h1 class="page-title" id="music-page-title">Music</h1>
+      <p class="page-intro">
+        Classical music has shaped the way I listen. Piano, violin, and conducting train the same attention I bring to
+        systems: proportion, timing, voice, and structure.
+      </p>
+    </section>
+  </div>
+
+  <PianoStaff label="Piano staff motif" />
+
+  <section class="section" aria-labelledby="recordings-title">
+    <div class="section-header">
+      <h2 class="section-title" id="recordings-title">Recordings</h2>
+      <p class="section-intro">
+        Seed entries for performances and repertoire notes. Replace the links as recordings become available.
+      </p>
+    </div>
+    <MusicPlayer client:visible recordings={recordings} />
+  </section>
+
+  <section class="section compact" aria-labelledby="repertoire-title">
+    <div class="feature-grid">
+      <div>
+        <h2 class="section-title" id="repertoire-title">Repertoire Notes</h2>
+      </div>
+      <div class="feature-panel" data-reveal>
+        <h3>Performance as interpretation.</h3>
+        <p>
+          This page is built to grow into a living archive: recordings, program notes, rehearsal studies, and short
+          reflections on the pieces that keep teaching me how structure moves.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

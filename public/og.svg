@@ -1,0 +1,10 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#050504"/>
+  <path d="M91 488H1108" stroke="#D3B270" stroke-opacity=".42"/>
+  <path d="M786 140L957 207L920 390L730 430L622 270L786 140Z" stroke="#F5F0E8" stroke-opacity=".32" stroke-width="3"/>
+  <path d="M786 140L730 430M957 207L622 270M920 390L786 140M730 430L957 207" stroke="#F5F0E8" stroke-opacity=".2" stroke-width="2"/>
+  <text x="90" y="210" fill="#F5F0E8" font-family="Georgia, serif" font-size="112" font-weight="700">Álex</text>
+  <text x="90" y="318" fill="#F5F0E8" font-family="Georgia, serif" font-size="112" font-weight="700">Filipe</text>
+  <text x="90" y="426" fill="#F5F0E8" font-family="Georgia, serif" font-size="112" font-weight="700">Santos</text>
+  <text x="90" y="545" fill="#D3B270" font-family="Georgia, serif" font-size="50" font-weight="700">The architecture of intelligence.</text>
+</svg>

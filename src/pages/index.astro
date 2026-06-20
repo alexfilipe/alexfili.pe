@@ -1,0 +1,9 @@
+---
+import FigmaHome from "@/components/FigmaHome";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { profile } from "@/data/profile";
+---
+
+<BaseLayout title={profile.name} description={profile.role} hideChrome>
+  <FigmaHome client:load />
+</BaseLayout>
