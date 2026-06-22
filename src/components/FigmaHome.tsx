@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { SVGProps } from "react";
 import { ArrowUpRight, BookOpen, Mail, Music } from "lucide-react";
 import PianoSeparator from "@/components/PianoSeparator";
@@ -159,8 +159,9 @@ function rotateX(v: [number, number, number], angle: number): [number, number, n
   return [x, y * Math.cos(angle) - z * Math.sin(angle), y * Math.sin(angle) + z * Math.cos(angle)];
 }
 
-function GeometricArtifact() {
+function GeometricArtifact({ onReady }: { onReady?: () => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const hasReportedReadyRef = useRef(false);
   const isInteractingRef = useRef(false);
   const isDraggingRef = useRef(false);
   const cursorTargetRef = useRef({ x: 0, y: 0 });
@@ -449,12 +450,16 @@ function GeometricArtifact() {
     };
 
     draw();
+    if (!hasReportedReadyRef.current) {
+      hasReportedReadyRef.current = true;
+      onReady?.();
+    }
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       cancelAnimationFrame(animId);
     };
-  }, []);
+  }, [onReady]);
 
   const updateCursorTarget = (event: React.PointerEvent<HTMLCanvasElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -537,8 +542,24 @@ const socialLinks = [
 ];
 
 export default function FigmaHome() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleArtifactReady = useCallback(() => {
+    window.setTimeout(() => setIsLoading(false), 520);
+  }, []);
+
   return (
-    <div className="figma-home">
+    <div className={`figma-home${isLoading ? " is-loading" : ""}`}>
+      {isLoading && (
+        <div className="figma-loader" role="status" aria-live="polite" aria-label="Loading site">
+          <div className="figma-loader-mark" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </div>
+          <p>Calibrating dimensions</p>
+        </div>
+      )}
       <div className="figma-home-main">
         <section className="figma-hero" aria-labelledby="hero-title">
           <div className="figma-hero-copy">
@@ -554,13 +575,15 @@ export default function FigmaHome() {
               {profile.tagline}
             </p>
 
-            <p className="figma-role">{profile.role}</p>
+            <p className="figma-role">
+              <strong>Software & AI Engineer</strong> guided by mathematical thought and classical musicianship.
+            </p>
           </div>
 
           <div className="figma-artifact-wrap" aria-label="Interactive intelligence geometry">
             <div className="figma-artifact-scale">
               <div className="figma-artifact-inner-scale">
-                <GeometricArtifact />
+                <GeometricArtifact onReady={handleArtifactReady} />
               </div>
             </div>
           </div>
@@ -572,12 +595,12 @@ export default function FigmaHome() {
 
         <section className="figma-bio" aria-label="Biography">
           <p>
-            My name is Álex. Brazilian by birth and San Franciscan by heart, I build intelligent systems where thoughtful
+            <strong>My name is Álex</strong>. Brazilian by birth and San Franciscan by heart, I build intelligent systems where thoughtful
             design matters as much as technical execution.
           </p>
           <p>
             Classical music has shaped the way I listen. Through piano, violin, and conducting, I keep returning to the
-            same question that draws me to systems built with care: what makes structure feel meaningful.
+            same question that draws me to systems built with care: <strong>what makes structure feel meaningful</strong>.
           </p>
         </section>
 

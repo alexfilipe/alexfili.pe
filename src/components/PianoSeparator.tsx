@@ -230,16 +230,21 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.domElement.className = "piano-separator-canvas";
     renderer.domElement.setAttribute("aria-hidden", "true");
+    renderer.domElement.style.touchAction = "none";
     mount.appendChild(renderer.domElement);
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     const keys: PianoKeyMesh[] = [];
     const whiteKeys: PianoKeyMesh[] = [];
+    const orderedKeys: PianoKeyMesh[] = [];
     const edgeLines: THREE.LineSegments[] = [];
     const glints: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>[] = [];
     let activeKey: PianoKeyMesh | null = null;
     let pressedKey: PianoKeyMesh | null = null;
+    let lastDragKey: PianoKeyMesh | null = null;
+    let isPointerDown = false;
+    const dragTimers: number[] = [];
     let raf = 0;
     let lastScrollY = window.scrollY;
     let scrollDistance = 0;
@@ -397,6 +402,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
         disposeObject(key);
       });
       whiteKeys.splice(0);
+      orderedKeys.splice(0);
       edgeLines.splice(0).forEach((edgeLine) => {
         scene.remove(edgeLine);
         disposeObject(edgeLine);
@@ -461,6 +467,11 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
           );
         }
       }
+
+      orderedKeys.push(...[...keys].sort((a, b) => a.position.x - b.position.x));
+      orderedKeys.forEach((key, index) => {
+        key.userData.playIndex = index;
+      });
 
       camera.position.set(0, 5.0, 7.8);
       camera.lookAt(0, -0.05, 0.2);
@@ -561,21 +572,21 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
         const keyDepth = Number(key.userData.depth);
         const wholeKeyDrop = isPressed
           ? isBlack
-            ? -0.064
-            : -0.112
+            ? -0.048
+            : -0.084
           : isHovered || isFlash
             ? isBlack
               ? -0.032
-              : -0.058
+              : -0.056
             : 0;
         const targetRotationX = isPressed
           ? isBlack
-            ? 0.13
-            : 0.185
+            ? 0.098
+            : 0.139
           : isHovered || isFlash
             ? isBlack
-              ? 0.095
-              : 0.135
+              ? 0.065
+              : 0.093
             : 0;
         const targetY = restingY + wholeKeyDrop - Math.sin(targetRotationX) * keyDepth * 0.5;
         const targetZ = restingZ - (1 - Math.cos(targetRotationX)) * keyDepth * 0.5;
@@ -599,10 +610,42 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
     };
 
+    const playDragGlissando = (from: PianoKeyMesh | null, to: PianoKeyMesh) => {
+      if (!from || from === to) {
+        onPlayRef.current(to.userData.note, to.userData.freq);
+        to.userData.sparklePulse = 1;
+        return;
+      }
+
+      const fromIndex = Number(from.userData.playIndex);
+      const toIndex = Number(to.userData.playIndex);
+      if (!Number.isFinite(fromIndex) || !Number.isFinite(toIndex)) {
+        onPlayRef.current(to.userData.note, to.userData.freq);
+        to.userData.sparklePulse = 1;
+        return;
+      }
+
+      const direction = toIndex > fromIndex ? 1 : -1;
+      let delayStep = 0;
+      for (let index = fromIndex + direction; direction > 0 ? index <= toIndex : index >= toIndex; index += direction) {
+        const key = orderedKeys[index];
+        if (!key) {
+          continue;
+        }
+        const timer = window.setTimeout(() => {
+          onPlayRef.current(key.userData.note, key.userData.freq);
+          key.userData.sparklePulse = 1;
+        }, delayStep * 18);
+        dragTimers.push(timer);
+        delayStep += 1;
+      }
+    };
+
     const pick = (event: PointerEvent, play = false) => {
       setPointer(event);
       raycaster.setFromCamera(pointer, camera);
       const hit = raycaster.intersectObjects(keys, false)[0]?.object as PianoKeyMesh | undefined;
+      const previousKey = activeKey;
 
       if (hit !== activeKey) {
         if (activeKey) {
@@ -610,16 +653,24 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
         }
         activeKey = hit ?? null;
         if (activeKey) {
-          onEnterRef.current(activeKey.userData.note, activeKey.userData.freq, !play);
+          onEnterRef.current(activeKey.userData.note, activeKey.userData.freq, !play && !isPointerDown);
           activeKey.userData.sparklePulse = 1;
         }
       }
 
       if (play) {
+        isPointerDown = true;
         pressedKey = activeKey;
+        lastDragKey = activeKey;
         if (pressedKey) {
           onPlayRef.current(pressedKey.userData.note, pressedKey.userData.freq);
           pressedKey.userData.sparklePulse = 1;
+        }
+      } else if (isPointerDown) {
+        pressedKey = activeKey;
+        if (activeKey && activeKey !== lastDragKey) {
+          playDragGlissando(lastDragKey ?? previousKey, activeKey);
+          lastDragKey = activeKey;
         }
       }
     };
@@ -630,10 +681,14 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       }
       activeKey = null;
       pressedKey = null;
+      lastDragKey = null;
+      isPointerDown = false;
     };
 
     const clearPressed = () => {
       pressedKey = null;
+      lastDragKey = null;
+      isPointerDown = false;
     };
 
     const animate = (time = 0) => {
@@ -645,7 +700,23 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
     };
 
     const handlePointerMove = (event: PointerEvent) => pick(event);
-    const handlePointerDown = (event: PointerEvent) => pick(event, true);
+    const handlePointerDown = (event: PointerEvent) => {
+      event.preventDefault();
+      renderer.domElement.setPointerCapture(event.pointerId);
+      pick(event, true);
+    };
+    const handlePointerUp = (event: PointerEvent) => {
+      if (renderer.domElement.hasPointerCapture(event.pointerId)) {
+        renderer.domElement.releasePointerCapture(event.pointerId);
+      }
+      clearPressed();
+    };
+    const handlePointerCancel = (event: PointerEvent) => {
+      if (renderer.domElement.hasPointerCapture(event.pointerId)) {
+        renderer.domElement.releasePointerCapture(event.pointerId);
+      }
+      clearPressed();
+    };
 
     rebuild();
     animate();
@@ -654,8 +725,8 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
     window.addEventListener("scroll", handleScroll, { passive: true });
     renderer.domElement.addEventListener("pointermove", handlePointerMove);
     renderer.domElement.addEventListener("pointerdown", handlePointerDown);
-    renderer.domElement.addEventListener("pointerup", clearPressed);
-    renderer.domElement.addEventListener("pointercancel", clearPressed);
+    renderer.domElement.addEventListener("pointerup", handlePointerUp);
+    renderer.domElement.addEventListener("pointercancel", handlePointerCancel);
     renderer.domElement.addEventListener("pointerleave", clearActive);
 
     return () => {
@@ -664,8 +735,8 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       window.removeEventListener("scroll", handleScroll);
       renderer.domElement.removeEventListener("pointermove", handlePointerMove);
       renderer.domElement.removeEventListener("pointerdown", handlePointerDown);
-      renderer.domElement.removeEventListener("pointerup", clearPressed);
-      renderer.domElement.removeEventListener("pointercancel", clearPressed);
+      renderer.domElement.removeEventListener("pointerup", handlePointerUp);
+      renderer.domElement.removeEventListener("pointercancel", handlePointerCancel);
       renderer.domElement.removeEventListener("pointerleave", clearActive);
       clearActive();
       keys.forEach((key) => {
@@ -680,6 +751,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
         scene.remove(glint);
         disposeObject(glint);
       });
+      dragTimers.forEach((timer) => window.clearTimeout(timer));
       darkTexture?.dispose();
       brightTexture?.dispose();
       sparkleTexture?.dispose();
@@ -742,6 +814,7 @@ export default function PianoSeparator() {
         onPlay={onPlay}
         onLeave={onLeave}
       />
+      <p className="piano-interaction-label">Tap or drag across the keys</p>
       <div className="piano-separator-fallback" aria-hidden="true">
         {Array.from({ length: 30 }, (_, index) => (
           <span key={index} />

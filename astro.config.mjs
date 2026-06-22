@@ -7,8 +7,14 @@ export default defineConfig({
   site: "https://alexfili.pe",
   integrations: [react(), mdx(), sitemap()],
   prefetch: true,
+  devToolbar: {
+    enabled: false
+  },
   output: "static",
   vite: {
+    server: {
+      allowedHosts: ["dev.alexfili.pe"]
+    },
     build: {
       chunkSizeWarningLimit: 650
     },

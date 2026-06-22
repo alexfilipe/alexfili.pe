@@ -29,13 +29,13 @@
 html {
   background: var(--bg);
   scroll-behavior: smooth;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 
 body {
   min-width: 320px;
   margin: 0;
-  overflow-x: clip;
+  overflow-x: hidden;
   background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
@@ -81,7 +81,7 @@ select {
 
 .site-shell {
   min-height: 100vh;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 
 .site-shell--bare {
@@ -93,6 +93,7 @@ select {
 }
 
 .figma-home {
+  position: relative;
   min-height: 100vh;
   overflow-x: hidden;
   background: #080807;
@@ -101,10 +102,101 @@ select {
   -webkit-font-smoothing: antialiased;
 }
 
+.figma-home.is-loading {
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.figma-home.is-loading .figma-home-main {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.figma-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(200, 169, 110, 0.1), transparent 18rem),
+    #080807;
+  color: rgba(240, 237, 230, 0.76);
+}
+
+.figma-loader > * {
+  grid-area: 1 / 1;
+}
+
+.figma-loader p {
+  margin: 10.35rem 0 0;
+  color: rgba(240, 237, 230, 0.48);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.figma-loader-mark {
+  position: relative;
+  width: 7rem;
+  aspect-ratio: 1;
+  border: 1px solid rgba(240, 237, 230, 0.12);
+  border-radius: 999px;
+  animation: figma-loader-turn 3.4s linear infinite;
+}
+
+.figma-loader-mark::before,
+.figma-loader-mark::after {
+  position: absolute;
+  inset: 1.05rem;
+  content: "";
+  border: 1px solid rgba(200, 169, 110, 0.24);
+  border-radius: 999px;
+}
+
+.figma-loader-mark::after {
+  inset: 2.2rem;
+  border-color: rgba(240, 237, 230, 0.18);
+}
+
+.figma-loader-mark span {
+  position: absolute;
+  width: 0.42rem;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: var(--gold);
+  box-shadow: 0 0 1.2rem rgba(200, 169, 110, 0.7);
+}
+
+.figma-loader-mark span:nth-child(1) {
+  top: calc(50% + 1.2rem - 0.21rem);
+  left: calc(50% + 3.29rem - 0.21rem);
+}
+
+.figma-loader-mark span:nth-child(2) {
+  top: calc(50% + 1.01rem - 0.21rem);
+  left: calc(50% - 2.08rem - 0.21rem);
+  background: rgba(240, 237, 230, 0.9);
+}
+
+.figma-loader-mark span:nth-child(3) {
+  top: calc(50% - 1.16rem - 0.21rem);
+  left: calc(50% + 0.25rem - 0.21rem);
+  background: rgba(91, 78, 255, 0.95);
+}
+
+@keyframes figma-loader-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .figma-home-main {
   max-width: 860px;
   margin: 0 auto;
   padding: 6rem 1.5rem 7rem;
+  transition: opacity 220ms ease;
 }
 
 .figma-hero {
@@ -144,7 +236,7 @@ select {
   padding-left: 0.75rem;
   color: rgba(240, 237, 230, 0.72);
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.01em;
   line-height: 1.65;
 }
@@ -176,7 +268,7 @@ select {
 }
 
 .figma-piano-wrap {
-  margin: -1.5rem -1.5rem 0;
+  margin: -1.5rem -1.5rem clamp(2rem, 3.85vw, 3.35rem);
   overflow: visible;
 }
 
@@ -316,7 +408,7 @@ select {
   }
 
   .figma-piano-wrap {
-    margin: 2rem 0 0;
+    margin: 2rem 0 clamp(1.85rem, 2.85vw, 3.15rem);
   }
 }
 
@@ -331,7 +423,7 @@ select {
 
   .figma-artifact-wrap {
     min-height: 320px;
-    margin: -2.25rem 0 3rem;
+    margin: -2.25rem 0 1.35rem;
   }
 
   .figma-artifact-scale {
@@ -344,6 +436,7 @@ select {
 
   .figma-piano-wrap {
     margin-top: 1rem;
+    margin-bottom: 2.15rem;
   }
 
   .figma-bio p {
@@ -618,7 +711,25 @@ main {
   z-index: 1;
   max-width: none;
   cursor: pointer;
-  touch-action: manipulation;
+  touch-action: none;
+}
+
+.piano-interaction-label {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.2rem, 2.25vw, 1.85rem);
+  z-index: 4;
+  margin: 0;
+  color: rgba(240, 237, 230, 0.26);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  pointer-events: none;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 .piano-separator-fallback {
