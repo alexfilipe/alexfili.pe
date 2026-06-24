@@ -557,7 +557,7 @@ export default function FigmaHome() {
             <span />
             <span />
           </div>
-          <p>Calibrating dimensions</p>
+          <p>Building</p>
         </div>
       )}
       <div className="figma-home-main">

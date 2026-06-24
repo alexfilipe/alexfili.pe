@@ -418,12 +418,12 @@ select {
   }
 
   .figma-role {
-    margin-bottom: 1.25rem;
+    margin-bottom: 2rem;
   }
 
   .figma-artifact-wrap {
     min-height: 320px;
-    margin: -2.25rem 0 1.35rem;
+    margin: -2.25rem 0 0.7rem;
   }
 
   .figma-artifact-scale {
@@ -435,7 +435,7 @@ select {
   }
 
   .figma-piano-wrap {
-    margin-top: 1rem;
+    margin-top: 1.35rem;
     margin-bottom: 2.15rem;
   }
 
