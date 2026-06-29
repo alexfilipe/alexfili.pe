@@ -260,11 +260,23 @@ select {
   transform-origin: center;
 }
 
+.figma-artifact-hit-area {
+  display: grid;
+  width: 15rem;
+  height: 15rem;
+  place-items: center;
+  cursor: grab;
+  touch-action: none;
+}
+
+.figma-artifact-hit-area:active {
+  cursor: grabbing;
+}
+
 .figma-artifact-canvas {
   display: block;
-  cursor: pointer;
   opacity: 0.9;
-  touch-action: none;
+  pointer-events: none;
 }
 
 .figma-piano-wrap {

@@ -5,7 +5,16 @@ const NATURAL_OFFSETS = [0, 2, 4, 5, 7, 9, 11];
 const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const BLACK_KEY_AFTER = new Set([0, 2, 5, 7, 9]);
 const SOUNDING_OCTAVE_SHIFT = 12;
+const KEY_GLOW_HEX = 0xc8a96e;
 const RAINBOW_HEX = [0xff2a2a, 0xff7e18, 0xffe220, 0x30ee58, 0x19cbff, 0x5b4eff, 0xe236ff];
+const WHITE_KEYBOARD_ROWS: [string, number[]][] = [
+  ["qwertyuiop", [60, 62, 64, 65, 67, 69, 71, 72, 74, 76]],
+  ["zxcvbnm,./", [77, 79, 81, 83, 84, 86, 88, 89, 91, 93]]
+];
+const BLACK_KEYBOARD_ROWS: [string, number[]][] = [
+  ["2356790", [61, 63, 66, 68, 70, 73, 75]],
+  ["sdfhjl;'", [78, 80, 82, 85, 87, 90, 92, 94]]
+];
 
 function blendHex(left: number, right: number, amount = 0.5) {
   const leftColor = new THREE.Color(left);
@@ -21,6 +30,27 @@ function midiToNoteName(midi: number) {
   const name = NOTE_NAMES[((midi % 12) + 12) % 12];
   const octave = Math.floor(midi / 12) - 1;
   return `${name}${octave}`;
+}
+
+const COMPUTER_KEYBOARD_NOTES = new Map(
+  [...WHITE_KEYBOARD_ROWS, ...BLACK_KEYBOARD_ROWS].flatMap(([keys, midis]) =>
+    [...keys].map((key, index) => [
+      key,
+      {
+        freq: midiToFrequency(midis[index]),
+        note: midiToNoteName(midis[index])
+      }
+    ])
+  )
+);
+
+function isTypingTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+
+  const tagName = target.tagName.toLowerCase();
+  return target.isContentEditable || tagName === "input" || tagName === "textarea" || tagName === "select";
 }
 
 function whiteMidiFromCenterDelta(delta: number) {
@@ -238,8 +268,11 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
     const keys: PianoKeyMesh[] = [];
     const whiteKeys: PianoKeyMesh[] = [];
     const orderedKeys: PianoKeyMesh[] = [];
+    const keysByNote = new Map<string, PianoKeyMesh>();
     const edgeLines: THREE.LineSegments[] = [];
     const glints: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>[] = [];
+    const pressedComputerKeys = new Map<string, string>();
+    const keyboardPressedNotes = new Set<string>();
     let activeKey: PianoKeyMesh | null = null;
     let pressedKey: PianoKeyMesh | null = null;
     let lastDragKey: PianoKeyMesh | null = null;
@@ -250,6 +283,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
     let scrollDistance = 0;
     let scrollDirection = 1;
     let scrollCursor = 0;
+    let scrollScatterSeed = 0x9e3779b9;
     let lastScrollGlowAt = 0;
     let lastFrameTime = 0;
 
@@ -287,7 +321,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       note: string,
       freq: number,
       black = false,
-      activeColor = RAINBOW_HEX[0]
+      activeColor = KEY_GLOW_HEX
     ) => {
       const material = new THREE.MeshBasicMaterial({
         color: black ? ivory : warmSurface,
@@ -314,6 +348,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       };
       scene.add(mesh);
       keys.push(mesh);
+      keysByNote.set(note, mesh);
       if (!black) {
         whiteKeys.push(mesh);
       }
@@ -403,6 +438,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       });
       whiteKeys.splice(0);
       orderedKeys.splice(0);
+      keysByNote.clear();
       edgeLines.splice(0).forEach((edgeLine) => {
         scene.remove(edgeLine);
         disposeObject(edgeLine);
@@ -490,9 +526,9 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
     };
 
     const triggerScrollGlow = (time: number) => {
-      const triggerDistance = 135;
-      const triggerGap = 0.34;
-      const pool = whiteKeys.length ? whiteKeys : keys;
+      const triggerDistance = 115;
+      const triggerGap = 0.24;
+      const pool = orderedKeys.length ? orderedKeys : keys;
 
       if (!pool.length || scrollDistance < triggerDistance || time - lastScrollGlowAt < triggerGap) {
         return;
@@ -500,10 +536,24 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
 
       scrollDistance = Math.max(0, scrollDistance - triggerDistance);
       lastScrollGlowAt = time;
-      scrollCursor = (scrollCursor + scrollDirection * 3 + pool.length) % pool.length;
+      let nextCursor: number | null = null;
+      for (let attempt = 0; attempt < 8; attempt += 1) {
+        scrollScatterSeed = (Math.imul(scrollScatterSeed, 1664525) + 1013904223) >>> 0;
+        const candidate = ((scrollScatterSeed ^ (scrollDirection > 0 ? 0x9e3779b9 : 0x85ebca6b)) >>> 0) % pool.length;
+        const distance = Math.abs(candidate - scrollCursor);
+        const wrappedDistance = Math.min(distance, pool.length - distance);
+        if (wrappedDistance > 4 || pool.length < 10) {
+          nextCursor = candidate;
+          break;
+        }
+      }
+      scrollCursor =
+        nextCursor ??
+        (scrollCursor + Math.max(5, Math.floor(pool.length * 0.618)) * scrollDirection + pool.length) % pool.length;
 
       const key = pool[scrollCursor];
-      key.userData.scrollGlow = Math.max(Number(key.userData.scrollGlow) || 0, 1);
+      key.userData.scrollGlow = Math.max(Number(key.userData.scrollGlow) || 0, 1.15);
+      key.userData.sparklePulse = Math.max(Number(key.userData.sparklePulse) || 0, 0.9);
     };
 
     const updateVisualState = (time: number) => {
@@ -527,39 +577,55 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
         const glintMaterial = glint.material;
         const isHovered = activeKey === key || hoveredRef.current === key.userData.note;
         const isFlash = flashRef.current === key.userData.note;
-        const isPressed = pressedKey === key;
+        const isPressed = pressedKey === key || keyboardPressedNotes.has(key.userData.note as string);
         const isBlack = Boolean(key.userData.black);
-        const activeColor = new THREE.Color(Number(key.userData.activeColor) || RAINBOW_HEX[0]);
-        const isActive = isHovered || isFlash;
+        const activeColor = new THREE.Color(Number(key.userData.activeColor) || KEY_GLOW_HEX);
+        const scrollColor = gold;
+        const isActive = isHovered || isFlash || isPressed;
         const scrollGlow = Number(key.userData.scrollGlow) || 0;
         const glintStrength = Math.pow(scrollGlow, 1.35);
+        const scrollOpacityStrength = Math.min(1, glintStrength);
+        const scrollColorStrength = Math.pow(scrollGlow, 0.72);
         const sparklePulse = Number(key.userData.sparklePulse) || 0;
         key.userData.scrollGlow = scrollGlow > 0.01 ? scrollGlow * glowDecay : 0;
         key.userData.sparklePulse = sparklePulse > 0.015 ? Math.max(0, sparklePulse - frameDelta) : 0;
 
         material.color.copy(isActive ? activeColor : isBlack ? ivory : warmSurface);
-        if (!isFlash && glintStrength > 0.35) {
-          material.color.lerp(gold, Math.min(0.2, (glintStrength - 0.35) * 0.18));
+        if (!isActive && scrollColorStrength > 0.02) {
+          material.color.lerp(scrollColor, Math.min(isBlack ? 0.58 : 0.54, scrollColorStrength * (isBlack ? 0.58 : 0.54)));
+        }
+        if (!isFlash && glintStrength > 0.25) {
+          material.color.lerp(gold, Math.min(0.12, (glintStrength - 0.25) * 0.12));
         }
         material.opacity = isActive
           ? isBlack
             ? 0.82
             : 0.58
-          : Number(key.userData.baseOpacity) + glintStrength * (isBlack ? 0.08 : 0.045);
+          : Math.min(isBlack ? 0.92 : 0.7, Number(key.userData.baseOpacity) + scrollOpacityStrength * (isBlack ? 0.3 : 0.42));
 
         edgeMaterial.color.copy(isActive ? activeColor : ivory);
-        edgeMaterial.opacity = isActive ? 0.95 : isBlack ? 0.64 : 0.82;
+        if (!isActive && scrollColorStrength > 0.02) {
+          edgeMaterial.color.lerp(scrollColor, Math.min(0.82, scrollColorStrength * 0.82));
+        }
+        edgeMaterial.opacity = isActive ? 0.95 : Math.min(1, (isBlack ? 0.64 : 0.82) + scrollOpacityStrength * (isBlack ? 0.32 : 0.18));
         hiddenEdgeMaterial.color.copy(isActive ? activeColor : ivory);
-        hiddenEdgeMaterial.opacity = isActive ? 0.46 : isBlack ? 0.2 : 0.26 + glintStrength * 0.18;
-        glintMaterial.color.copy(isActive ? activeColor : gold);
-        glintMaterial.opacity = isActive ? (isBlack ? 0.36 : 0.42) : glintStrength * (isBlack ? 0.22 : 0.18);
+        if (!isActive && scrollColorStrength > 0.02) {
+          hiddenEdgeMaterial.color.lerp(scrollColor, Math.min(0.88, scrollColorStrength * 0.88));
+        }
+        hiddenEdgeMaterial.opacity = isActive
+          ? 0.46
+          : isBlack
+            ? 0.2 + scrollOpacityStrength * 0.42
+            : 0.26 + scrollOpacityStrength * 0.36;
+        glintMaterial.color.copy(isActive ? activeColor : scrollGlow > 0.02 ? scrollColor : gold);
+        glintMaterial.opacity = isActive ? (isBlack ? 0.36 : 0.42) : scrollOpacityStrength * (isBlack ? 0.52 : 0.46);
 
         const currentSparklePulse = Number(key.userData.sparklePulse) || 0;
         sparkles.forEach((sparkle, sparkleIndex) => {
           const sparkleMaterial = sparkle.material;
           const sparklePhase = Number(sparkle.userData.phase);
           const drift = Math.sin(time * 6.2 + sparklePhase) * 0.025;
-          sparkleMaterial.color.copy(activeColor);
+          sparkleMaterial.color.copy(isActive ? activeColor : scrollColor);
           sparkleMaterial.opacity = currentSparklePulse * (0.34 + (sparkleIndex % 3) * 0.11);
           sparkle.position.x = Number(sparkle.userData.baseX) + drift;
           sparkle.position.y = Number(sparkle.userData.baseY) + currentSparklePulse * 0.24;
@@ -691,6 +757,49 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       isPointerDown = false;
     };
 
+    const pressComputerKey = (event: KeyboardEvent) => {
+      if (event.metaKey || event.ctrlKey || event.altKey || isTypingTarget(event.target)) {
+        return;
+      }
+
+      const keyboardKey = event.key.toLowerCase();
+      const mappedNote = COMPUTER_KEYBOARD_NOTES.get(keyboardKey);
+      if (!mappedNote || pressedComputerKeys.has(keyboardKey)) {
+        return;
+      }
+
+      const key = keysByNote.get(mappedNote.note);
+      if (!key) {
+        return;
+      }
+
+      event.preventDefault();
+      pressedComputerKeys.set(keyboardKey, mappedNote.note);
+      keyboardPressedNotes.add(mappedNote.note);
+      key.userData.sparklePulse = 1;
+      onPlayRef.current(mappedNote.note, mappedNote.freq);
+    };
+
+    const releaseComputerKey = (event: KeyboardEvent) => {
+      const keyboardKey = event.key.toLowerCase();
+      const note = pressedComputerKeys.get(keyboardKey);
+      if (!note) {
+        return;
+      }
+
+      pressedComputerKeys.delete(keyboardKey);
+      keyboardPressedNotes.delete(note);
+      onLeaveRef.current(note);
+    };
+
+    const clearComputerKeyboardState = () => {
+      pressedComputerKeys.forEach((note) => {
+        keyboardPressedNotes.delete(note);
+        onLeaveRef.current(note);
+      });
+      pressedComputerKeys.clear();
+    };
+
     const animate = (time = 0) => {
       updateVisualState(time * 0.001);
       renderer.render(scene, camera);
@@ -723,6 +832,9 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
 
     window.addEventListener("resize", rebuild);
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("keydown", pressComputerKey);
+    window.addEventListener("keyup", releaseComputerKey);
+    window.addEventListener("blur", clearComputerKeyboardState);
     renderer.domElement.addEventListener("pointermove", handlePointerMove);
     renderer.domElement.addEventListener("pointerdown", handlePointerDown);
     renderer.domElement.addEventListener("pointerup", handlePointerUp);
@@ -733,6 +845,9 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       window.cancelAnimationFrame(raf);
       window.removeEventListener("resize", rebuild);
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("keydown", pressComputerKey);
+      window.removeEventListener("keyup", releaseComputerKey);
+      window.removeEventListener("blur", clearComputerKeyboardState);
       renderer.domElement.removeEventListener("pointermove", handlePointerMove);
       renderer.domElement.removeEventListener("pointerdown", handlePointerDown);
       renderer.domElement.removeEventListener("pointerup", handlePointerUp);
@@ -814,7 +929,7 @@ export default function PianoSeparator() {
         onPlay={onPlay}
         onLeave={onLeave}
       />
-      <p className="piano-interaction-label">Tap or drag across the keys</p>
+      <p className="piano-interaction-label">Tap keys or use your keyboard</p>
       <div className="piano-separator-fallback" aria-hidden="true">
         {Array.from({ length: 30 }, (_, index) => (
           <span key={index} />

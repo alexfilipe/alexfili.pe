@@ -168,6 +168,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
   const lastPointerRef = useRef({ x: 0, y: 0 });
   const rotationVelocityRef = useRef({ x: 0, y: 0 });
   const scrollVelocityRef = useRef(0);
+  const supportsHoverRef = useRef(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -189,6 +190,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
 
     ctx.scale(dpr, dpr);
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    supportsHoverRef.current = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const beamEdges = [...DENSE_EDGES, ...NEURAL];
     const vertexMotion = VISUAL_VERTS.map((vertex, index) => {
       const radialAxis = normalizeVector(vertex);
@@ -253,9 +255,9 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
       rotationVelocityRef.current.y *= 0.91;
       rxCurrent = Math.max(-1.05, Math.min(1.16, rxCurrent));
 
-      if (isInteractingRef.current && !isDraggingRef.current) {
-        const targetRy = cursorTargetRef.current.x * 1.15;
-        const targetRx = 0.22 - cursorTargetRef.current.y * 0.75;
+      if (supportsHoverRef.current && isInteractingRef.current && !isDraggingRef.current) {
+        const targetRy = cursorTargetRef.current.x * 0.86;
+        const targetRx = 0.22 - cursorTargetRef.current.y * 0.56;
         ryCurrent += (targetRy - ryCurrent) * 0.12;
         rxCurrent += (targetRx - rxCurrent) * 0.12;
       }
@@ -461,7 +463,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
     };
   }, [onReady]);
 
-  const updateCursorTarget = (event: React.PointerEvent<HTMLCanvasElement>) => {
+  const updateCursorTarget = (event: React.PointerEvent<HTMLElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     cursorTargetRef.current = {
       x: ((event.clientX - rect.left) / rect.width - 0.5) * 2,
@@ -470,12 +472,12 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
   };
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="figma-artifact-canvas"
+    <div
+      className="figma-artifact-hit-area"
       onPointerEnter={(event) => {
         isInteractingRef.current = true;
         updateCursorTarget(event);
+        lastPointerRef.current = { x: event.clientX, y: event.clientY };
       }}
       onPointerMove={(event) => {
         isInteractingRef.current = true;
@@ -487,6 +489,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
           lastPointerRef.current = { x: event.clientX, y: event.clientY };
         } else {
           updateCursorTarget(event);
+          lastPointerRef.current = { x: event.clientX, y: event.clientY };
         }
       }}
       onPointerLeave={() => {
@@ -497,6 +500,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
       onPointerDown={(event) => {
         isInteractingRef.current = true;
         isDraggingRef.current = true;
+        updateCursorTarget(event);
         lastPointerRef.current = { x: event.clientX, y: event.clientY };
         event.currentTarget.setPointerCapture(event.pointerId);
       }}
@@ -510,7 +514,9 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         isInteractingRef.current = false;
         event.currentTarget.releasePointerCapture(event.pointerId);
       }}
-    />
+    >
+      <canvas ref={canvasRef} className="figma-artifact-canvas" />
+    </div>
   );
 }
 
