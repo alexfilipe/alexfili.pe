@@ -127,6 +127,8 @@ const BEAM_COLORS = [
   [91, 78, 255],
   [226, 54, 255]
 ] as const;
+const TARGET_FRAME_MS = 1000 / 60;
+const MAX_FRAME_SCALE = 3;
 
 function rgbaColor([r, g, b]: readonly [number, number, number], alpha: number) {
   return `rgba(${r},${g},${b},${alpha.toFixed(3)})`;
@@ -235,6 +237,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
     let rxCurrent = 0.22;
     let animId = 0;
     let lastScrollY = window.scrollY;
+    let lastFrameTime = 0;
 
     const handleScroll = () => {
       const nextScrollY = window.scrollY;
@@ -244,22 +247,29 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    const draw = () => {
+    const draw = (time = 0) => {
+      const frameDelta = lastFrameTime
+        ? Math.min(50, Math.max(0, time - lastFrameTime))
+        : TARGET_FRAME_MS;
+      const frameScale = Math.min(MAX_FRAME_SCALE, frameDelta / TARGET_FRAME_MS);
+      lastFrameTime = time;
+
       ctx.clearRect(0, 0, size, size);
 
-      ryCurrent += scrollVelocityRef.current;
-      ryCurrent += rotationVelocityRef.current.y;
-      rxCurrent += rotationVelocityRef.current.x;
-      scrollVelocityRef.current *= 0.84;
-      rotationVelocityRef.current.x *= 0.91;
-      rotationVelocityRef.current.y *= 0.91;
+      ryCurrent += scrollVelocityRef.current * frameScale;
+      ryCurrent += rotationVelocityRef.current.y * frameScale;
+      rxCurrent += rotationVelocityRef.current.x * frameScale;
+      scrollVelocityRef.current *= Math.pow(0.84, frameScale);
+      rotationVelocityRef.current.x *= Math.pow(0.91, frameScale);
+      rotationVelocityRef.current.y *= Math.pow(0.91, frameScale);
       rxCurrent = Math.max(-1.05, Math.min(1.16, rxCurrent));
 
       if (supportsHoverRef.current && isInteractingRef.current && !isDraggingRef.current) {
         const targetRy = cursorTargetRef.current.x * 0.86;
         const targetRx = 0.22 - cursorTargetRef.current.y * 0.56;
-        ryCurrent += (targetRy - ryCurrent) * 0.12;
-        rxCurrent += (targetRx - rxCurrent) * 0.12;
+        const hoverEase = 1 - Math.pow(0.88, frameScale);
+        ryCurrent += (targetRy - ryCurrent) * hoverEase;
+        rxCurrent += (targetRx - rxCurrent) * hoverEase;
       }
 
       const ry = ryCurrent + t * 0.2;
@@ -387,7 +397,8 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         const targetBurst = vertexBurstTargets[index];
         const previousBurst = vertexBursts[index];
         const burstEase = targetBurst > previousBurst ? 0.16 : 0.075;
-        const burst = previousBurst + (targetBurst - previousBurst) * burstEase;
+        const burstFrameEase = 1 - Math.pow(1 - burstEase, frameScale);
+        const burst = previousBurst + (targetBurst - previousBurst) * burstFrameEase;
         const baseOpacity = Math.max(0.1, (point.z + 1) * 0.28 + 0.1);
         const burstColor = BEAM_COLORS[vertexBurstColorIndexes[index] % BEAM_COLORS.length];
 
@@ -412,12 +423,12 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         ctx.fill();
 
         vertexBursts[index] = burst > 0.006 ? burst : 0;
-        vertexBurstTargets[index] = targetBurst > 0.006 ? targetBurst * 0.91 : 0;
+        vertexBurstTargets[index] = targetBurst > 0.006 ? targetBurst * Math.pow(0.91, frameScale) : 0;
       });
 
       for (let index = pulses.length - 1; index >= 0; index -= 1) {
         const pulse = pulses[index];
-        pulse.progress += pulse.speed;
+        pulse.progress += pulse.speed * frameScale;
         if (!pulse.hitFired && pulse.progress >= 1) {
           const [, target] = beamEdges[pulse.edge];
           vertexBurstTargets[target] = Math.max(vertexBurstTargets[target], 1.08);
@@ -430,7 +441,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         }
       }
 
-      nextPulse -= 1;
+      nextPulse -= frameScale;
       if (nextPulse <= 0) {
         const colorIndex = nextPulseColorIndex;
         nextPulseColorIndex = (nextPulseColorIndex + 1) % BEAM_COLORS.length;
@@ -445,7 +456,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         nextPulse = 18 + Math.floor(Math.random() * 34);
       }
 
-      t += 0.004;
+      t += 0.004 * frameScale;
       if (!reduceMotion) {
         animId = requestAnimationFrame(draw);
       }

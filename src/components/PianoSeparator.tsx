@@ -7,6 +7,8 @@ const BLACK_KEY_AFTER = new Set([0, 2, 5, 7, 9]);
 const SOUNDING_OCTAVE_SHIFT = 12;
 const KEY_GLOW_HEX = 0xc8a96e;
 const RAINBOW_HEX = [0xff2a2a, 0xff7e18, 0xffe220, 0x30ee58, 0x19cbff, 0x5b4eff, 0xe236ff];
+const TARGET_FRAME_SECONDS = 1 / 60;
+const MAX_FRAME_SCALE = 3;
 const WHITE_KEYBOARD_ROWS: [string, number[]][] = [
   ["qwertyuiop", [60, 62, 64, 65, 67, 69, 71, 72, 74, 76]],
   ["zxcvbnm,./", [77, 79, 81, 83, 84, 86, 88, 89, 91, 93]]
@@ -557,9 +559,13 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
     };
 
     const updateVisualState = (time: number) => {
-      const frameDelta = lastFrameTime ? Math.min(0.05, time - lastFrameTime) : 0.016;
+      const frameDelta = lastFrameTime
+        ? Math.min(0.05, Math.max(0, time - lastFrameTime))
+        : TARGET_FRAME_SECONDS;
+      const frameScale = Math.min(MAX_FRAME_SCALE, frameDelta / TARGET_FRAME_SECONDS);
+      const keyEase = 1 - Math.pow(0.78, frameScale);
       lastFrameTime = time;
-      const glowDecay = Math.pow(0.988, frameDelta * 60);
+      const glowDecay = Math.pow(0.988, frameScale);
 
       triggerScrollGlow(time);
 
@@ -656,9 +662,9 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
             : 0;
         const targetY = restingY + wholeKeyDrop - Math.sin(targetRotationX) * keyDepth * 0.5;
         const targetZ = restingZ - (1 - Math.cos(targetRotationX)) * keyDepth * 0.5;
-        key.position.y += (targetY - key.position.y) * 0.22;
-        key.position.z += (targetZ - key.position.z) * 0.22;
-        key.rotation.x += (targetRotationX - key.rotation.x) * 0.22;
+        key.position.y += (targetY - key.position.y) * keyEase;
+        key.position.z += (targetZ - key.position.z) * keyEase;
+        key.rotation.x += (targetRotationX - key.rotation.x) * keyEase;
         edges.position.copy(key.position);
         edges.rotation.copy(key.rotation);
         hiddenEdges.position.copy(key.position);
