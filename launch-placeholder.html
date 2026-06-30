@@ -3,12 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Álex Filipe</title>
+  <title>Álex Filipe Santos \ AI Engineer, Software Engineer, Classical Musician</title>
   <meta
     name="description"
-    content="Álex Filipe — AI Engineer, Software Engineer, and classical musician based in San Francisco."
+    content="Agentic workflows, backend systems, applied AI, and thoughtful tools built from San Francisco."
+  />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="Álex Filipe Santos" />
+  <meta
+    name="keywords"
+    content="Álex Filipe Santos, AI Engineer, Software Engineer, Classical Musician, agentic workflows, backend systems, applied AI, San Francisco"
   />
   <meta name="theme-color" content="#050504" />
+  <meta name="application-name" content="Álex Filipe Santos" />
+  <meta name="apple-mobile-web-app-title" content="Álex Filipe Santos" />
   <link rel="canonical" href="https://alexfili.pe/" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -16,13 +24,14 @@
   <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
-  <meta property="og:site_name" content="Álex Filipe" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:site_name" content="Álex Filipe Santos" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://alexfili.pe/" />
-  <meta property="og:title" content="Álex Filipe" />
+  <meta property="og:title" content="Álex Filipe Santos \ AI Engineer, Software Engineer, Classical Musician" />
   <meta
     property="og:description"
-    content="AI Engineer, Software Engineer, and classical musician based in San Francisco."
+    content="Agentic workflows, backend systems, applied AI, and thoughtful tools built from San Francisco."
   />
   <meta property="og:image" content="https://alexfili.pe/og-image.png" />
   <meta property="og:image:secure_url" content="https://alexfili.pe/og-image.png" />
@@ -31,21 +40,46 @@
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Álex Filipe Santos with geometric intelligence artwork." />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Álex Filipe" />
+  <meta name="twitter:title" content="Álex Filipe Santos \ AI Engineer, Software Engineer, Classical Musician" />
   <meta
     name="twitter:description"
-    content="AI Engineer, Software Engineer, and classical musician based in San Francisco."
+    content="Agentic workflows, backend systems, applied AI, and thoughtful tools built from San Francisco."
   />
   <meta name="twitter:image" content="https://alexfili.pe/og-image.png" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Álex Filipe Santos",
+      "url": "https://alexfili.pe/",
+      "jobTitle": ["AI Engineer", "Software Engineer", "Classical Musician"],
+      "description": "Agentic workflows, backend systems, applied AI, and thoughtful tools built from San Francisco.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "San Francisco",
+        "addressRegion": "CA",
+        "addressCountry": "US"
+      },
+      "sameAs": [
+        "https://linkedin.com/in/alexfilipe",
+        "https://github.com/alexfilipe"
+      ]
+    }
+  </script>
 
   <style>
+    @import url("https://fonts.googleapis.com/css2?family=Gloock&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap");
+
     :root {
       --bg: #080807;
-      --fg: #f5efe3;
-      --muted: #b9ad96;
-      --gold: #d6b56d;
-      --gold-soft: rgba(214, 181, 109, 0.22);
-      --line: rgba(245, 239, 227, 0.12);
+      --fg: #f0ede6;
+      --muted: rgba(240, 237, 230, 0.72);
+      --quiet: rgba(240, 237, 230, 0.52);
+      --gold: #c8a96e;
+      --gold-soft: rgba(200, 169, 110, 0.22);
+      --line: rgba(240, 237, 230, 0.1);
+      --display: "Gloock", Georgia, serif;
+      --sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     * {
@@ -61,9 +95,9 @@
         radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.05), transparent 28rem),
         var(--bg);
       color: var(--fg);
-      font-family:
-        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
+      font-family: var(--sans);
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
@@ -89,8 +123,8 @@
       border-radius: 999px;
       position: relative;
       box-shadow:
-        0 0 60px rgba(214, 181, 109, 0.12),
-        inset 0 0 30px rgba(214, 181, 109, 0.08);
+        0 0 60px rgba(200, 169, 110, 0.12),
+        inset 0 0 30px rgba(200, 169, 110, 0.08);
       animation: breathe 5s ease-in-out infinite;
     }
 
@@ -99,14 +133,14 @@
       content: "";
       position: absolute;
       inset: 16%;
-      border: 1px solid rgba(214, 181, 109, 0.36);
+      border: 1px solid rgba(200, 169, 110, 0.36);
       transform: rotate(45deg);
     }
 
     .orb::after {
       inset: 28%;
       transform: rotate(-22deg);
-      border-color: rgba(245, 239, 227, 0.18);
+      border-color: rgba(240, 237, 230, 0.18);
     }
 
     .eyebrow {
@@ -118,13 +152,12 @@
     }
 
     h1 {
-      font-family:
-        "Cormorant Garamond", Georgia, "Times New Roman", serif;
-      font-size: clamp(3rem, 11vw, 6.5rem);
+      font-family: var(--display);
+      font-size: clamp(3.6rem, 11vw, 7rem);
       font-weight: 400;
-      line-height: 0.92;
+      line-height: 0.88;
       margin: 0;
-      letter-spacing: -0.055em;
+      letter-spacing: 0;
     }
 
     .title {
@@ -137,7 +170,7 @@
 
     .title strong {
       color: var(--fg);
-      font-weight: 500;
+      font-weight: 700;
     }
 
     .status {
@@ -149,7 +182,7 @@
       color: var(--muted);
       font-size: 0.86rem;
       backdrop-filter: blur(12px);
-      background: rgba(255, 255, 255, 0.025);
+      background: rgba(255, 252, 244, 0.035);
     }
 
     .links {
@@ -174,14 +207,14 @@
     }
 
     .links a:hover {
-      border-color: rgba(214, 181, 109, 0.58);
-      background: rgba(214, 181, 109, 0.08);
+      border-color: rgba(200, 169, 110, 0.58);
+      background: rgba(200, 169, 110, 0.08);
       transform: translateY(-1px);
     }
 
     .footer {
       margin-top: 2.25rem;
-      color: rgba(185, 173, 150, 0.72);
+      color: var(--quiet);
       font-size: 0.82rem;
     }
 
@@ -242,10 +275,10 @@
 
     <div class="eyebrow">The architecture of intelligence</div>
 
-    <h1>Álex Filipe</h1>
+    <h1>Álex Filipe Santos</h1>
 
     <p class="title">
-      <strong>AI Engineer • Software Engineer</strong><br />
+      <strong>AI Engineer • Software Engineer • Classical Musician</strong><br />
       Agentic workflows, backend systems, applied AI, and thoughtful tools
       built from San Francisco.
     </p>
