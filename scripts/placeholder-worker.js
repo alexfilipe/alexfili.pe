@@ -1,4 +1,5 @@
 const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/main";
+const SOURCE_VERSION = "20260630-seo-copy";
 const HTML_ASSET = {
   path: "launch-placeholder.html",
   contentType: "text/html; charset=UTF-8",
@@ -33,7 +34,7 @@ async function handleRequest(request) {
 
   const url = new URL(request.url);
   const asset = resolveAsset(url.pathname);
-  const upstream = await fetch(`${RAW_BASE}/${asset.path}`, {
+  const upstream = await fetch(`${RAW_BASE}/${asset.path}?v=${SOURCE_VERSION}`, {
     cf: {
       cacheEverything: true,
       cacheTtl: asset.cacheTtl,
