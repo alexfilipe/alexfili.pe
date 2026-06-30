@@ -84,6 +84,7 @@ Cloudflare Pages settings:
 Temporary launch mode:
 
 - `npm run build` currently publishes only `launch-placeholder.html` as `dist/index.html`.
+- `scripts/placeholder-worker.js` mirrors the temporary Cloudflare Worker currently serving the placeholder and its preview/icon assets.
 - `npm run build:site` keeps the full Astro site build available for when the full website is ready.
 - To restore the full site deploy, change `build` in `package.json` back to the `build:site` command.
 
