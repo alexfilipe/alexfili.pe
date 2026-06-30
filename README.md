@@ -81,6 +81,12 @@ Cloudflare Pages settings:
 - Build output directory: `dist`
 - Production branch: `main`
 
+Temporary launch mode:
+
+- `npm run build` currently publishes only `launch-placeholder.html` as `dist/index.html`.
+- `npm run build:site` keeps the full Astro site build available for when the full website is ready.
+- To restore the full site deploy, change `build` in `package.json` back to the `build:site` command.
+
 After the first successful deploy:
 
 1. Add `alexfili.pe` as a custom domain in Cloudflare Pages.

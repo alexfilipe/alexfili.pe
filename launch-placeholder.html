@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Álex Filipe</title>
+  <meta
+    name="description"
+    content="Álex Filipe — AI Engineer, Software Engineer, and classical musician based in San Francisco."
+  />
+
+  <style>
+    :root {
+      --bg: #080807;
+      --fg: #f5efe3;
+      --muted: #b9ad96;
+      --gold: #d6b56d;
+      --gold-soft: rgba(214, 181, 109, 0.22);
+      --line: rgba(245, 239, 227, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(214, 181, 109, 0.12), transparent 34rem),
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.05), transparent 28rem),
+        var(--bg);
+      color: var(--fg);
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+      overflow: hidden;
+    }
+
+    .page {
+      width: min(100%, 760px);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .orb {
+      width: clamp(7rem, 22vw, 11rem);
+      aspect-ratio: 1;
+      margin: 0 auto 2rem;
+      border: 1px solid var(--gold-soft);
+      border-radius: 999px;
+      position: relative;
+      box-shadow:
+        0 0 60px rgba(214, 181, 109, 0.12),
+        inset 0 0 30px rgba(214, 181, 109, 0.08);
+      animation: breathe 5s ease-in-out infinite;
+    }
+
+    .orb::before,
+    .orb::after {
+      content: "";
+      position: absolute;
+      inset: 16%;
+      border: 1px solid rgba(214, 181, 109, 0.36);
+      transform: rotate(45deg);
+    }
+
+    .orb::after {
+      inset: 28%;
+      transform: rotate(-22deg);
+      border-color: rgba(245, 239, 227, 0.18);
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      font-size: 0.72rem;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family:
+        "Cormorant Garamond", Georgia, "Times New Roman", serif;
+      font-size: clamp(3rem, 11vw, 6.5rem);
+      font-weight: 400;
+      line-height: 0.92;
+      margin: 0;
+      letter-spacing: -0.055em;
+    }
+
+    .title {
+      margin: 1.2rem auto 0;
+      max-width: 42rem;
+      color: var(--muted);
+      font-size: clamp(1rem, 2.6vw, 1.2rem);
+      line-height: 1.65;
+    }
+
+    .title strong {
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    .status {
+      width: fit-content;
+      margin: 2rem auto 0;
+      padding: 0.62rem 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .links {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .links a {
+      color: var(--fg);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.78rem 1rem;
+      font-size: 0.92rem;
+      transition:
+        border-color 180ms ease,
+        background 180ms ease,
+        transform 180ms ease;
+    }
+
+    .links a:hover {
+      border-color: rgba(214, 181, 109, 0.58);
+      background: rgba(214, 181, 109, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .footer {
+      margin-top: 2.25rem;
+      color: rgba(185, 173, 150, 0.72);
+      font-size: 0.82rem;
+    }
+
+    .grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(circle at center, black, transparent 72%);
+      pointer-events: none;
+    }
+
+    @keyframes breathe {
+      0%,
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.9;
+      }
+
+      50% {
+        transform: scale(1.045) rotate(4deg);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 1.25rem;
+      }
+
+      .orb {
+        margin-bottom: 1.5rem;
+      }
+
+      .title {
+        line-height: 1.55;
+      }
+
+      .links {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .links a {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grid" aria-hidden="true"></div>
+
+  <main class="page">
+    <div class="orb" aria-hidden="true"></div>
+
+    <div class="eyebrow">The architecture of intelligence</div>
+
+    <h1>Álex Filipe</h1>
+
+    <p class="title">
+      <strong>AI Engineer • Software Engineer</strong><br />
+      Agentic workflows, backend systems, applied AI, and thoughtful tools
+      built from San Francisco.
+    </p>
+
+    <div class="status">Website in construction — full site coming soon.</div>
+
+    <nav class="links" aria-label="Profile links">
+      <a href="https://linkedin.com/in/alexfilipe">LinkedIn</a>
+      <a href="https://github.com/alexfilipe">GitHub</a>
+      <a href="mailto:hi@alexfili.pe">Email</a>
+    </nav>
+
+    <div class="footer">
+      Brazilian by birth. San Franciscan by heart.
+    </div>
+  </main>
+</body>
+</html>
