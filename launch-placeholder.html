@@ -267,6 +267,15 @@
         line-height: 1.55;
       }
 
+      .role-line {
+        font-size: 0.86rem;
+        white-space: nowrap;
+      }
+
+      .role-separator {
+        margin: 0 0.32em;
+      }
+
       .links {
         flex-direction: column;
         align-items: stretch;
@@ -274,6 +283,16 @@
 
       .links a {
         width: 100%;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .role-line {
+        font-size: 0.78rem;
+      }
+
+      .role-separator {
+        margin: 0 0.24em;
       }
     }
   </style>
