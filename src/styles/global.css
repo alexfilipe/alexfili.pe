@@ -123,6 +123,13 @@ select {
     radial-gradient(circle at 50% var(--loader-glow-y), rgba(200, 169, 110, 0.1), transparent 18rem),
     #080807;
   color: rgba(240, 237, 230, 0.76);
+  opacity: 1;
+  transition: opacity 620ms ease;
+}
+
+.figma-loader.is-exiting {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .figma-loader > * {
@@ -197,7 +204,7 @@ select {
   max-width: 860px;
   margin: 0 auto;
   padding: 6rem 1.5rem 7rem;
-  transition: opacity 220ms ease;
+  transition: opacity 720ms ease 120ms;
 }
 
 .figma-hero {

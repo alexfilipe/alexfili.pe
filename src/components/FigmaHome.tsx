@@ -560,15 +560,26 @@ const socialLinks = [
 
 export default function FigmaHome() {
   const [isLoading, setIsLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
 
   const handleArtifactReady = useCallback(() => {
     window.setTimeout(() => setIsLoading(false), 520);
   }, []);
 
+  useEffect(() => {
+    if (isLoading) {
+      setShowLoader(true);
+      return;
+    }
+
+    const timeout = window.setTimeout(() => setShowLoader(false), 620);
+    return () => window.clearTimeout(timeout);
+  }, [isLoading]);
+
   return (
     <div className={`figma-home${isLoading ? " is-loading" : ""}`}>
-      {isLoading && (
-        <div className="figma-loader" role="status" aria-live="polite" aria-label="Loading site">
+      {showLoader && (
+        <div className={`figma-loader${!isLoading ? " is-exiting" : ""}`} role="status" aria-live="polite" aria-label="Loading site">
           <div className="figma-loader-mark" aria-hidden="true">
             <span />
             <span />
