@@ -221,6 +221,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
     });
     const pulses: {
       edge: number;
+      reverse: boolean;
       progress: number;
       speed: number;
       width: number;
@@ -332,9 +333,9 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
       ctx.setLineDash([1.5, 5]);
       NEURAL.forEach(([a, b]) => {
         const avg = (proj[a].z + proj[b].z) / 2;
-        const opacity = Math.max(0, (avg + 1) * 0.09 + 0.03);
+        const opacity = Math.max(0.08, (avg + 1) * 0.12 + 0.05);
         ctx.strokeStyle = `rgba(200,169,110,${opacity.toFixed(3)})`;
-        ctx.lineWidth = 0.5;
+        ctx.lineWidth = 0.65;
         ctx.beginPath();
         ctx.moveTo(proj[a].x, proj[a].y);
         ctx.lineTo(proj[b].x, proj[b].y);
@@ -355,7 +356,9 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
       });
 
       pulses.forEach((pulse) => {
-        const [a, b] = beamEdges[pulse.edge];
+        const [edgeA, edgeB] = beamEdges[pulse.edge];
+        const a = pulse.reverse ? edgeB : edgeA;
+        const b = pulse.reverse ? edgeA : edgeB;
         const beamColor = BEAM_COLORS[pulse.colorIndex % BEAM_COLORS.length];
         const charge = 0.14 + smoothStep(0.08, 0.48, pulse.progress) * 0.86;
         const visibleWidth = pulse.width * (0.18 + charge * 0.82);
@@ -430,7 +433,8 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         const pulse = pulses[index];
         pulse.progress += pulse.speed * frameScale;
         if (!pulse.hitFired && pulse.progress >= 1) {
-          const [, target] = beamEdges[pulse.edge];
+          const [edgeA, edgeB] = beamEdges[pulse.edge];
+          const target = pulse.reverse ? edgeA : edgeB;
           vertexBurstTargets[target] = Math.max(vertexBurstTargets[target], 1.08);
           vertexBurstColorIndexes[target] = pulse.colorIndex;
           pulse.hitFired = true;
@@ -443,17 +447,21 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
 
       nextPulse -= frameScale;
       if (nextPulse <= 0) {
-        const colorIndex = nextPulseColorIndex;
-        nextPulseColorIndex = (nextPulseColorIndex + 1) % BEAM_COLORS.length;
-        pulses.push({
-          edge: Math.floor(Math.random() * beamEdges.length),
-          progress: 0,
-          speed: 0.018 + Math.random() * 0.018,
-          width: 0.11 + Math.random() * 0.09,
-          hitFired: false,
-          colorIndex
-        });
-        nextPulse = 18 + Math.floor(Math.random() * 34);
+        if (pulses.length < 6) {
+          const colorIndex = nextPulseColorIndex;
+          nextPulseColorIndex = (nextPulseColorIndex + 1) % BEAM_COLORS.length;
+          pulses.push({
+            edge: Math.floor(Math.random() * beamEdges.length),
+            reverse: Math.random() < 0.5,
+            progress: 0,
+            speed: 0.018 + Math.random() * 0.018,
+            width: 0.11 + Math.random() * 0.09,
+            hitFired: false,
+            colorIndex
+          });
+        }
+
+        nextPulse = 24 + Math.floor(Math.random() * 68);
       }
 
       t += 0.004 * frameScale;
