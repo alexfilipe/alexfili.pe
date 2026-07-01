@@ -18,9 +18,10 @@ const {
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
+const homeSeoTitle = "Álex Filipe Santos \\ AI Engineer, Software Engineer, Classical Musician";
 const pageTitle =
   currentPath === "/"
-    ? "Álex Filipe Santos | Software & AI Engineer and Classical Musician"
+    ? homeSeoTitle
     : title === profile.name
       ? title
       : `${title} | ${profile.name}`;

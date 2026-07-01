@@ -646,6 +646,11 @@ export default function FigmaHome() {
             </a>
           ))}
         </div>
+
+        <footer className="figma-home-footnote">
+          This site is an experiment in AI-first development, bringing together front-end interaction, design systems,
+          and personal storytelling through agentic workflows.
+        </footer>
       </div>
     </div>
   );

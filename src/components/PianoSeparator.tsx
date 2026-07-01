@@ -9,7 +9,7 @@ const KEY_GLOW_HEX = 0xc8a96e;
 const RAINBOW_HEX = [0xff2a2a, 0xff7e18, 0xffe220, 0x30ee58, 0x19cbff, 0x5b4eff, 0xe236ff];
 const TARGET_FRAME_SECONDS = 1 / 60;
 const MAX_FRAME_SCALE = 3;
-const SPARKLE_SWEEP_SECONDS = 1;
+const SPARKLE_SWEEP_SECONDS = 1.5;
 const SPARKLE_SWEEP_TAIL_SECONDS = 0.24;
 const SPARKLE_SWEEP_KEY_GLOW_SECONDS = 0.085;
 const SPARKLE_SWEEP_LIFT = 0.38;
@@ -297,6 +297,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
     let scrollCursor = 0;
     let scrollScatterSeed = 0x9e3779b9;
     let lastScrollGlowAt = 0;
+    let nextSweepDirection: 1 | -1 = 1;
     let lastFrameTime = 0;
 
     const ivory = new THREE.Color(0xf0ede6);
@@ -821,9 +822,12 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
     };
 
     const startSparkleSweep = () => {
+      const direction = nextSweepDirection;
+      nextSweepDirection = nextSweepDirection === 1 ? -1 : 1;
+
       sparkleSweep = {
         color: RAINBOW_HEX[Math.floor(Math.random() * RAINBOW_HEX.length)],
-        direction: Math.random() < 0.5 ? -1 : 1,
+        direction,
         startedAt: lastFrameTime || performance.now() * 0.001
       };
     };

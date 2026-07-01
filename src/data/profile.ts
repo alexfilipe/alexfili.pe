@@ -3,7 +3,7 @@ export const profile = {
   shortName: "Álex Filipe",
   domain: "alexfili.pe",
   tagline: "The architecture of intelligence.",
-  role: "Software & AI Engineer guided by mathematical thought and classical musicianship.",
+  role: "AI Engineer, Software Engineer, Classical Musician.",
   email: "hello@alexfili.pe",
   github: "https://github.com/",
   linkedin: "https://linkedin.com/",
