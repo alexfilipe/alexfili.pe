@@ -113,13 +113,14 @@ select {
 }
 
 .figma-loader {
+  --loader-glow-y: calc(50% + 2rem);
   position: fixed;
   inset: 0;
   z-index: 1000;
   display: grid;
   place-items: center;
   background:
-    radial-gradient(circle at 50% 44%, rgba(200, 169, 110, 0.1), transparent 18rem),
+    radial-gradient(circle at 50% var(--loader-glow-y), rgba(200, 169, 110, 0.1), transparent 18rem),
     #080807;
   color: rgba(240, 237, 230, 0.76);
 }
