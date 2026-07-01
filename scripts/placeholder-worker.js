@@ -25,6 +25,14 @@ addEventListener("fetch", (event) => {
 });
 
 async function handleRequest(request) {
+  const url = new URL(request.url);
+
+  if (url.protocol === "http:" || url.hostname === "www.alexfili.pe") {
+    url.protocol = "https:";
+    url.hostname = "alexfili.pe";
+    return Response.redirect(url.toString(), 308);
+  }
+
   if (request.method !== "GET" && request.method !== "HEAD") {
     return new Response("Method Not Allowed", {
       status: 405,
@@ -32,9 +40,8 @@ async function handleRequest(request) {
     });
   }
 
-  const url = new URL(request.url);
   const asset = resolveAsset(url.pathname);
-  const upstream = await fetch(`${RAW_BASE}/${asset.path}?v=${SOURCE_VERSION}`, {
+  const upstream = await fetch(RAW_BASE + "/" + asset.path + "?v=" + SOURCE_VERSION, {
     cf: {
       cacheEverything: true,
       cacheTtl: asset.cacheTtl,

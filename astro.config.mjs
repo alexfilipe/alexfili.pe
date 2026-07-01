@@ -15,6 +15,9 @@ export default defineConfig({
     server: {
       allowedHosts: ["dev.alexfili.pe"]
     },
+    optimizeDeps: {
+      include: ["@astrojs/react/client.js", "lucide-react", "react", "react-dom/client", "three"]
+    },
     build: {
       chunkSizeWarningLimit: 650
     },

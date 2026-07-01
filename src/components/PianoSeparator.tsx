@@ -9,6 +9,10 @@ const KEY_GLOW_HEX = 0xc8a96e;
 const RAINBOW_HEX = [0xff2a2a, 0xff7e18, 0xffe220, 0x30ee58, 0x19cbff, 0x5b4eff, 0xe236ff];
 const TARGET_FRAME_SECONDS = 1 / 60;
 const MAX_FRAME_SCALE = 3;
+const SPARKLE_SWEEP_SECONDS = 1;
+const SPARKLE_SWEEP_TAIL_SECONDS = 0.24;
+const SPARKLE_SWEEP_KEY_GLOW_SECONDS = 0.085;
+const SPARKLE_SWEEP_LIFT = 0.38;
 const WHITE_KEYBOARD_ROWS: [string, number[]][] = [
   ["qwertyuiop", [60, 62, 64, 65, 67, 69, 71, 72, 74, 76]],
   ["zxcvbnm,./", [77, 79, 81, 83, 84, 86, 88, 89, 91, 93]]
@@ -211,6 +215,11 @@ function playNote(freq: number) {
 
 type PianoKeyMesh = THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>;
 type SparkleSprite = THREE.Sprite;
+type SparkleSweep = {
+  color: number;
+  direction: 1 | -1;
+  startedAt: number;
+};
 
 type PerspectivePianoProps = {
   hovered: string | null;
@@ -275,6 +284,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
     const glints: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>[] = [];
     const pressedComputerKeys = new Map<string, string>();
     const keyboardPressedNotes = new Set<string>();
+    let sparkleSweep: SparkleSweep | null = null;
     let activeKey: PianoKeyMesh | null = null;
     let pressedKey: PianoKeyMesh | null = null;
     let lastDragKey: PianoKeyMesh | null = null;
@@ -352,6 +362,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       keys.push(mesh);
       keysByNote.set(note, mesh);
       if (!black) {
+        mesh.userData.whiteIndex = whiteKeys.length;
         whiteKeys.push(mesh);
       }
 
@@ -566,6 +577,12 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       const keyEase = 1 - Math.pow(0.78, frameScale);
       lastFrameTime = time;
       const glowDecay = Math.pow(0.988, frameScale);
+      const activeSweep = sparkleSweep;
+      const sweepElapsed = activeSweep ? time - activeSweep.startedAt : 0;
+      const activeSweepColor = activeSweep ? new THREE.Color(activeSweep.color) : null;
+      if (activeSweep && sweepElapsed > SPARKLE_SWEEP_SECONDS) {
+        sparkleSweep = null;
+      }
 
       triggerScrollGlow(time);
 
@@ -589,10 +606,36 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
         const scrollColor = gold;
         const isActive = isHovered || isFlash || isPressed;
         const scrollGlow = Number(key.userData.scrollGlow) || 0;
-        const glintStrength = Math.pow(scrollGlow, 1.35);
+        const sparklePulse = Number(key.userData.sparklePulse) || 0;
+        let sweepSparkle = 0;
+        let sweepKeyGlow = 0;
+        let sweepLift = 0;
+        if (activeSweep && orderedKeys.length > 0 && sweepElapsed >= 0 && sweepElapsed <= SPARKLE_SWEEP_SECONDS) {
+          const orderedIndex = Number(key.userData.playIndex) || 0;
+          const sweepIndex = activeSweep.direction === 1 ? orderedIndex : orderedKeys.length - 1 - orderedIndex;
+          const sweepStartRange = Math.max(0.001, SPARKLE_SWEEP_SECONDS - SPARKLE_SWEEP_KEY_GLOW_SECONDS);
+          const keyStart = orderedKeys.length > 1 ? (sweepIndex / (orderedKeys.length - 1)) * sweepStartRange : 0;
+          const glowProgress = (sweepElapsed - keyStart) / SPARKLE_SWEEP_KEY_GLOW_SECONDS;
+          if (glowProgress >= 0 && glowProgress <= 1) {
+            sweepKeyGlow = Math.pow(1 - glowProgress, 2.2);
+          }
+        }
+        if (activeSweep && !isBlack && whiteKeys.length > 0 && sweepElapsed >= 0 && sweepElapsed <= SPARKLE_SWEEP_SECONDS) {
+          const whiteIndex = Number(key.userData.whiteIndex) || 0;
+          const sweepIndex = activeSweep.direction === 1 ? whiteIndex : whiteKeys.length - 1 - whiteIndex;
+          const sweepStartRange = Math.max(0.001, SPARKLE_SWEEP_SECONDS - SPARKLE_SWEEP_TAIL_SECONDS);
+          const keyStart = whiteKeys.length > 1 ? (sweepIndex / (whiteKeys.length - 1)) * sweepStartRange : 0;
+          const localProgress = (sweepElapsed - keyStart) / SPARKLE_SWEEP_TAIL_SECONDS;
+          if (localProgress >= 0 && localProgress <= 1) {
+            sweepSparkle = Math.sin(localProgress * Math.PI);
+            sweepLift = (1 - localProgress) * SPARKLE_SWEEP_LIFT + sweepSparkle * 0.08;
+          }
+        }
+        const scrollGlintStrength = Math.pow(scrollGlow, 1.35);
+        const glintStrength = Math.max(scrollGlintStrength, sweepKeyGlow);
         const scrollOpacityStrength = Math.min(1, glintStrength);
         const scrollColorStrength = Math.pow(scrollGlow, 0.72);
-        const sparklePulse = Number(key.userData.sparklePulse) || 0;
+        const sweepColor = activeSweepColor ?? scrollColor;
         key.userData.scrollGlow = scrollGlow > 0.01 ? scrollGlow * glowDecay : 0;
         key.userData.sparklePulse = sparklePulse > 0.015 ? Math.max(0, sparklePulse - frameDelta) : 0;
 
@@ -600,8 +643,11 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
         if (!isActive && scrollColorStrength > 0.02) {
           material.color.lerp(scrollColor, Math.min(isBlack ? 0.58 : 0.54, scrollColorStrength * (isBlack ? 0.58 : 0.54)));
         }
-        if (!isFlash && glintStrength > 0.25) {
-          material.color.lerp(gold, Math.min(0.12, (glintStrength - 0.25) * 0.12));
+        if (!isActive && sweepKeyGlow > 0.02) {
+          material.color.lerp(sweepColor, Math.min(0.72, sweepKeyGlow * 0.72));
+        }
+        if (!isFlash && scrollGlintStrength > 0.25) {
+          material.color.lerp(gold, Math.min(0.12, (scrollGlintStrength - 0.25) * 0.12));
         }
         material.opacity = isActive
           ? isBlack
@@ -613,28 +659,39 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
         if (!isActive && scrollColorStrength > 0.02) {
           edgeMaterial.color.lerp(scrollColor, Math.min(0.82, scrollColorStrength * 0.82));
         }
+        if (!isActive && sweepKeyGlow > 0.02) {
+          edgeMaterial.color.lerp(sweepColor, Math.min(0.94, sweepKeyGlow * 0.94));
+        }
         edgeMaterial.opacity = isActive ? 0.95 : Math.min(1, (isBlack ? 0.64 : 0.82) + scrollOpacityStrength * (isBlack ? 0.32 : 0.18));
         hiddenEdgeMaterial.color.copy(isActive ? activeColor : ivory);
         if (!isActive && scrollColorStrength > 0.02) {
           hiddenEdgeMaterial.color.lerp(scrollColor, Math.min(0.88, scrollColorStrength * 0.88));
+        }
+        if (!isActive && sweepKeyGlow > 0.02) {
+          hiddenEdgeMaterial.color.lerp(sweepColor, Math.min(0.96, sweepKeyGlow * 0.96));
         }
         hiddenEdgeMaterial.opacity = isActive
           ? 0.46
           : isBlack
             ? 0.2 + scrollOpacityStrength * 0.42
             : 0.26 + scrollOpacityStrength * 0.36;
-        glintMaterial.color.copy(isActive ? activeColor : scrollGlow > 0.02 ? scrollColor : gold);
+        glintMaterial.color.copy(isActive ? activeColor : sweepKeyGlow > 0.02 ? sweepColor : scrollGlow > 0.02 ? scrollColor : gold);
         glintMaterial.opacity = isActive ? (isBlack ? 0.36 : 0.42) : scrollOpacityStrength * (isBlack ? 0.52 : 0.46);
 
-        const currentSparklePulse = Number(key.userData.sparklePulse) || 0;
+        const currentSparklePulse = Math.max(Number(key.userData.sparklePulse) || 0, sweepSparkle);
         sparkles.forEach((sparkle, sparkleIndex) => {
           const sparkleMaterial = sparkle.material;
           const sparklePhase = Number(sparkle.userData.phase);
           const drift = Math.sin(time * 6.2 + sparklePhase) * 0.025;
-          sparkleMaterial.color.copy(isActive ? activeColor : scrollColor);
+          if (sweepSparkle > 0 && activeSweep && !isBlack) {
+            sparkleMaterial.color.setHex(activeSweep.color);
+          } else {
+            sparkleMaterial.color.copy(isActive ? activeColor : scrollColor);
+          }
           sparkleMaterial.opacity = currentSparklePulse * (0.34 + (sparkleIndex % 3) * 0.11);
           sparkle.position.x = Number(sparkle.userData.baseX) + drift;
-          sparkle.position.y = Number(sparkle.userData.baseY) + currentSparklePulse * 0.24;
+          sparkle.position.y =
+            Number(sparkle.userData.baseY) + Math.max(sparklePulse * 0.24, sweepSparkle > 0 ? sweepLift + sweepSparkle * 0.13 : 0);
           sparkle.position.z = Number(sparkle.userData.baseZ) + Math.cos(time * 5.1 + sparklePhase) * 0.018;
           sparkle.scale.setScalar(Number(sparkle.userData.size) * (0.75 + currentSparklePulse * 1.65));
         });
@@ -763,6 +820,14 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       isPointerDown = false;
     };
 
+    const startSparkleSweep = () => {
+      sparkleSweep = {
+        color: RAINBOW_HEX[Math.floor(Math.random() * RAINBOW_HEX.length)],
+        direction: Math.random() < 0.5 ? -1 : 1,
+        startedAt: lastFrameTime || performance.now() * 0.001
+      };
+    };
+
     const pressComputerKey = (event: KeyboardEvent) => {
       if (event.metaKey || event.ctrlKey || event.altKey || isTypingTarget(event.target)) {
         return;
@@ -770,7 +835,15 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
 
       const keyboardKey = event.key.toLowerCase();
       const mappedNote = COMPUTER_KEYBOARD_NOTES.get(keyboardKey);
-      if (!mappedNote || pressedComputerKeys.has(keyboardKey)) {
+      if (!mappedNote) {
+        if (!event.repeat && event.key.length === 1) {
+          event.preventDefault();
+          startSparkleSweep();
+        }
+        return;
+      }
+
+      if (pressedComputerKeys.has(keyboardKey)) {
         return;
       }
 
