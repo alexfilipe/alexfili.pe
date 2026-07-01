@@ -113,7 +113,7 @@ select {
 }
 
 .figma-loader {
-  --loader-glow-y: calc(50% + 2rem);
+  --loader-glow-y: 50%;
   position: fixed;
   inset: 0;
   z-index: 1000;
@@ -442,6 +442,11 @@ select {
     transform: scale(1.65);
   }
 
+  .figma-role {
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+  }
+
   .figma-piano-wrap {
     margin: 2rem 0 clamp(1.85rem, 2.85vw, 3.15rem);
   }
@@ -470,6 +475,12 @@ select {
 
   .figma-hero {
     gap: 0.8rem;
+  }
+
+  .figma-role {
+    max-width: 22rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
   }
 
   .figma-artifact-wrap {
