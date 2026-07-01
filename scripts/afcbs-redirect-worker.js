@@ -6,7 +6,7 @@ addEventListener("fetch", (event) => {
 
 function handleRequest(request) {
   const url = new URL(request.url);
-  const location = `${TARGET_ORIGIN}${url.pathname}${url.search}`;
+  const location = TARGET_ORIGIN + url.pathname + url.search;
 
   return new Response(null, {
     status: 308,
