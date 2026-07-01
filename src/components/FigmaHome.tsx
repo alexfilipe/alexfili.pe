@@ -368,12 +368,13 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         ctx.restore();
       });
 
-      ctx.setLineDash([1.5, 5]);
+      ctx.setLineDash([1, 4.5]);
       NEURAL.forEach(([a, b]) => {
         const avg = (proj[a].z + proj[b].z) / 2;
-        const opacity = Math.max(0.08, (avg + 1) * 0.12 + 0.05);
-        ctx.strokeStyle = `rgba(200,169,110,${opacity.toFixed(3)})`;
-        ctx.lineWidth = 0.65;
+        const opacity = Math.max(0.12, (avg + 1) * 0.13 + 0.07);
+        ctx.strokeStyle = `rgba(228,218,194,${opacity.toFixed(3)})`;
+        ctx.lineWidth = 0.42;
+        ctx.lineCap = "butt";
         ctx.beginPath();
         ctx.moveTo(proj[a].x, proj[a].y);
         ctx.lineTo(proj[b].x, proj[b].y);
