@@ -139,6 +139,11 @@ function smoothStep(edge0: number, edge1: number, value: number) {
   return t * t * (3 - 2 * t);
 }
 
+function easeAccelerate(value: number) {
+  const t = Math.max(0, Math.min(1, value));
+  return t * t;
+}
+
 function normalizeVector([x, y, z]: [number, number, number]): [number, number, number] {
   const length = Math.hypot(x, y, z) || 1;
   return [x / length, y / length, z / length];
@@ -320,14 +325,47 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
       ctx.setLineDash([]);
       sortedFaces.forEach(([a, b, c]) => {
         const avgZ = (proj[a].z + proj[b].z + proj[c].z) / 3;
-        const opacity = Math.max(0.01, (avgZ + 1) * 0.03);
-        ctx.fillStyle = `rgba(240,237,230,${opacity.toFixed(3)})`;
+        const opacity = Math.max(0.045, (avgZ + 1) * 0.048 + 0.026);
+        const centerX = (proj[a].x + proj[b].x + proj[c].x) / 3;
+        const centerY = (proj[a].y + proj[b].y + proj[c].y) / 3;
+        const faceGradient = ctx.createLinearGradient(centerX - size * 0.08, centerY - size * 0.08, centerX + size * 0.1, centerY + size * 0.12);
+        faceGradient.addColorStop(0, `rgba(245,245,238,${(opacity * 0.54).toFixed(3)})`);
+        faceGradient.addColorStop(0.42, `rgba(150,150,142,${(opacity * 0.24).toFixed(3)})`);
+        faceGradient.addColorStop(1, `rgba(48,49,47,${(opacity * 0.46).toFixed(3)})`);
+
         ctx.beginPath();
         ctx.moveTo(proj[a].x, proj[a].y);
         ctx.lineTo(proj[b].x, proj[b].y);
         ctx.lineTo(proj[c].x, proj[c].y);
         ctx.closePath();
+        ctx.fillStyle = faceGradient;
         ctx.fill();
+
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        ctx.clip();
+        const gloss = ctx.createLinearGradient(centerX - size * 0.12, centerY - size * 0.14, centerX + size * 0.05, centerY + size * 0.04);
+        gloss.addColorStop(0, `rgba(255,255,250,${(opacity * 0.44).toFixed(3)})`);
+        gloss.addColorStop(0.42, `rgba(220,220,210,${(opacity * 0.1).toFixed(3)})`);
+        gloss.addColorStop(1, "rgba(220,220,210,0)");
+        ctx.fillStyle = gloss;
+        ctx.fillRect(centerX - size * 0.16, centerY - size * 0.16, size * 0.32, size * 0.32);
+
+        ctx.lineCap = "square";
+        ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.58).toFixed(3)})`;
+        ctx.lineWidth = 0.42;
+        ctx.beginPath();
+        ctx.moveTo(centerX - size * 0.11, centerY - size * 0.04);
+        ctx.lineTo(centerX + size * 0.1, centerY - size * 0.1);
+        ctx.stroke();
+
+        ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.34).toFixed(3)})`;
+        ctx.lineWidth = 0.34;
+        ctx.beginPath();
+        ctx.moveTo(centerX - size * 0.08, centerY + size * 0.07);
+        ctx.lineTo(centerX + size * 0.12, centerY + size * 0.01);
+        ctx.stroke();
+        ctx.restore();
       });
 
       ctx.setLineDash([1.5, 5]);
@@ -368,13 +406,15 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
           return;
         }
 
+        const easedStart = easeAccelerate(start);
+        const easedEnd = easeAccelerate(end);
         const from = {
-          x: proj[a].x + (proj[b].x - proj[a].x) * start,
-          y: proj[a].y + (proj[b].y - proj[a].y) * start
+          x: proj[a].x + (proj[b].x - proj[a].x) * easedStart,
+          y: proj[a].y + (proj[b].y - proj[a].y) * easedStart
         };
         const head = {
-          x: proj[a].x + (proj[b].x - proj[a].x) * end,
-          y: proj[a].y + (proj[b].y - proj[a].y) * end
+          x: proj[a].x + (proj[b].x - proj[a].x) * easedEnd,
+          y: proj[a].y + (proj[b].y - proj[a].y) * easedEnd
         };
         const gradient = ctx.createLinearGradient(from.x, from.y, head.x, head.y);
         gradient.addColorStop(0, rgbaColor(beamColor, 0));
@@ -406,11 +446,11 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         const burstColor = BEAM_COLORS[vertexBurstColorIndexes[index] % BEAM_COLORS.length];
 
         if (burst > 0.008) {
-          const haloRadius = 5.2 + burst * 14.5;
+          const haloRadius = 4.2 + burst * 9.5;
           const halo = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, haloRadius);
-          halo.addColorStop(0, rgbaColor(burstColor, burst * 0.46));
-          halo.addColorStop(0.28, rgbaColor(burstColor, burst * 0.34));
-          halo.addColorStop(0.66, rgbaColor(burstColor, burst * 0.13));
+          halo.addColorStop(0, rgbaColor(burstColor, burst * 0.4));
+          halo.addColorStop(0.28, rgbaColor(burstColor, burst * 0.28));
+          halo.addColorStop(0.66, rgbaColor(burstColor, burst * 0.1));
           halo.addColorStop(1, rgbaColor(burstColor, 0));
           ctx.fillStyle = halo;
           ctx.beginPath();
@@ -418,8 +458,8 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
           ctx.fill();
         }
 
-        const pointOpacity = Math.min(0.96, baseOpacity + burst * 0.36);
-        const pointRadius = 1.55 + burst * 2.8;
+        const pointOpacity = Math.min(0.96, baseOpacity + burst * 0.3);
+        const pointRadius = 1.55 + burst * 1.9;
         ctx.fillStyle = `rgba(240,237,230,${pointOpacity.toFixed(3)})`;
         ctx.beginPath();
         ctx.arc(point.x, point.y, pointRadius, 0, Math.PI * 2);
@@ -435,7 +475,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         if (!pulse.hitFired && pulse.progress >= 1) {
           const [edgeA, edgeB] = beamEdges[pulse.edge];
           const target = pulse.reverse ? edgeA : edgeB;
-          vertexBurstTargets[target] = Math.max(vertexBurstTargets[target], 1.08);
+          vertexBurstTargets[target] = Math.max(vertexBurstTargets[target], 0.86);
           vertexBurstColorIndexes[target] = pulse.colorIndex;
           pulse.hitFired = true;
         }
