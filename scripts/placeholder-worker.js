@@ -1,5 +1,5 @@
 const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/main";
-const SOURCE_VERSION = "20260701-subheading-nbsp";
+const SOURCE_VERSION = "20260701-subheading-css-gap";
 const HTML_ASSET = {
   path: "launch-placeholder.html",
   contentType: "text/html; charset=UTF-8",

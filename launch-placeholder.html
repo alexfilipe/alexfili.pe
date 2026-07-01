@@ -173,6 +173,18 @@
       font-weight: 700;
     }
 
+    .role-line {
+      display: inline-flex;
+      align-items: baseline;
+      justify-content: center;
+      flex-wrap: wrap;
+      row-gap: 0.1rem;
+    }
+
+    .role-separator {
+      margin: 0 0.55em;
+    }
+
     .status {
       width: fit-content;
       margin: 2rem auto 0;
@@ -278,7 +290,9 @@
     <h1>Álex Filipe Santos</h1>
 
     <p class="title">
-      <strong>AI Engineer&nbsp;&nbsp;•&nbsp;&nbsp;Software Engineer&nbsp;&nbsp;•&nbsp;&nbsp;Classical Musician</strong><br />
+      <strong class="role-line">
+        <span>AI Engineer</span><span class="role-separator" aria-hidden="true">•</span><span>Software Engineer</span><span class="role-separator" aria-hidden="true">•</span><span>Classical Musician</span>
+      </strong><br />
       Agentic workflows, backend systems, applied AI, and thoughtful tools
       built from San Francisco.
     </p>
