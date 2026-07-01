@@ -1,5 +1,5 @@
-const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/c5696d42afdb7f3570579e350b10b0323cceafea";
-const SOURCE_VERSION = "20260701-subheading-css-gap-commit";
+const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/703bb20a44fa34113dd336dca8b0580035efde83";
+const SOURCE_VERSION = "20260701-mobile-subtitle-nowrap";
 const HTML_ASSET = {
   path: "launch-placeholder.html",
   contentType: "text/html; charset=UTF-8",
