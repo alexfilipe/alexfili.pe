@@ -322,15 +322,15 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
       });
 
       ctx.setLineDash([]);
-      sortedFaces.forEach(([a, b, c]) => {
+      sortedFaces.forEach(([a, b, c], faceIndex) => {
         const avgZ = (proj[a].z + proj[b].z + proj[c].z) / 3;
-        const opacity = Math.max(0.055, (avgZ + 1) * 0.056 + 0.03);
+        const opacity = Math.max(0.042, (avgZ + 1) * 0.044 + 0.022);
         const centerX = (proj[a].x + proj[b].x + proj[c].x) / 3;
         const centerY = (proj[a].y + proj[b].y + proj[c].y) / 3;
         const faceGradient = ctx.createLinearGradient(centerX - size * 0.08, centerY - size * 0.08, centerX + size * 0.1, centerY + size * 0.12);
-        faceGradient.addColorStop(0, `rgba(248,248,242,${(opacity * 0.62).toFixed(3)})`);
-        faceGradient.addColorStop(0.38, `rgba(168,168,158,${(opacity * 0.28).toFixed(3)})`);
-        faceGradient.addColorStop(1, `rgba(48,49,47,${(opacity * 0.5).toFixed(3)})`);
+        faceGradient.addColorStop(0, `rgba(248,248,242,${(opacity * 0.5).toFixed(3)})`);
+        faceGradient.addColorStop(0.38, `rgba(168,168,158,${(opacity * 0.2).toFixed(3)})`);
+        faceGradient.addColorStop(1, `rgba(48,49,47,${(opacity * 0.36).toFixed(3)})`);
 
         ctx.beginPath();
         ctx.moveTo(proj[a].x, proj[a].y);
@@ -344,15 +344,15 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         ctx.globalCompositeOperation = "screen";
         ctx.clip();
         const gloss = ctx.createLinearGradient(centerX - size * 0.12, centerY - size * 0.14, centerX + size * 0.05, centerY + size * 0.04);
-        gloss.addColorStop(0, `rgba(255,255,250,${(opacity * 0.7).toFixed(3)})`);
-        gloss.addColorStop(0.28, `rgba(250,250,240,${(opacity * 0.22).toFixed(3)})`);
-        gloss.addColorStop(0.62, `rgba(220,220,210,${(opacity * 0.08).toFixed(3)})`);
+        gloss.addColorStop(0, `rgba(255,255,250,${(opacity * 0.42).toFixed(3)})`);
+        gloss.addColorStop(0.28, `rgba(250,250,240,${(opacity * 0.12).toFixed(3)})`);
+        gloss.addColorStop(0.62, `rgba(220,220,210,${(opacity * 0.04).toFixed(3)})`);
         gloss.addColorStop(1, "rgba(220,220,210,0)");
         ctx.fillStyle = gloss;
         ctx.fillRect(centerX - size * 0.16, centerY - size * 0.16, size * 0.32, size * 0.32);
 
-        ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.3).toFixed(3)})`;
-        ctx.lineWidth = 0.32;
+        ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.22).toFixed(3)})`;
+        ctx.lineWidth = 0.24;
         ctx.beginPath();
         ctx.moveTo(proj[a].x, proj[a].y);
         ctx.lineTo(proj[b].x, proj[b].y);
@@ -360,20 +360,22 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         ctx.closePath();
         ctx.stroke();
 
-        ctx.lineCap = "square";
-        ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.74).toFixed(3)})`;
-        ctx.lineWidth = 0.46;
-        ctx.beginPath();
-        ctx.moveTo(centerX - size * 0.11, centerY - size * 0.04);
-        ctx.lineTo(centerX + size * 0.1, centerY - size * 0.1);
-        ctx.stroke();
+        if (avgZ > -0.25 && faceIndex % 3 === 0) {
+          ctx.lineCap = "square";
+          ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.72).toFixed(3)})`;
+          ctx.lineWidth = 0.22;
+          ctx.beginPath();
+          ctx.moveTo(centerX - size * 0.09, centerY - size * 0.035);
+          ctx.lineTo(centerX + size * 0.085, centerY - size * 0.085);
+          ctx.stroke();
 
-        ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.44).toFixed(3)})`;
-        ctx.lineWidth = 0.36;
-        ctx.beginPath();
-        ctx.moveTo(centerX - size * 0.08, centerY + size * 0.07);
-        ctx.lineTo(centerX + size * 0.12, centerY + size * 0.01);
-        ctx.stroke();
+          ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.38).toFixed(3)})`;
+          ctx.lineWidth = 0.18;
+          ctx.beginPath();
+          ctx.moveTo(centerX - size * 0.06, centerY + size * 0.055);
+          ctx.lineTo(centerX + size * 0.095, centerY + size * 0.01);
+          ctx.stroke();
+        }
         ctx.restore();
       });
 
@@ -428,20 +430,21 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         };
         const gradient = ctx.createLinearGradient(from.x, from.y, head.x, head.y);
         gradient.addColorStop(0, rgbaColor(beamColor, 0));
-        gradient.addColorStop(0.45, rgbaColor(beamColor, 0.42 * charge));
-        gradient.addColorStop(1, rgbaColor(beamColor, 0.94 * charge));
+        gradient.addColorStop(0.38, rgbaColor(beamColor, 0.52 * charge));
+        gradient.addColorStop(0.78, rgbaColor(beamColor, 0.76 * charge));
+        gradient.addColorStop(1, rgbaColor(beamColor, 0.82 * charge));
 
         ctx.setLineDash([]);
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = 0.45 + charge * 0.7;
+        ctx.lineWidth = 0.48 + charge * 0.82;
         ctx.beginPath();
         ctx.moveTo(from.x, from.y);
         ctx.lineTo(head.x, head.y);
         ctx.stroke();
 
-        ctx.fillStyle = rgbaColor(beamColor, 0.2 + charge * 0.58);
+        ctx.fillStyle = rgbaColor(beamColor, 0.16 + charge * 0.38);
         ctx.beginPath();
-        ctx.arc(head.x, head.y, 0.55 + charge * 0.9, 0, Math.PI * 2);
+        ctx.arc(head.x, head.y, 0.36 + charge * 0.58, 0, Math.PI * 2);
         ctx.fill();
       });
 
