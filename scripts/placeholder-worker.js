@@ -1,5 +1,5 @@
-const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/060dbb2f3d80c3ceaff34712eefda2624edc6f8f";
-const SOURCE_VERSION = "20260702-conditional-scroll";
+const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/d33df80c9b6a38c83b837ea0c627a53d63cd1de5";
+const SOURCE_VERSION = "20260702-phone-scroll-breakpoint";
 const HTML_ASSET = {
   path: "launch-placeholder.html",
   contentType: "text/html; charset=UTF-8",
