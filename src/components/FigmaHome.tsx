@@ -237,7 +237,6 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
     const vertexBurstTargets = VISUAL_VERTS.map(() => 0);
     const vertexBurstColorIndexes = VISUAL_VERTS.map(() => 0);
     let nextPulse = 18;
-    let nextPulseColorIndex = 0;
     let t = 0;
     let ryCurrent = 0;
     let rxCurrent = 0.22;
@@ -325,13 +324,13 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
       ctx.setLineDash([]);
       sortedFaces.forEach(([a, b, c]) => {
         const avgZ = (proj[a].z + proj[b].z + proj[c].z) / 3;
-        const opacity = Math.max(0.045, (avgZ + 1) * 0.048 + 0.026);
+        const opacity = Math.max(0.055, (avgZ + 1) * 0.056 + 0.03);
         const centerX = (proj[a].x + proj[b].x + proj[c].x) / 3;
         const centerY = (proj[a].y + proj[b].y + proj[c].y) / 3;
         const faceGradient = ctx.createLinearGradient(centerX - size * 0.08, centerY - size * 0.08, centerX + size * 0.1, centerY + size * 0.12);
-        faceGradient.addColorStop(0, `rgba(245,245,238,${(opacity * 0.54).toFixed(3)})`);
-        faceGradient.addColorStop(0.42, `rgba(150,150,142,${(opacity * 0.24).toFixed(3)})`);
-        faceGradient.addColorStop(1, `rgba(48,49,47,${(opacity * 0.46).toFixed(3)})`);
+        faceGradient.addColorStop(0, `rgba(248,248,242,${(opacity * 0.62).toFixed(3)})`);
+        faceGradient.addColorStop(0.38, `rgba(168,168,158,${(opacity * 0.28).toFixed(3)})`);
+        faceGradient.addColorStop(1, `rgba(48,49,47,${(opacity * 0.5).toFixed(3)})`);
 
         ctx.beginPath();
         ctx.moveTo(proj[a].x, proj[a].y);
@@ -345,22 +344,32 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         ctx.globalCompositeOperation = "screen";
         ctx.clip();
         const gloss = ctx.createLinearGradient(centerX - size * 0.12, centerY - size * 0.14, centerX + size * 0.05, centerY + size * 0.04);
-        gloss.addColorStop(0, `rgba(255,255,250,${(opacity * 0.44).toFixed(3)})`);
-        gloss.addColorStop(0.42, `rgba(220,220,210,${(opacity * 0.1).toFixed(3)})`);
+        gloss.addColorStop(0, `rgba(255,255,250,${(opacity * 0.7).toFixed(3)})`);
+        gloss.addColorStop(0.28, `rgba(250,250,240,${(opacity * 0.22).toFixed(3)})`);
+        gloss.addColorStop(0.62, `rgba(220,220,210,${(opacity * 0.08).toFixed(3)})`);
         gloss.addColorStop(1, "rgba(220,220,210,0)");
         ctx.fillStyle = gloss;
         ctx.fillRect(centerX - size * 0.16, centerY - size * 0.16, size * 0.32, size * 0.32);
 
+        ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.3).toFixed(3)})`;
+        ctx.lineWidth = 0.32;
+        ctx.beginPath();
+        ctx.moveTo(proj[a].x, proj[a].y);
+        ctx.lineTo(proj[b].x, proj[b].y);
+        ctx.lineTo(proj[c].x, proj[c].y);
+        ctx.closePath();
+        ctx.stroke();
+
         ctx.lineCap = "square";
-        ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.58).toFixed(3)})`;
-        ctx.lineWidth = 0.42;
+        ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.74).toFixed(3)})`;
+        ctx.lineWidth = 0.46;
         ctx.beginPath();
         ctx.moveTo(centerX - size * 0.11, centerY - size * 0.04);
         ctx.lineTo(centerX + size * 0.1, centerY - size * 0.1);
         ctx.stroke();
 
-        ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.34).toFixed(3)})`;
-        ctx.lineWidth = 0.34;
+        ctx.strokeStyle = `rgba(255,255,248,${(opacity * 0.44).toFixed(3)})`;
+        ctx.lineWidth = 0.36;
         ctx.beginPath();
         ctx.moveTo(centerX - size * 0.08, centerY + size * 0.07);
         ctx.lineTo(centerX + size * 0.12, centerY + size * 0.01);
@@ -489,8 +498,6 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
       nextPulse -= frameScale;
       if (nextPulse <= 0) {
         if (pulses.length < 6) {
-          const colorIndex = nextPulseColorIndex;
-          nextPulseColorIndex = (nextPulseColorIndex + 1) % BEAM_COLORS.length;
           pulses.push({
             edge: Math.floor(Math.random() * beamEdges.length),
             reverse: Math.random() < 0.5,
@@ -498,7 +505,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
             speed: 0.018 + Math.random() * 0.018,
             width: 0.11 + Math.random() * 0.09,
             hitFired: false,
-            colorIndex
+            colorIndex: Math.floor(Math.random() * BEAM_COLORS.length)
           });
         }
 
