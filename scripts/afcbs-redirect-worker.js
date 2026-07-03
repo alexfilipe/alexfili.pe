@@ -9,7 +9,7 @@ function handleRequest(request) {
     status: 301,
     headers: {
       location: TARGET_URL,
-      "cache-control": "public, max-age=3600",
+      "cache-control": "no-store, max-age=0",
     },
   });
 }
