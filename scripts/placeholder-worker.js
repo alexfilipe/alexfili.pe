@@ -1,5 +1,5 @@
-const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/757e6b2b2ee122a5ac759675116464650114974b";
-const SOURCE_VERSION = "20260701-mobile-subtitle-copy-gap";
+const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/01da29bf30cda1903dae134a5460d28426bc92f3";
+const SOURCE_VERSION = "20260702-short-viewport-scroll";
 const HTML_ASSET = {
   path: "launch-placeholder.html",
   contentType: "text/html; charset=UTF-8",
