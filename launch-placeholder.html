@@ -106,8 +106,7 @@
       display: grid;
       place-items: center;
       padding: 2rem;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden;
     }
 
     .page {
@@ -294,6 +293,15 @@
 
       .links {
         gap: 1rem;
+      }
+    }
+
+    @media (max-height: 760px) {
+      body {
+        align-items: start;
+        justify-items: center;
+        overflow-x: hidden;
+        overflow-y: auto;
       }
     }
 
