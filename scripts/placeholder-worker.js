@@ -1,5 +1,5 @@
-const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/01da29bf30cda1903dae134a5460d28426bc92f3";
-const SOURCE_VERSION = "20260702-short-viewport-scroll";
+const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/060dbb2f3d80c3ceaff34712eefda2624edc6f8f";
+const SOURCE_VERSION = "20260702-conditional-scroll";
 const HTML_ASSET = {
   path: "launch-placeholder.html",
   contentType: "text/html; charset=UTF-8",
