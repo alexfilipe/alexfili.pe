@@ -30,6 +30,10 @@ async function handleRequest(request) {
   if (url.protocol === "http:" || url.hostname === "www.alexfili.pe") {
     url.protocol = "https:";
     url.hostname = "alexfili.pe";
+    if (shouldCollapseToHome(url.pathname)) {
+      url.pathname = "/";
+      url.search = "";
+    }
     return Response.redirect(url.toString(), 308);
   }
 
@@ -38,6 +42,10 @@ async function handleRequest(request) {
       status: 405,
       headers: { allow: "GET, HEAD" },
     });
+  }
+
+  if (shouldCollapseToHome(url.pathname)) {
+    return Response.redirect("https://alexfili.pe/", 308);
   }
 
   const asset = resolveAsset(url.pathname);
@@ -61,6 +69,10 @@ async function handleRequest(request) {
     status: upstream.status,
     headers,
   });
+}
+
+function shouldCollapseToHome(pathname) {
+  return pathname !== "/" && !STATIC_ASSETS[pathname];
 }
 
 function resolveAsset(pathname) {
