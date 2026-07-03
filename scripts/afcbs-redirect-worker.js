@@ -6,7 +6,7 @@ addEventListener("fetch", (event) => {
 
 function handleRequest(request) {
   return new Response(null, {
-    status: 308,
+    status: 301,
     headers: {
       location: TARGET_URL,
       "cache-control": "public, max-age=3600",
