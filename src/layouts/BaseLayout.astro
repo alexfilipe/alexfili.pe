@@ -30,10 +30,7 @@ const assetVersion = "20260624-dodecahedron";
 const assetSuffix = `?v=${assetVersion}`;
 const ogImageUrl = new URL(`/og-image.png${assetSuffix}`, Astro.site ?? "https://alexfili.pe").toString();
 const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/music/", label: "Music" },
-  { href: "/writings/", label: "Writings" },
-  { href: "/#contact", label: "Contact" }
+  { href: "/", label: "Home" }
 ];
 
 ---
@@ -88,12 +85,7 @@ const navItems = [
                 {navItems.map((item) => (
                   <a
                     href={item.href}
-                    aria-current={
-                      item.href !== "/#contact" &&
-                      (currentPath === item.href || currentPath === item.href.replace(/\/$/, ""))
-                        ? "page"
-                        : undefined
-                    }
+                    aria-current={currentPath === item.href || currentPath === item.href.replace(/\/$/, "") ? "page" : undefined}
                   >
                     {item.label}
                   </a>

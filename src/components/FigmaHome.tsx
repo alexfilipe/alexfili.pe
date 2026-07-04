@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { SVGProps } from "react";
-import { ArrowUpRight, BookOpen, Mail, Music } from "lucide-react";
+import { Mail } from "lucide-react";
 import PianoSeparator from "@/components/PianoSeparator";
 import { profile } from "@/data/profile";
 
 const ACCENT = "#c8a96e";
-const FG_BRIGHT = "rgba(240,237,230,0.9)";
 
 type BrandIconProps = SVGProps<SVGSVGElement> & {
   size?: number;
@@ -590,27 +589,6 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
   );
 }
 
-const navLinks = [
-  {
-    label: "My Music",
-    href: "/music/",
-    Icon: Music,
-    desc: "Recordings, compositions, and performances"
-  },
-  {
-    label: "My Writings",
-    href: "/writings/",
-    Icon: BookOpen,
-    desc: "Essays on technology, design, and thought"
-  },
-  {
-    label: "Get in Touch",
-    href: `mailto:${profile.email}`,
-    Icon: Mail,
-    desc: "Open to conversations and collaborations"
-  }
-];
-
 const socialLinks = [
   { href: profile.github, Icon: GitHubIcon, label: "GitHub" },
   { href: profile.linkedin, Icon: LinkedInIcon, label: "LinkedIn" },
@@ -690,24 +668,6 @@ export default function FigmaHome() {
             same question that draws me to systems built with care: <strong>what makes structure feel meaningful</strong>.
           </p>
         </section>
-
-        <nav className="figma-link-nav" aria-label="Site navigation">
-          {navLinks.map(({ label, href, Icon, desc }) => (
-            <a key={label} href={href} className="figma-link-row">
-              <div className="figma-link-copy">
-                <Icon size={14} className="figma-link-icon" aria-hidden="true" />
-                <div>
-                  <div className="figma-link-label" style={{ color: FG_BRIGHT }}>
-                    {label}
-                  </div>
-                  <div className="figma-link-desc">{desc}</div>
-                </div>
-              </div>
-              <ArrowUpRight size={13} className="figma-link-arrow" aria-hidden="true" />
-            </a>
-          ))}
-          <div className="figma-link-rule" />
-        </nav>
 
         <div className="figma-socials">
           {socialLinks.map(({ href, Icon, label }) => (
