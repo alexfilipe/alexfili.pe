@@ -1,5 +1,5 @@
-const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/57263f7ad083c8ccbc46b51f5826e39b3a3a1a76";
-const SOURCE_VERSION = "20260704-sitemap";
+const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/94784ca3e2c335cfdc749cffb2fbda28f148f8df";
+const SOURCE_VERSION = "20260704-profile-links-new-tabs";
 const HTML_ASSET = {
   path: "launch-placeholder.html",
   contentType: "text/html; charset=UTF-8",
