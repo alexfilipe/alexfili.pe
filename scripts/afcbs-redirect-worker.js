@@ -11,7 +11,8 @@ addEventListener("fetch", (event) => {
 function handleRequest(request) {
   const url = new URL(request.url);
   const hostname = url.hostname.toLowerCase();
-  const fileRedirect = AFCBS_FILE_REDIRECTS.get(url.pathname);
+  const pathname = url.pathname.toLowerCase().replace(/\/$/, "");
+  const fileRedirect = AFCBS_FILE_REDIRECTS.get(pathname);
 
   if ((hostname === "afcbs.me" || hostname === "www.afcbs.me") && fileRedirect) {
     return redirect(fileRedirect);
