@@ -18,6 +18,8 @@ const staticAssets = [
   "favicon-32x32.png",
   "apple-touch-icon.png",
   "og-image.png",
+  "robots.txt",
+  "sitemap.xml",
   "site.webmanifest",
 ];
 

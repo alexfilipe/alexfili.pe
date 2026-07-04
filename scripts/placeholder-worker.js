@@ -14,6 +14,8 @@ const STATIC_ASSETS = {
   "/favicon-32x32.png": ["public/favicon-32x32.png", "image/png"],
   "/apple-touch-icon.png": ["public/apple-touch-icon.png", "image/png"],
   "/og-image.png": ["public/og-image.png", "image/png"],
+  "/robots.txt": ["public/robots.txt", "text/plain; charset=UTF-8"],
+  "/sitemap.xml": ["public/sitemap.xml", "application/xml; charset=UTF-8"],
   "/site.webmanifest": ["public/site.webmanifest", "application/manifest+json; charset=UTF-8"],
   "/icons/icon-192.png": ["public/icons/icon-192.png", "image/png"],
   "/icons/icon-512.png": ["public/icons/icon-512.png", "image/png"],
