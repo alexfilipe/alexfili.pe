@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { SVGProps } from "react";
-import { Mail } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import PianoSeparator from "@/components/PianoSeparator";
 import { profile } from "@/data/profile";
 
@@ -21,7 +21,7 @@ function GitHubIcon({ size = 16, ...props }: BrandIconProps) {
 function LinkedInIcon({ size = 16, ...props }: BrandIconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" {...props}>
-      <path d="M5.2 8.8h3.1v10H5.2v-10Zm1.6-5c1 0 1.8.8 1.8 1.7 0 1-.8 1.8-1.8 1.8S5 6.5 5 5.5c0-.9.8-1.7 1.8-1.7Zm3.5 5h3v1.4h.1c.4-.8 1.5-1.6 3-1.6 3.2 0 3.8 2.1 3.8 4.8v5.4h-3.1V14c0-1.2 0-2.7-1.6-2.7s-1.9 1.3-1.9 2.6v4.9h-3.1v-10Z" />
+      <path d="M20.4 3.1H3.6c-.8 0-1.4.6-1.4 1.4v15c0 .8.6 1.4 1.4 1.4h16.8c.8 0 1.4-.6 1.4-1.4v-15c0-.8-.6-1.4-1.4-1.4ZM8.1 18H5.4V9.5h2.7V18ZM6.7 8.3c-.9 0-1.5-.6-1.5-1.4s.6-1.4 1.6-1.4c.9 0 1.5.6 1.5 1.4s-.6 1.4-1.6 1.4ZM18.7 18H16v-4.6c0-1.1-.4-1.9-1.4-1.9-.8 0-1.2.5-1.4 1-.1.2-.1.5-.1.7V18h-2.7V9.5h2.7v1.2c.4-.6 1-1.4 2.5-1.4 1.8 0 3.1 1.2 3.1 3.7V18Z" />
     </svg>
   );
 }
@@ -669,13 +669,15 @@ export default function FigmaHome() {
           </p>
         </section>
 
-        <div className="figma-socials">
+        <nav className="figma-socials" aria-label="Social links">
           {socialLinks.map(({ href, Icon, label }) => (
-            <a key={label} href={href} aria-label={label} className="figma-social-link">
-              <Icon size={16} aria-hidden="true" />
+            <a key={label} href={href} className="figma-social-link">
+              <Icon size={16} className="figma-social-icon" aria-hidden="true" />
+              <span>{label}</span>
+              <ArrowUpRight size={14} className="figma-social-arrow" aria-hidden="true" />
             </a>
           ))}
-        </div>
+        </nav>
 
         <footer className="figma-home-footnote">
           This site is an AI-first experiment in front-end interaction, design systems, and agentic workflows.

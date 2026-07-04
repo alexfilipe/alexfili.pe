@@ -311,7 +311,7 @@ select {
 }
 
 .figma-bio {
-  margin: 0 0 6rem;
+  margin: 0 0 2.25rem;
   color: rgba(240, 237, 230, 0.52);
 }
 
@@ -328,12 +328,26 @@ select {
 
 .figma-socials {
   display: flex;
-  gap: 1.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.4rem;
 }
 
 .figma-social-link {
-  color: rgba(240, 237, 230, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  color: rgba(240, 237, 230, 0.62);
+  font-size: 1.12rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  line-height: 1;
+  text-decoration: none;
   transition: color 200ms ease;
+}
+
+.figma-social-arrow {
+  margin-left: -0.18rem;
 }
 
 .figma-social-link:hover {
@@ -439,6 +453,24 @@ select {
   .figma-piano-wrap {
     margin-top: 1.35rem;
     margin-bottom: 2.15rem;
+  }
+
+  .figma-socials {
+    gap: 0.95rem;
+  }
+
+  .figma-social-link {
+    font-size: 0.94rem;
+  }
+
+  .figma-social-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .figma-social-arrow {
+    width: 0.75rem;
+    height: 0.75rem;
   }
 
   .figma-bio p {
