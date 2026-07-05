@@ -7,14 +7,20 @@ export type Writing = {
 
 export const writings: Writing[] = [
   {
-    title: "Notes on structure and feeling",
-    summary: "A short reflection on why precise systems still need room for emotional truth.",
+    title: "11 Years Away From Brazil",
+    summary: "I left Brazil when I was starting to become myself. Eleven years later, I'm still learning what it means to build a life abroad.",
     legend: "July 2026",
     href: "#"
   },
   {
-    title: "What conducting taught me about systems",
-    summary: "On attention, timing, and the quiet work of making complexity respond as one.",
+    title: "Why I Still Practice",
+    summary: "After 25 years with the violin and 13 with the piano, I’m still drawn to the slow, stubborn work of getting better.",
+    legend: "July 2026",
+    href: "#"
+  },
+  {
+    title: "Why Elevators Feel Slow",
+    summary: "A personal systems essay on waiting, coordination, and why the machines we trust every day still feel underdesigned.",
     legend: "July 2026",
     href: "#"
   }
