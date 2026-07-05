@@ -1,5 +1,5 @@
-const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/94784ca3e2c335cfdc749cffb2fbda28f148f8df";
-const SOURCE_VERSION = "20260704-profile-links-new-tabs";
+const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/e0cd3a09247272d684db9c2627c508e218492394";
+const SOURCE_VERSION = "20260704-assets-refresh";
 const HTML_ASSET = {
   path: "launch-placeholder.html",
   contentType: "text/html; charset=UTF-8",
