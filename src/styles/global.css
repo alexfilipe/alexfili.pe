@@ -543,7 +543,7 @@ select {
 .figma-section-title {
   margin: 0;
   font-family: var(--display);
-  font-size: clamp(2rem, 5vw, 3.1rem);
+  font-size: clamp(2rem, 5vw, 2.5rem);
   font-weight: 600;
   letter-spacing: 0;
   line-height: 0.96;
@@ -664,7 +664,7 @@ select {
 }
 
 a.figma-carousel-card:hover {
-  background-color: rgba(211, 178, 112, 0.035);
+  background-color: rgba(211, 178, 112, 0.018);
 }
 
 .figma-carousel-card--upcoming {
@@ -968,17 +968,6 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
     text-align: center;
   }
 
-  .figma-carousel {
-    --carousel-card-width: 72%;
-  }
-
-  .figma-carousel-card {
-    flex-basis: var(--carousel-card-width);
-  }
-
-  .figma-essays .figma-carousel-card {
-    flex-basis: var(--carousel-card-width);
-  }
 }
 
 @media (max-width: 600px) {
@@ -1042,7 +1031,7 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
 
   .figma-section {
     --figma-section-gap: 3rem;
-    --figma-section-header-gap: 1.45rem;
+    --figma-section-header-gap: 2.25rem;
   }
 
   .figma-intro-contact {
@@ -1059,11 +1048,15 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
   }
 
   .figma-carousel {
-    --carousel-card-width: 62%;
+    --carousel-card-width: 78%;
+  }
+
+  .figma-carousel-card,
+  .figma-essays .figma-carousel-card {
+    flex-basis: var(--carousel-card-width);
   }
 
   .figma-carousel-card {
-    flex-basis: var(--carousel-card-width);
     min-height: 20.5rem;
   }
 
