@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { SVGProps } from "react";
+import type { ReactNode, SVGProps } from "react";
 import { ArrowUpRight, Mail } from "lucide-react";
 import PianoSeparator from "@/components/PianoSeparator";
+import { musicDisciplines } from "@/data/music";
 import { profile } from "@/data/profile";
+import { projects } from "@/data/projects";
+import { writings } from "@/data/writings";
 
 const ACCENT = "#c8a96e";
 
@@ -595,6 +598,158 @@ const socialLinks = [
   { href: `mailto:${profile.email}`, Icon: Mail, label: "Email" }
 ];
 
+const MUSIC_NUMERALS = ["I", "II", "III"];
+
+function SectionHeader({ id, title }: { id: string; title: string }) {
+  return (
+    <header className="figma-section-header">
+      <h2 id={id} className="figma-section-title">
+        {title}
+      </h2>
+    </header>
+  );
+}
+
+function ArtworkFrame({ children }: { children: ReactNode }) {
+  return (
+    <span className="figma-carousel-media" aria-hidden="true">
+      <span className="figma-carousel-art">{children}</span>
+    </span>
+  );
+}
+
+function ProjectArtwork() {
+  return (
+    <ArtworkFrame>
+      <svg viewBox="0 0 44 44" focusable="false">
+        <rect x="11" y="11" width="22" height="22" rx="1" transform="rotate(45 22 22)" />
+        <circle cx="22" cy="22" r="7.5" />
+      </svg>
+    </ArtworkFrame>
+  );
+}
+
+function MusicArtwork({ title }: { title: string }) {
+  if (title === "Conducting") {
+    return (
+      <ArtworkFrame>
+        <svg viewBox="0 0 64 64" focusable="false">
+          <path d="M14 43c10-9 21-16 35-22" />
+          <path d="M18 26c8 6 18 9 30 9" />
+          <path d="M18 49c9-3 20-3 32 1" />
+          <circle cx="18" cy="43" r="2.5" />
+        </svg>
+      </ArtworkFrame>
+    );
+  }
+
+  if (title === "Piano") {
+    return (
+      <ArtworkFrame>
+        <svg viewBox="0 0 44 44" focusable="false">
+          <path d="M8 12h28v20H8z" />
+          <path d="M14 12v20M20 12v20M26 12v20M32 12v20" />
+          <path d="M11 12v11M17 12v11M29 12v11" />
+        </svg>
+      </ArtworkFrame>
+    );
+  }
+
+  return (
+    <ArtworkFrame>
+      <svg viewBox="0 0 64 64" focusable="false">
+        <path d="M34 12c6 5 8 12 5 20-3 9-12 13-19 10" />
+        <path d="M27 17c-5 7-7 15-4 23 2 6 7 10 14 12" />
+        <path d="M42 10 19 54" />
+        <path d="M17 17c7-3 14-3 21 0" />
+        <circle cx="39" cy="12" r="2.5" />
+      </svg>
+    </ArtworkFrame>
+  );
+}
+
+function WritingArtwork() {
+  return (
+    <ArtworkFrame>
+      <svg viewBox="0 0 44 44" focusable="false">
+        <path d="M11 13h22" />
+        <path d="M11 21h17" />
+        <path d="M11 29h22" />
+        <path d="M31 10v24" />
+      </svg>
+    </ArtworkFrame>
+  );
+}
+
+function FeaturedWorkSection() {
+  return (
+    <section className="figma-section figma-featured-work" aria-labelledby="featured-work-title">
+      <SectionHeader id="featured-work-title" title="Featured projects" />
+
+      <div className="figma-carousel" role="list" aria-label="Featured projects">
+        {projects.map((project) => (
+          <a key={project.title} href={project.href ?? "#"} className="figma-carousel-card" role="listitem">
+            <ProjectArtwork />
+            <span className="figma-carousel-copy">
+              <span className="figma-carousel-meta">
+                {project.focus} / {project.year}
+              </span>
+              <span className="figma-carousel-title">{project.title}</span>
+              <span className="figma-carousel-description">{project.description}</span>
+            </span>
+            <ArrowUpRight size={16} className="figma-carousel-arrow" aria-hidden="true" />
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function MusicSection() {
+  return (
+    <section className="figma-section figma-music" aria-labelledby="music-title">
+      <SectionHeader id="music-title" title="Music" />
+
+      <div className="figma-carousel" role="list" aria-label="Music">
+        {musicDisciplines.map((discipline, index) => (
+          <article key={discipline.title} className="figma-carousel-card" role="listitem">
+            <MusicArtwork title={discipline.title} />
+            <div className="figma-carousel-copy">
+              <p className="figma-carousel-meta">{MUSIC_NUMERALS[index]}</p>
+              <h3 className="figma-carousel-title">{discipline.title}</h3>
+              <p className="figma-carousel-description">{discipline.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function WritingsSection() {
+  return (
+    <section className="figma-section figma-writings" aria-labelledby="writings-title">
+      <SectionHeader id="writings-title" title="Writings" />
+
+      <div className="figma-carousel" role="list" aria-label="Writings">
+        {writings.map((writing) => (
+          <a key={writing.title} href={writing.href} className="figma-carousel-card" role="listitem">
+            <WritingArtwork />
+            <span className="figma-carousel-copy">
+              <span className="figma-carousel-meta">
+                {writing.date} / {writing.readingTime}
+              </span>
+              <span className="figma-carousel-title">{writing.title}</span>
+              <span className="figma-carousel-description">{writing.summary}</span>
+            </span>
+            <ArrowUpRight size={16} className="figma-carousel-arrow" aria-hidden="true" />
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default function FigmaHome() {
   const [isLoading, setIsLoading] = useState(true);
   const [showLoader, setShowLoader] = useState(true);
@@ -668,6 +823,10 @@ export default function FigmaHome() {
             same question that draws me to systems built with care: <strong>what makes structure feel meaningful</strong>.
           </p>
         </section>
+
+        <FeaturedWorkSection />
+        <MusicSection />
+        <WritingsSection />
 
         <nav className="figma-socials" aria-label="Social links">
           {socialLinks.map(({ href, Icon, label }) => (

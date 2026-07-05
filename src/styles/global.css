@@ -326,10 +326,180 @@ select {
   margin-top: 1.1rem;
 }
 
+.figma-section {
+  position: relative;
+  margin-top: clamp(5rem, 11vw, 6rem);
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+}
+
+.figma-section::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
+}
+
+.figma-section-header {
+  margin-bottom: clamp(1.35rem, 3vw, 1.8rem);
+}
+
+.figma-section-title {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: clamp(1.55rem, 4vw, 2.45rem);
+  font-weight: 760;
+  letter-spacing: 0.01em;
+  line-height: 1.04;
+}
+
+.figma-carousel {
+  display: grid;
+  grid-auto-columns: minmax(15.5rem, 47%);
+  grid-auto-flow: column;
+  gap: 1px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--line);
+  scrollbar-color: rgba(200, 169, 110, 0.45) transparent;
+  scroll-padding-inline: 0;
+  scroll-snap-type: x proximity;
+}
+
+.figma-carousel::-webkit-scrollbar {
+  height: 0.35rem;
+}
+
+.figma-carousel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.figma-carousel::-webkit-scrollbar-thumb {
+  background: rgba(200, 169, 110, 0.32);
+}
+
+.figma-carousel-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  min-height: 26rem;
+  color: inherit;
+  text-decoration: none;
+  background:
+    linear-gradient(135deg, rgba(255, 252, 244, 0.045), transparent 42%),
+    var(--bg);
+  scroll-snap-align: start;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.figma-carousel-card:hover {
+  background-color: rgba(211, 178, 112, 0.035);
+}
+
+.figma-carousel-media {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  place-items: center;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(135deg, rgba(255, 252, 244, 0.045), transparent 42%),
+    var(--bg);
+}
+
+.figma-carousel-media::before {
+  position: absolute;
+  inset: 12%;
+  content: "";
+  border: 1px solid var(--line);
+  opacity: 0.42;
+  transform: rotate(-9deg);
+}
+
+.figma-carousel-art {
+  width: clamp(2.8rem, 8vw, 4rem);
+  color: var(--text);
+  opacity: 0.14;
+}
+
+.figma-carousel-art svg {
+  width: 100%;
+  height: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.2;
+}
+
+.figma-carousel-copy {
+  display: grid;
+  align-content: start;
+  gap: 0.65rem;
+  min-width: 0;
+  padding: clamp(1.1rem, 2.5vw, 1.45rem);
+}
+
+.figma-carousel-meta {
+  margin: 0;
+  color: var(--gold);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.figma-carousel-title {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: clamp(1.28rem, 2.8vw, 1.65rem);
+  font-weight: 760;
+  letter-spacing: 0;
+  line-height: 1.08;
+  transition: color 200ms ease;
+}
+
+.figma-carousel-description {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.figma-carousel-arrow {
+  position: absolute;
+  right: 1.15rem;
+  bottom: 1.15rem;
+  color: var(--gold);
+  opacity: 0.56;
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.figma-carousel-card:hover .figma-carousel-title {
+  color: var(--gold);
+}
+
+.figma-carousel-card:hover .figma-carousel-arrow {
+  opacity: 1;
+  transform: translate(0.18rem, -0.18rem);
+}
+
 .figma-socials {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: clamp(5rem, 10vw, 6rem);
   gap: 1.4rem;
 }
 
@@ -420,6 +590,10 @@ select {
     padding-left: 0;
     text-align: center;
   }
+
+  .figma-carousel {
+    grid-auto-columns: minmax(16rem, 76%);
+  }
 }
 
 @media (max-width: 600px) {
@@ -475,6 +649,26 @@ select {
 
   .figma-bio p {
     font-size: 1.15rem;
+  }
+
+  .figma-section {
+    margin-top: 4.6rem;
+  }
+
+  .figma-section-title {
+    font-size: clamp(1.55rem, 8vw, 2.1rem);
+  }
+
+  .figma-carousel {
+    grid-auto-columns: minmax(15.25rem, 88%);
+  }
+
+  .figma-carousel-card {
+    min-height: 24rem;
+  }
+
+  .figma-carousel-description {
+    font-size: 0.92rem;
   }
 }
 

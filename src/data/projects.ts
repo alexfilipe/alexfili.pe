@@ -8,24 +8,21 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    title: "Intelligent Systems",
-    description:
-      "Production software shaped by model behavior, evaluation loops, and interfaces that make AI systems legible to the people using them.",
-    focus: "AI engineering",
-    year: "Current"
+    title: "Aetherloom",
+    description: "A calm local-first workspace for shaping intelligent systems from personal knowledge.",
+    focus: "AI systems",
+    year: "2026"
   },
   {
-    title: "Mathematical Interfaces",
-    description:
-      "Tools and visual systems that turn abstract structure into something navigable, inspectable, and calm under pressure.",
-    focus: "Product engineering",
+    title: "InspiraSonho",
+    description: "A thoughtful digital experience for discovery, storytelling, and emotional clarity.",
+    focus: "Product design",
+    year: "In progress"
+  },
+  {
+    title: "Home Assistant Integrations & Add-ons",
+    description: "Open-source tools that make connected homes more adaptable, legible, and humane.",
+    focus: "Open source",
     year: "Selected"
-  },
-  {
-    title: "Classical Computation",
-    description:
-      "A personal research thread connecting musical form, notation, interpretation, and the design of precise computational systems.",
-    focus: "Research notes",
-    year: "Ongoing"
   }
 ];
