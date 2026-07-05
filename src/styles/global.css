@@ -1,5 +1,4 @@
-@import "@fontsource-variable/instrument-sans/index.css";
-@import "@fontsource/gloock/index.css";
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Instrument+Sans:wght@400..700&family=Spline+Sans+Mono:wght@400;500;600;700&display=swap");
 
 :root {
   color-scheme: dark;
@@ -18,8 +17,9 @@
   --shadow: rgba(0, 0, 0, 0.52);
   --max: 1180px;
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
-  --display: "Gloock", Georgia, serif;
-  --sans: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --display: "Fraunces", Georgia, serif;
+  --sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "Spline Sans Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 * {
@@ -142,9 +142,10 @@ select {
 .figma-loader p {
   margin: 10.35rem 0 0;
   color: rgba(240, 237, 230, 0.48);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -226,7 +227,7 @@ select {
   margin: 0 0 1.75rem;
   font-family: var(--display);
   font-size: clamp(4.25rem, 12vw, 6.8rem);
-  font-weight: 400;
+  font-weight: 560;
   letter-spacing: 0;
   line-height: 0.88;
 }
@@ -235,26 +236,31 @@ select {
   margin: 0 0 1.25rem;
   font-family: var(--display);
   font-size: clamp(1.45rem, 3.6vw, 2.05rem);
-  font-weight: 400;
-  letter-spacing: 0;
+  font-weight: 500;
+  letter-spacing: -0.015em;
   line-height: 1.35;
 }
 
 .figma-role {
   max-width: 38rem;
-  margin: 0 0 3rem;
+  margin: 1.75rem 0 3rem;
   border-left: 1.5px solid rgba(200, 169, 110, 0.55);
   padding-left: 0.75rem;
-  color: rgba(240, 237, 230, 0.72);
-  font-size: 1rem;
+  color: rgba(240, 237, 230, 0.74);
+  font-size: 1.1rem;
   font-weight: 500;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
   line-height: 1.65;
 }
 
+.figma-role-keep {
+  white-space: nowrap;
+}
+
 .figma-role strong {
-  color: rgba(240, 237, 230, 0.96);
-  font-weight: 800;
+  color: var(--text);
+  font-weight: 700;
+  -webkit-text-stroke: 0.35px currentColor;
 }
 
 .figma-artifact-wrap {
@@ -314,19 +320,25 @@ select {
 }
 
 .figma-bio {
-  margin: 0 0 2.25rem;
-  color: rgba(240, 237, 230, 0.6);
+  margin: clamp(2.75rem, 5vw, 4rem) 0;
+  color: rgba(240, 237, 230, 0.5);
 }
 
 .figma-bio p {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
+  font-weight: 450;
   letter-spacing: 0;
-  line-height: 1.84;
+  line-height: 1.78;
 }
 
 .figma-bio p + p {
   margin-top: 1.1rem;
+}
+
+.figma-bio strong {
+  color: rgba(240, 237, 230, 0.74);
+  font-weight: 700;
 }
 
 .figma-intro-contact {
@@ -334,7 +346,7 @@ select {
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.55rem clamp(1.35rem, 3.6vw, 2.1rem);
-  margin: 0 0 clamp(2.75rem, 6vw, 3.75rem);
+  margin: 0 0 clamp(3rem, 5.2vw, 3.65rem);
   padding-top: 1.15rem;
   text-align: center;
 }
@@ -344,8 +356,9 @@ select {
   align-items: baseline;
   gap: 0.24rem;
   color: rgba(240, 237, 230, 0.58);
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 600;
   letter-spacing: 0.08em;
   line-height: 1.4;
   text-transform: uppercase;
@@ -372,18 +385,14 @@ select {
 }
 
 .figma-section {
-  --figma-section-gap: clamp(3.4rem, 6.25vw, 4.35rem);
+  --figma-section-gap: clamp(3rem, 5.2vw, 3.65rem);
   --figma-section-header-gap: clamp(1.45rem, 2.9vw, 1.95rem);
   position: relative;
   margin-top: var(--figma-section-gap);
+  padding-top: var(--figma-section-gap);
 }
 
-.figma-featured-work {
-  margin-top: 0;
-  padding-top: clamp(3rem, 5.2vw, 3.65rem);
-}
-
-.figma-featured-work::before {
+.figma-section::before {
   position: absolute;
   top: 0;
   right: 0;
@@ -393,16 +402,20 @@ select {
   background: linear-gradient(90deg, transparent, var(--line), transparent);
 }
 
+.figma-featured-work {
+  margin-top: 0;
+}
+
 .figma-section-header {
   margin-bottom: var(--figma-section-header-gap);
 }
 
 .figma-section-title {
   margin: 0;
-  font-family: var(--sans);
-  font-size: clamp(1.55rem, 4vw, 2.45rem);
-  font-weight: 760;
-  letter-spacing: 0.01em;
+  font-family: var(--display);
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  font-weight: 600;
+  letter-spacing: 0;
   line-height: 0.96;
 }
 
@@ -572,11 +585,11 @@ select {
 .figma-carousel-copy {
   display: grid;
   align-content: start;
-  gap: 0.65rem;
+  gap: 0.95rem;
   min-width: 0;
   padding: var(--carousel-copy-pad);
   padding-right: calc(var(--carousel-copy-pad) * 0.9 + var(--carousel-rail) * 0.2);
-  padding-bottom: calc(var(--carousel-copy-pad) * 1.35);
+  padding-bottom: calc(var(--carousel-copy-pad) * 1.9);
 }
 
 .figma-carousel-meta {
@@ -584,7 +597,7 @@ select {
   color: var(--gold);
   font-size: 0.73rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   line-height: 1.25;
   text-transform: uppercase;
 }
@@ -593,7 +606,7 @@ select {
   margin: 0;
   font-family: var(--sans);
   font-size: clamp(1.28rem, 2.8vw, 1.65rem);
-  font-weight: 760;
+  font-weight: 700;
   letter-spacing: 0;
   line-height: 1.08;
   transition: color 200ms ease;
@@ -601,8 +614,9 @@ select {
 
 .figma-carousel-description {
   margin: 0;
-  color: var(--text-muted);
-  font-size: 0.95rem;
+  color: rgba(240, 237, 230, 0.66);
+  font-size: 1.05rem;
+  font-weight: 500;
   line-height: 1.55;
 }
 
@@ -611,8 +625,9 @@ select {
   right: calc(var(--carousel-rail) * 0.42 + 0.45rem);
   bottom: 0.82rem;
   color: var(--gold);
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  stroke-width: 2.6;
   opacity: 0.72;
   transition:
     opacity 200ms ease,
@@ -641,9 +656,9 @@ select {
   align-items: center;
   gap: 0.42rem;
   color: rgba(240, 237, 230, 0.48);
-  font-size: 0.98rem;
+  font-size: 1.06rem;
   font-weight: 600;
-  letter-spacing: 0.025em;
+  letter-spacing: 0;
   line-height: 1;
   text-decoration: none;
   transition: color 200ms ease;
@@ -661,17 +676,17 @@ select {
   margin-top: 3.25rem;
   border-top: 1px solid rgba(240, 237, 230, 0.08);
   padding-top: 1.1rem;
-  color: rgba(240, 237, 230, 0.28);
-  font-size: 0.765rem;
-  letter-spacing: 0.01em;
+  color: rgba(240, 237, 230, 0.42);
+  font-size: 0.85rem;
+  letter-spacing: 0;
   line-height: 1.65;
 }
 
 .figma-home-copyright {
   margin: 0.72rem 0 -0.45rem;
-  color: rgba(240, 237, 230, 0.22);
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
+  color: rgba(240, 237, 230, 0.34);
+  font-size: 0.82rem;
+  letter-spacing: 0;
   line-height: 1.5;
 }
 
@@ -713,7 +728,7 @@ select {
   }
 
   .figma-piano-wrap {
-    margin: 2rem 0 clamp(1.85rem, 2.85vw, 3.15rem);
+    margin: 3.25rem 0 2rem;
   }
 }
 
@@ -756,7 +771,7 @@ select {
 
   .figma-role {
     max-width: 22rem;
-    font-size: 0.95rem;
+    font-size: 1.14rem;
     line-height: 1.55;
   }
 
@@ -778,12 +793,16 @@ select {
     margin-bottom: 2.15rem;
   }
 
+  .figma-home .piano-interaction-label {
+    bottom: 1.1rem;
+  }
+
   .figma-socials {
     gap: 0.95rem;
   }
 
   .figma-social-link {
-    font-size: 0.94rem;
+    font-size: 1rem;
   }
 
   .figma-social-icon {
@@ -797,7 +816,7 @@ select {
   }
 
   .figma-bio p {
-    font-size: 1.15rem;
+    font-size: 1.28rem;
   }
 
   .figma-section {
@@ -810,7 +829,7 @@ select {
   }
 
   .figma-section-title {
-    font-size: clamp(1.55rem, 8vw, 2.1rem);
+    font-size: clamp(1.95rem, 9vw, 2.6rem);
   }
 
   .figma-carousel-shell {
@@ -835,7 +854,7 @@ select {
   }
 
   .figma-carousel-description {
-    font-size: 0.86rem;
+    font-size: 0.95rem;
     line-height: 1.5;
   }
 }
@@ -892,7 +911,7 @@ select {
   color: var(--text-soft);
   font-size: 0.76rem;
   font-weight: 650;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -1113,12 +1132,13 @@ main {
 .piano-interaction-label {
   position: absolute;
   left: 50%;
-  bottom: clamp(1.2rem, 2.25vw, 1.85rem);
+  bottom: clamp(0.35rem, 1.1vw, 0.85rem);
   z-index: 4;
   margin: 0;
   color: rgba(240, 237, 230, 0.26);
-  font-size: 0.68rem;
-  font-weight: 700;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
   letter-spacing: 0.14em;
   line-height: 1;
   pointer-events: none;
@@ -1164,7 +1184,7 @@ main {
   color: var(--text-muted);
   font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -1239,7 +1259,7 @@ main {
   color: var(--gold);
   font-size: 0.75rem;
   font-weight: 760;
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -1262,7 +1282,7 @@ main {
   color: var(--text-muted);
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -1311,7 +1331,7 @@ main {
   color: var(--text);
   font-size: 0.78rem;
   font-weight: 760;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   line-height: 1;
   text-transform: uppercase;
   transition:
@@ -1368,7 +1388,7 @@ main {
   color: var(--text-muted);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
   line-height: 1;
 }
 
@@ -1414,7 +1434,7 @@ main {
   color: var(--gold);
   font-size: 0.8rem;
   font-weight: 760;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 
@@ -1457,7 +1477,7 @@ main {
   cursor: pointer;
   font-size: 0.76rem;
   font-weight: 760;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   text-transform: uppercase;
   transition:
     border-color 180ms ease,

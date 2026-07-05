@@ -4,9 +4,9 @@ export const profile = {
   domain: "alexfili.pe",
   tagline: "The architecture of intelligence.",
   role: "AI Engineer, Software Engineer, Classical Musician.",
-  email: "hello@alexfili.pe",
-  github: "https://github.com/",
-  linkedin: "https://linkedin.com/",
+  email: "hi@alexfili.pe",
+  github: "https://github.com/alexfilipe",
+  linkedin: "https://linkedin.com/in/alexfilipe",
   location: "San Francisco, California",
   bio: [
     "Brazilian by birth and San Franciscan by heart, I build intelligent systems where thoughtful design matters as much as technical execution.",

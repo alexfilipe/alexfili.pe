@@ -615,7 +615,7 @@ function IntroContactRow() {
   return (
     <nav className="figma-intro-contact" aria-label="Contact links">
       {links.map(({ href, label }) => (
-        <a key={label} href={href}>
+        <a key={label} href={href} {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
           <span>{label}</span>
           <span aria-hidden="true">↗</span>
         </a>
@@ -815,8 +815,16 @@ function FeaturedWorkSection() {
       <SectionHeader id="featured-work-title" title="Things I’ve Built" />
 
       <CarouselControls label="Featured projects" controlLabel="projects">
-        {projects.map((project) => (
-          <a key={project.title} href={project.href ?? "#"} className="figma-carousel-card" role="listitem">
+        {projects.map((project) => {
+          const external = project.href?.startsWith("http");
+          return (
+          <a
+            key={project.title}
+            href={project.href ?? "#"}
+            className="figma-carousel-card"
+            role="listitem"
+            {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          >
             <ProjectArtwork />
             <span className="figma-carousel-copy">
               <span className="figma-carousel-meta">
@@ -827,7 +835,8 @@ function FeaturedWorkSection() {
             </span>
             <ArrowUpRight size={16} className="figma-carousel-arrow" aria-hidden="true" />
           </a>
-        ))}
+          );
+        })}
       </CarouselControls>
     </section>
   );
@@ -922,7 +931,8 @@ export default function FigmaHome() {
             </p>
 
             <p className="figma-role">
-              <strong>Software & AI Engineer</strong> guided by mathematical thought and classical musicianship.
+              <strong>Software & AI Engineer</strong> guided by mathematical thought{" "}
+              <span className="figma-role-keep">and classical musicianship.</span>
             </p>
           </div>
 
@@ -958,7 +968,7 @@ export default function FigmaHome() {
 
         <nav className="figma-socials" aria-label="Social links">
           {socialLinks.map(({ href, Icon, label }) => (
-            <a key={label} href={href} className="figma-social-link">
+            <a key={label} href={href} className="figma-social-link" {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
               <Icon size={16} className="figma-social-icon" aria-hidden="true" />
               <span>{label}</span>
               <ArrowUpRight size={14} className="figma-social-arrow" aria-hidden="true" />

@@ -19,7 +19,8 @@ export const projects: Project[] = [
     period: {
       start: "2026",
       end: "Present"
-    }
+    },
+    href: "https://aetherloom.app/"
   },
   {
     title: "InspiraSonho",
@@ -29,7 +30,8 @@ export const projects: Project[] = [
     period: {
       start: "2015",
       end: "2018"
-    }
+    },
+    href: "https://www.inspirasonho.com.br/"
   },
   {
     title: "Home Assistant Extensions",
