@@ -169,7 +169,7 @@ select {
 .figma-navbar-links {
   display: flex;
   align-items: center;
-  gap: clamp(1.1rem, 3vw, 2rem);
+  gap: clamp(1.15rem, 2.25vw, 1.85rem);
   font-family: var(--mono);
   font-size: 0.8rem;
   font-weight: 500;
@@ -465,9 +465,9 @@ select {
   align-items: baseline;
   gap: 0.24rem;
   color: rgba(240, 237, 230, 0.58);
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 800;
   letter-spacing: 0.08em;
   line-height: 1.4;
   text-transform: uppercase;
@@ -766,8 +766,9 @@ select {
   align-items: center;
   gap: 0.42rem;
   color: rgba(240, 237, 230, 0.48);
+  font-family: var(--sans);
   font-size: 1.06rem;
-  font-weight: 600;
+  font-weight: 800;
   letter-spacing: 0;
   line-height: 1;
   text-decoration: none;
@@ -839,6 +840,21 @@ select {
 
   .figma-piano-wrap {
     margin: 3.25rem 0 2rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .figma-piano-wrap {
+    margin-top: 1.65rem;
+    margin-bottom: 0;
+  }
+
+  .figma-home .piano-interaction-label {
+    bottom: 1.55rem;
+  }
+
+  .figma-bio {
+    margin-top: 2rem;
   }
 }
 
