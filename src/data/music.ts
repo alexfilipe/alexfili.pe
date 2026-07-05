@@ -7,17 +7,17 @@ export type MusicDiscipline = {
 export const musicDisciplines: MusicDiscipline[] = [
   {
     title: "Conducting",
-    description: "Listening for structure across many voices, then shaping motion with restraint and intent.",
+    description: "Where my love of systems and complexity meets the artistry of shaping many voices as one.",
     href: "#"
   },
   {
     title: "Piano",
-    description: "A private instrument for harmony, memory, and the architecture underneath musical feeling.",
+    description: "The instrument I keep growing into, through discipline, harmony, memory, and form.",
     href: "#"
   },
   {
     title: "Violin",
-    description: "A study in line, patience, and the expressive precision of a single sustained voice.",
+    description: "My first musical language, shaped by 25 years of study, performance, and expressive precision.",
     href: "#"
   }
 ];

@@ -812,7 +812,7 @@ function WritingArtwork() {
 function FeaturedWorkSection() {
   return (
     <section className="figma-section figma-featured-work" aria-labelledby="featured-work-title">
-      <SectionHeader id="featured-work-title" title="Featured projects" />
+      <SectionHeader id="featured-work-title" title="Things I’ve Built" />
 
       <CarouselControls label="Featured projects" controlLabel="projects">
         {projects.map((project) => (
@@ -969,6 +969,8 @@ export default function FigmaHome() {
         <footer className="figma-home-footnote">
           This site is an AI-first experiment in front-end interaction, design systems, and agentic workflows.
         </footer>
+
+        <p className="figma-home-copyright">© {new Date().getFullYear()} Álex Filipe Santos</p>
       </div>
     </div>
   );

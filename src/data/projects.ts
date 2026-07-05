@@ -13,7 +13,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     title: "Aetherloom",
-    description: "A calm local-first workspace for shaping intelligent systems from personal knowledge.",
+    description: "An AI-first native macOS app for safe, local-first sync across multiple clouds and personal storage.",
     focus: "AI systems",
     year: "2026",
     period: {
@@ -23,7 +23,7 @@ export const projects: Project[] = [
   },
   {
     title: "InspiraSonho",
-    description: "A thoughtful digital experience for discovery, storytelling, and emotional clarity.",
+    description: "A social-impact platform that helped 20,000+ Brazilian students discover opportunities beyond the classroom.",
     focus: "Product design",
     year: "In progress",
     period: {
@@ -33,7 +33,7 @@ export const projects: Project[] = [
   },
   {
     title: "Home Assistant Extensions",
-    description: "Open-source tools that make connected homes more adaptable, legible, and humane.",
+    description: "Open-source smart-home tools for legible, local-first, human-in-the-loop automation.",
     focus: "Open source",
     year: "Selected",
     period: {

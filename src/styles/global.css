@@ -368,15 +368,15 @@ select {
 }
 
 .figma-section {
-  --figma-section-gap: clamp(2.45rem, 4.75vw, 3.15rem);
-  --figma-section-header-gap: clamp(1.85rem, 3.65vw, 2.35rem);
+  --figma-section-gap: clamp(3.4rem, 6.25vw, 4.35rem);
+  --figma-section-header-gap: clamp(1.45rem, 2.9vw, 1.95rem);
   position: relative;
   margin-top: var(--figma-section-gap);
 }
 
 .figma-featured-work {
   margin-top: 0;
-  padding-top: calc(var(--figma-section-gap) + 0.45rem);
+  padding-top: clamp(3rem, 5.2vw, 3.65rem);
 }
 
 .figma-featured-work::before {
@@ -528,15 +528,11 @@ select {
   min-height: 21.5rem;
 }
 
-.figma-music .figma-carousel-media {
-  aspect-ratio: 2.35 / 1;
-}
-
 .figma-carousel-media {
   position: relative;
   display: grid;
   overflow: hidden;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 4 / 3;
   place-items: center;
   border-bottom: 1px solid var(--line);
   background:
@@ -576,13 +572,13 @@ select {
   min-width: 0;
   padding: var(--carousel-copy-pad);
   padding-right: calc(var(--carousel-copy-pad) * 0.9 + var(--carousel-rail) * 0.2);
-  padding-bottom: calc(var(--carousel-copy-pad) * 0.72);
+  padding-bottom: calc(var(--carousel-copy-pad) * 1.35);
 }
 
 .figma-carousel-meta {
   margin: 0;
   color: var(--gold);
-  font-size: 0.68rem;
+  font-size: 0.73rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   line-height: 1.25;
@@ -665,6 +661,14 @@ select {
   font-size: 0.765rem;
   letter-spacing: 0.01em;
   line-height: 1.65;
+}
+
+.figma-home-copyright {
+  margin: 0.72rem 0 -0.45rem;
+  color: rgba(240, 237, 230, 0.22);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
 }
 
 .skip-link {
@@ -793,8 +797,8 @@ select {
   }
 
   .figma-section {
-    --figma-section-gap: 2.25rem;
-    --figma-section-header-gap: 1.85rem;
+    --figma-section-gap: 3rem;
+    --figma-section-header-gap: 1.45rem;
   }
 
   .figma-intro-contact {
@@ -820,14 +824,6 @@ select {
 
   .figma-music .figma-carousel-card {
     min-height: 17.5rem;
-  }
-
-  .figma-carousel-media {
-    aspect-ratio: 2.1 / 1;
-  }
-
-  .figma-music .figma-carousel-media {
-    aspect-ratio: 2.45 / 1;
   }
 
   .figma-carousel-title {
