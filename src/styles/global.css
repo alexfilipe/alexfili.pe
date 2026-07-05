@@ -1,4 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Instrument+Sans:wght@400..700&family=Spline+Sans+Mono:wght@400;500;600;700&display=swap");
+@import "@fontsource-variable/fraunces/wght.css";
+@import "@fontsource-variable/instrument-sans/wght.css";
 
 :root {
   color-scheme: dark;
@@ -19,7 +20,6 @@
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --display: "Fraunces", Georgia, serif;
   --sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "Spline Sans Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 * {
@@ -170,7 +170,7 @@ select {
   display: flex;
   align-items: center;
   gap: clamp(1.15rem, 2.25vw, 1.85rem);
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 0.8rem;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -251,7 +251,7 @@ select {
 .figma-loader p {
   margin: 10.35rem 0 0;
   color: rgba(240, 237, 230, 0.48);
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -442,7 +442,7 @@ select {
 }
 
 .figma-bio p + p {
-  margin-top: 1.1rem;
+  margin-top: 1.9rem;
 }
 
 .figma-bio strong {
@@ -1262,7 +1262,7 @@ main {
   z-index: 4;
   margin: 0;
   color: rgba(240, 237, 230, 0.26);
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.14em;

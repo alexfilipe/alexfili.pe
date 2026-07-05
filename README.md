@@ -8,7 +8,7 @@ Personal website for Álex Filipe Santos: a static Astro site with a cinematic e
 - React islands for the interactive hero and music filters
 - MDX content collections for essays and recordings
 - Three.js for the intelligence geometry and piano separator
-- Self-hosted Figma fonts through Fontsource: Gloock and Instrument Sans
+- Self-hosted fonts through Fontsource: Fraunces and Instrument Sans
 - Static output for Cloudflare Pages
 
 ## Local Development
@@ -70,7 +70,7 @@ Useful reference files from Figma Make:
 - `src/styles/globals.css`
 - generated image assets
 
-The production home page ports the Figma Make composition into maintainable Astro/React components: black editorial canvas, Gloock display identity, Instrument Sans body/UI, antique-gold accent, piano motif, and intelligence geometry. The implementation keeps Astro routing and content collections rather than shipping the generated Vite wrapper wholesale.
+The production home page ports the Figma Make composition into maintainable Astro/React components: black editorial canvas, Fraunces display identity, Instrument Sans body/UI, antique-gold accent, piano motif, and intelligence geometry. The implementation keeps Astro routing and content collections rather than shipping the generated Vite wrapper wholesale.
 
 ## Deployment
 

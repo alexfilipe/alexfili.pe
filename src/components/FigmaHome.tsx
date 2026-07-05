@@ -982,12 +982,12 @@ export default function FigmaHome() {
 
         <section className="figma-bio" aria-label="Biography">
           <p>
-            <strong>My name is Álex</strong>. Brazilian by birth and San Franciscan by heart, I build intelligent systems where thoughtful
+            <strong>My name is Álex.</strong> Brazilian by birth and San Franciscan by heart, I build intelligent systems where thoughtful
             design matters as much as technical execution.
           </p>
           <p>
             Classical music has shaped the way I listen. Through piano, violin, and conducting, I keep returning to the
-            same question that draws me to systems built with care: <strong>what makes structure feel meaningful</strong>.
+            same question that draws me to systems built with care: <strong>what makes structure feel meaningful.</strong>
           </p>
         </section>
 
