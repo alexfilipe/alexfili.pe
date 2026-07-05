@@ -20,7 +20,7 @@ export const writings: Writing[] = [
   },
   {
     title: "Why Elevators Feel Slow",
-    summary: "A personal systems essay on waiting, coordination, and why the machines we trust every day still feel underdesigned.",
+    summary: "A small treatise on waiting, coordination, and why the machines we use every day still feel underdesigned.",
     legend: "July 2026",
     href: "#"
   }

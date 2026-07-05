@@ -42,5 +42,15 @@ export const projects: Project[] = [
       start: "2025",
       end: "Present"
     }
+  },
+  {
+    title: "LabStocker",
+    description: "One of my first major software projects: a cloud inventory system for chemistry labs, with dashboards and early predictive models.",
+    focus: "Open source",
+    year: "Selected",
+    period: {
+      start: "2014",
+      end: "2015"
+    }
   }
 ];
