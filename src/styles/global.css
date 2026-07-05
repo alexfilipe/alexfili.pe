@@ -429,7 +429,7 @@ select {
 }
 
 .figma-bio {
-  margin: clamp(2.75rem, 5vw, 4rem) 0;
+  margin: clamp(2.75rem, 5vw, 4rem) 0 0;
   color: rgba(240, 237, 230, 0.5);
 }
 
@@ -453,44 +453,60 @@ select {
 .figma-intro-contact {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.55rem clamp(1.35rem, 3.6vw, 2.1rem);
-  margin: 0 0 clamp(3rem, 5.2vw, 3.65rem);
-  padding-top: 1.15rem;
-  text-align: center;
+  align-items: center;
+  gap: 0.65rem clamp(1.6rem, 3.5vw, 2.3rem);
+  margin: clamp(1.5rem, 3vw, 2.1rem) 0 clamp(3rem, 5.2vw, 3.65rem);
 }
 
 .figma-intro-contact a {
+  position: relative;
   display: inline-flex;
   align-items: baseline;
-  gap: 0.24rem;
-  color: rgba(240, 237, 230, 0.58);
+  gap: 0.32rem;
+  padding-block: 0.4rem;
+  color: rgba(240, 237, 230, 0.62);
   font-family: var(--sans);
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   line-height: 1.4;
   text-transform: uppercase;
-  transition: color 190ms ease;
+  transition: color 180ms ease;
+}
+
+.figma-intro-contact a::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 180ms ease;
 }
 
 .figma-intro-contact a span:last-child {
-  color: rgba(200, 169, 110, 0.58);
+  color: rgba(200, 169, 110, 0.6);
   font-size: 0.86em;
-  transition:
-    color 190ms ease,
-    transform 190ms ease;
+  transition: color 180ms ease;
 }
 
 .figma-intro-contact a:hover,
 .figma-intro-contact a:focus-visible {
-  color: rgba(240, 237, 230, 0.82);
+  color: var(--text);
+}
+
+.figma-intro-contact a:hover::after,
+.figma-intro-contact a:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 .figma-intro-contact a:hover span:last-child,
 .figma-intro-contact a:focus-visible span:last-child {
   color: var(--gold);
-  transform: translate(0.12rem, -0.12rem);
 }
 
 .figma-section {
