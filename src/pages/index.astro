@@ -4,6 +4,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { profile } from "@/data/profile";
 ---
 
-<BaseLayout title={profile.name} description={profile.role} hideChrome>
+<BaseLayout
+  title={profile.name}
+  description="Software & AI Engineer guided by mathematical thought and classical musicianship."
+  hideChrome
+>
   <FigmaHome client:load />
 </BaseLayout>
