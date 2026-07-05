@@ -14,12 +14,24 @@ const STATIC_ASSETS = {
   "/favicon-32x32.png": ["public/favicon-32x32.png", "image/png"],
   "/apple-touch-icon.png": ["public/apple-touch-icon.png", "image/png"],
   "/og-image.png": ["public/og-image.png", "image/png"],
-  "/robots.txt": ["public/robots.txt", "text/plain; charset=UTF-8"],
-  "/sitemap.xml": ["public/sitemap.xml", "application/xml; charset=UTF-8"],
   "/site.webmanifest": ["public/site.webmanifest", "application/manifest+json; charset=UTF-8"],
+  "/icons/favicon-16.png": ["public/icons/favicon-16.png", "image/png"],
+  "/icons/favicon-32.png": ["public/icons/favicon-32.png", "image/png"],
+  "/icons/favicon-48.png": ["public/icons/favicon-48.png", "image/png"],
   "/icons/icon-192.png": ["public/icons/icon-192.png", "image/png"],
   "/icons/icon-512.png": ["public/icons/icon-512.png", "image/png"],
   "/icons/maskable-512.png": ["public/icons/maskable-512.png", "image/png"],
+};
+
+const GENERATED_ASSETS = {
+  "/robots.txt": {
+    body: "User-agent: *\nAllow: /\n\nSitemap: https://alexfili.pe/sitemap.xml\n",
+    contentType: "text/plain; charset=UTF-8",
+  },
+  "/sitemap.xml": {
+    body: '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url>\n    <loc>https://alexfili.pe/</loc>\n  </url>\n</urlset>\n',
+    contentType: "application/xml; charset=UTF-8",
+  },
 };
 
 addEventListener("fetch", (event) => {
@@ -50,6 +62,16 @@ async function handleRequest(request) {
     return Response.redirect("https://alexfili.pe/", 308);
   }
 
+  const generatedAsset = GENERATED_ASSETS[url.pathname];
+  if (generatedAsset) {
+    return new Response(generatedAsset.body, {
+      headers: {
+        "content-type": generatedAsset.contentType,
+        "cache-control": "public, max-age=300",
+      },
+    });
+  }
+
   const asset = resolveAsset(url.pathname);
   const upstream = await fetch(RAW_BASE + "/" + asset.path + "?v=" + SOURCE_VERSION, {
     cf: {
@@ -74,7 +96,7 @@ async function handleRequest(request) {
 }
 
 function shouldCollapseToHome(pathname) {
-  return pathname !== "/" && !STATIC_ASSETS[pathname];
+  return pathname !== "/" && !STATIC_ASSETS[pathname] && !GENERATED_ASSETS[pathname];
 }
 
 function resolveAsset(pathname) {

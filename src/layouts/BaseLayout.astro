@@ -18,7 +18,7 @@ const {
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
-const homeSeoTitle = "Álex Filipe Santos \\ AI Engineer, Software Engineer, Classical Musician";
+const homeSeoTitle = "Álex Filipe Santos \ AI Engineer, Software Engineer, Classical Musician";
 const pageTitle =
   currentPath === "/"
     ? homeSeoTitle
@@ -29,6 +29,13 @@ const canonicalUrl = new URL(canonical, Astro.site ?? "https://alexfili.pe").toS
 const assetVersion = "20260624-dodecahedron";
 const assetSuffix = `?v=${assetVersion}`;
 const ogImageUrl = new URL(`/og-image.png${assetSuffix}`, Astro.site ?? "https://alexfili.pe").toString();
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: profile.name,
+  alternateName: [profile.shortName, profile.domain],
+  url: "https://alexfili.pe/"
+};
 const navItems = [
   { href: "/", label: "Home" }
 ];
@@ -68,6 +75,7 @@ const navItems = [
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
     <title>{pageTitle}</title>
     <ClientRouter />
   </head>
