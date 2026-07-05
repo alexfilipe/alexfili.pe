@@ -626,6 +626,7 @@ function IntroContactRow() {
 
 function CarouselControls({ children, label, controlLabel }: { children: ReactNode; label: string; controlLabel: string }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<number | null>(null);
   const [scrollState, setScrollState] = useState<CarouselScrollState>({
     canScrollLeft: false,
     canScrollRight: false
@@ -658,7 +659,12 @@ function CarouselControls({ children, label, controlLabel }: { children: ReactNo
 
     updateScrollState();
     const handleScroll = () => updateScrollState();
+    const dropTarget = () => {
+      targetRef.current = null;
+    };
     scroller.addEventListener("scroll", handleScroll, { passive: true });
+    scroller.addEventListener("pointerdown", dropTarget, { passive: true });
+    scroller.addEventListener("wheel", dropTarget, { passive: true });
     window.addEventListener("resize", updateScrollState);
 
     let resizeObserver: ResizeObserver | undefined;
@@ -670,6 +676,8 @@ function CarouselControls({ children, label, controlLabel }: { children: ReactNo
 
     return () => {
       scroller.removeEventListener("scroll", handleScroll);
+      scroller.removeEventListener("pointerdown", dropTarget);
+      scroller.removeEventListener("wheel", dropTarget);
       window.removeEventListener("resize", updateScrollState);
       resizeObserver?.disconnect();
     };
@@ -687,8 +695,13 @@ function CarouselControls({ children, label, controlLabel }: { children: ReactNo
       const scrollAmount = firstCard ? firstCard.offsetWidth + columnGap : scroller.clientWidth * 0.82;
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      scroller.scrollBy({
-        left: direction * scrollAmount,
+      const maxScrollLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+      const base = targetRef.current ?? scroller.scrollLeft;
+      const target = Math.max(0, Math.min(base + direction * scrollAmount, maxScrollLeft));
+      targetRef.current = target;
+
+      scroller.scrollTo({
+        left: target,
         behavior: reduceMotion ? "auto" : "smooth"
       });
 
