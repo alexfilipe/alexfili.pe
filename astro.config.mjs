@@ -4,7 +4,7 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: "https://alexfili.pe",
+  site: process.env.PUBLIC_SITE_URL ?? "https://alexfili.pe",
   integrations: [react(), mdx(), sitemap()],
   prefetch: true,
   devToolbar: {
