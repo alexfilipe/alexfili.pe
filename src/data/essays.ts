@@ -5,7 +5,7 @@ export type Writing = {
   href: string;
 };
 
-export const writings: Writing[] = [
+export const essays: Writing[] = [
   {
     title: "11 Years Away From Brazil",
     summary: "I left Brazil when I was starting to become myself. Eleven years later, I'm still learning what it means to build a life abroad.",

@@ -647,7 +647,7 @@ select {
   background-color: rgba(211, 178, 112, 0.035);
 }
 
-.figma-writings .figma-carousel-card {
+.figma-essays .figma-carousel-card {
   flex-basis: 50%;
 }
 
@@ -865,7 +865,7 @@ select {
     flex-basis: var(--carousel-card-width);
   }
 
-  .figma-writings .figma-carousel-card {
+  .figma-essays .figma-carousel-card {
     flex-basis: var(--carousel-card-width);
   }
 }

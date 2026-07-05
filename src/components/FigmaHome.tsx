@@ -5,7 +5,7 @@ import PianoSeparator from "@/components/PianoSeparator";
 import { musicDisciplines } from "@/data/music";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
-import { writings } from "@/data/writings";
+import { essays } from "@/data/essays";
 
 const ACCENT = "#c8a96e";
 
@@ -863,13 +863,13 @@ function MusicSection() {
   );
 }
 
-function WritingsSection() {
+function EssaysSection() {
   return (
-    <section id="writings" className="figma-section figma-writings" aria-labelledby="writings-title">
-      <SectionHeader id="writings-title" title="Writings" />
+    <section id="essays" className="figma-section figma-essays" aria-labelledby="essays-title">
+      <SectionHeader id="essays-title" title="Essays" />
 
-      <CarouselControls label="Writings" controlLabel="writings">
-        {writings.map((writing) => (
+      <CarouselControls label="Essays" controlLabel="essays">
+        {essays.map((writing) => (
           <a key={writing.title} href={writing.href} className="figma-carousel-card" role="listitem">
             <WritingArtwork />
             <span className="figma-carousel-copy">
@@ -942,7 +942,7 @@ export default function FigmaHome() {
           <div className="figma-navbar-links">
             <a href="#projects">Projects</a>
             <a href="#music">Music</a>
-            <a href="#writings">Writings</a>
+            <a href="#essays">Essays</a>
           </div>
         </nav>
       </header>
@@ -995,7 +995,7 @@ export default function FigmaHome() {
 
         <FeaturedWorkSection />
         <MusicSection />
-        <WritingsSection />
+        <EssaysSection />
 
         <nav className="figma-socials" aria-label="Social links">
           {socialLinks.map(({ href, Icon, label }) => (

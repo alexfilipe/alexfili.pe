@@ -6,7 +6,7 @@ Personal website for Álex Filipe Santos: a static Astro site with a cinematic e
 
 - Astro 6 with TypeScript
 - React islands for the interactive hero and music filters
-- MDX content collections for writings and recordings
+- MDX content collections for essays and recordings
 - Three.js for the intelligence geometry and piano separator
 - Self-hosted Figma fonts through Fontsource: Gloock and Instrument Sans
 - Static output for Cloudflare Pages
@@ -35,7 +35,7 @@ Profile and project seed data live in:
 - `src/data/profile.ts`
 - `src/data/projects.ts`
 
-Writings live in `src/content/writings/`. Each entry supports:
+Essays live in `src/content/essays/`. Each entry supports:
 
 - `title`
 - `description`
@@ -101,7 +101,7 @@ Verified locally:
 
 - `npm run check`
 - `npm run build`
-- Static route generation for `/`, `/music/`, `/writings/`, writing detail pages, and `/404.html`
+- Static route generation for `/`, `/music/`, `/essays/`, writing detail pages, and `/404.html`
 - Sitemap generation
 - Draft writing exclusion from `dist`
 
