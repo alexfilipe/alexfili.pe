@@ -27,3 +27,12 @@ When browser QA is not performed, say:
 "Browser QA skipped per project instructions."
 
 Never spend extra time taking screenshots or checking the page visually for tiny CSS/copy-only edits unless I request it.
+
+## Deployment
+
+Two independent targets — see the Deployment section of `README.md` for the full process.
+
+- **`alpha.alexfili.pe`** (full Astro site): auto-deploys via git-connected Cloudflare Pages on every push to `main`. No manual step.
+- **`alexfili.pe` / `www.alexfili.pe`** (production placeholder): served by the `alexfilipe-placeholder` Worker (`scripts/placeholder-worker.js`), which proxies `launch-placeholder.html` + `public/` assets from a pinned commit. Deploy is **manual** — bump `RAW_BASE` to the new commit SHA and `SOURCE_VERSION`, push, then `npx wrangler deploy scripts/placeholder-worker.js --name alexfilipe-placeholder --compatibility-date <today>`.
+
+Pushing to `main` does **not** update the production placeholder.

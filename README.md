@@ -74,26 +74,66 @@ The production home page ports the Figma Make composition into maintainable Astr
 
 ## Deployment
 
-Cloudflare Pages settings:
+There are two independent deploy targets. Pushing to `main` only updates the
+alpha site; the production placeholder is deployed manually.
+
+### Alpha site — `alpha.alexfili.pe` (automatic)
+
+The full Astro site is deployed by a git-connected Cloudflare Pages project.
 
 - Framework preset: Astro
-- Build command: `npm run build`
 - Build output directory: `dist`
 - Production branch: `main`
 
-Temporary launch mode:
+Every push to `main` triggers a Pages build automatically — no manual step is
+required. To force a rebuild without code changes, push an empty commit
+(`git commit --allow-empty -m "Trigger alpha Pages deployment"`).
 
-- `npm run build` currently publishes only `launch-placeholder.html` as `dist/index.html`.
-- `scripts/placeholder-worker.js` mirrors the temporary Cloudflare Worker currently serving the placeholder and its preview/icon assets.
-- `npm run build:site` keeps the full Astro site build available for when the full website is ready.
-- To restore the full site deploy, change `build` in `package.json` back to the `build:site` command.
+### Production placeholder — `alexfili.pe` and `www.alexfili.pe` (manual)
 
-After the first successful deploy:
+The apex domain is served by the `alexfilipe-placeholder` Cloudflare Worker
+(`scripts/placeholder-worker.js`), *not* by Pages. The worker proxies
+`launch-placeholder.html` plus the icon/preview assets in `public/` from a
+**pinned GitHub commit** (`RAW_BASE`) and redirects `www` → apex.
 
-1. Add `alexfili.pe` as a custom domain in Cloudflare Pages.
-2. Point DNS from the VPS to Cloudflare Pages as instructed by Cloudflare.
-3. Keep the VPS configuration available as a rollback until HTTPS is active on Cloudflare.
-4. Optionally add `www.alexfili.pe` and redirect it to the apex domain.
+Because the worker reads from a pinned commit, editing the placeholder is not
+enough — you must repin and redeploy the worker:
+
+1. Edit `launch-placeholder.html` / `public/` assets, then commit and push to
+   `main` so the new content is available on GitHub raw.
+2. In `scripts/placeholder-worker.js`, set `RAW_BASE` to the new commit SHA and
+   bump `SOURCE_VERSION` (this busts the Cloudflare edge cache so the new HTML
+   actually serves). Commit and push.
+3. Authenticate once: `npx wrangler login`.
+4. Deploy:
+
+   ```bash
+   npx wrangler deploy scripts/placeholder-worker.js \
+     --name alexfilipe-placeholder \
+     --compatibility-date <today>
+   ```
+
+5. Verify: `curl -sI https://alexfili.pe/` returns `200`, and
+   `curl -s https://alexfili.pe/ | grep -i '<title>'` shows the expected copy.
+
+Notes:
+
+- The worker is service-worker format, so `--compatibility-date` is required.
+- There is no `wrangler.toml`; without one, each deploy re-enables the
+  `workers.dev` subdomain and Preview URLs by default. Add a minimal
+  `wrangler.toml` (`name`, `compatibility_date`, `workers_dev = false`) if you
+  want reproducible deploys.
+- The `alexfili.pe` / `www.alexfili.pe` custom-domain routes live in the
+  Cloudflare dashboard. `wrangler deploy --name` only updates worker code and
+  leaves those routes untouched.
+
+### Restoring the full site to production
+
+- `npm run build` currently publishes only `launch-placeholder.html` as
+  `dist/index.html`; `npm run build:site` builds the full Astro site.
+- To promote the full site, point the production domain at the Pages project
+  (or change `build` in `package.json` back to `build:site`) and retire the
+  placeholder worker.
 
 ## QA Notes
 
