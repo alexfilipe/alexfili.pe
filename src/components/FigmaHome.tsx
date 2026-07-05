@@ -811,7 +811,7 @@ function WritingArtwork() {
 
 function FeaturedWorkSection() {
   return (
-    <section className="figma-section figma-featured-work" aria-labelledby="featured-work-title">
+    <section id="projects" className="figma-section figma-featured-work" aria-labelledby="featured-work-title">
       <SectionHeader id="featured-work-title" title="Things I’ve Built" />
 
       <CarouselControls label="Featured projects" controlLabel="projects">
@@ -844,7 +844,7 @@ function FeaturedWorkSection() {
 
 function MusicSection() {
   return (
-    <section className="figma-section figma-music" aria-labelledby="music-title">
+    <section id="music" className="figma-section figma-music" aria-labelledby="music-title">
       <SectionHeader id="music-title" title="Music" />
 
       <CarouselControls label="Music" controlLabel="music">
@@ -865,7 +865,7 @@ function MusicSection() {
 
 function WritingsSection() {
   return (
-    <section className="figma-section figma-writings" aria-labelledby="writings-title">
+    <section id="writings" className="figma-section figma-writings" aria-labelledby="writings-title">
       <SectionHeader id="writings-title" title="Writings" />
 
       <CarouselControls label="Writings" controlLabel="writings">
@@ -888,9 +888,27 @@ function WritingsSection() {
 export default function FigmaHome() {
   const [isLoading, setIsLoading] = useState(true);
   const [showLoader, setShowLoader] = useState(true);
+  const [showNav, setShowNav] = useState(false);
 
   const handleArtifactReady = useCallback(() => {
     window.setTimeout(() => setIsLoading(false), 520);
+  }, []);
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y <= 260) {
+        setShowNav(false);
+      } else if (y > lastY + 2) {
+        setShowNav(true);
+      } else if (y < lastY - 2) {
+        setShowNav(false);
+      }
+      lastY = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
@@ -915,7 +933,20 @@ export default function FigmaHome() {
           <p>Building</p>
         </div>
       )}
-      <div className="figma-home-main">
+      <header className={`figma-navbar${showNav ? " is-visible" : ""}`}>
+        <nav className="figma-navbar-inner" aria-label="Primary">
+          <a className="figma-navbar-brand" href="#top" aria-label={`${profile.name} — home`}>
+            <img src="/logo-mark.svg" alt="" className="figma-navbar-logo" width={28} height={28} aria-hidden="true" />
+            <span className="figma-navbar-name">{profile.name}</span>
+          </a>
+          <div className="figma-navbar-links">
+            <a href="#projects">Projects</a>
+            <a href="#music">Music</a>
+            <a href="#writings">Writings</a>
+          </div>
+        </nav>
+      </header>
+      <div className="figma-home-main" id="top">
         <section className="figma-hero" aria-labelledby="hero-title">
           <div className="figma-hero-copy">
             <h1 id="hero-title" className="figma-hero-title">
