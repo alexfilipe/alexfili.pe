@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ReactNode, SVGProps } from "react";
-import { ArrowUpRight, Mail } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Mail } from "lucide-react";
 import PianoSeparator from "@/components/PianoSeparator";
 import { musicDisciplines } from "@/data/music";
 import { profile } from "@/data/profile";
@@ -598,7 +598,135 @@ const socialLinks = [
   { href: `mailto:${profile.email}`, Icon: Mail, label: "Email" }
 ];
 
-const MUSIC_NUMERALS = ["I", "II", "III"];
+const SCROLL_EDGE_EPSILON = 2;
+
+type CarouselScrollState = {
+  canScrollLeft: boolean;
+  canScrollRight: boolean;
+};
+
+function IntroContactRow() {
+  const links = [
+    { href: profile.github, label: "GitHub" },
+    { href: profile.linkedin, label: "LinkedIn" },
+    { href: `mailto:${profile.email}`, label: "Email" }
+  ];
+
+  return (
+    <nav className="figma-intro-contact" aria-label="Contact links">
+      {links.map(({ href, label }) => (
+        <a key={label} href={href}>
+          <span>{label}</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+function CarouselControls({ children, label, controlLabel }: { children: ReactNode; label: string; controlLabel: string }) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [scrollState, setScrollState] = useState<CarouselScrollState>({
+    canScrollLeft: false,
+    canScrollRight: false
+  });
+
+  const updateScrollState = useCallback(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) {
+      return;
+    }
+
+    const maxScrollLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+    const nextState = {
+      canScrollLeft: scroller.scrollLeft > SCROLL_EDGE_EPSILON,
+      canScrollRight: scroller.scrollLeft < maxScrollLeft - SCROLL_EDGE_EPSILON
+    };
+
+    setScrollState((currentState) =>
+      currentState.canScrollLeft === nextState.canScrollLeft && currentState.canScrollRight === nextState.canScrollRight
+        ? currentState
+        : nextState
+    );
+  }, []);
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) {
+      return;
+    }
+
+    updateScrollState();
+    const handleScroll = () => updateScrollState();
+    scroller.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", updateScrollState);
+
+    let resizeObserver: ResizeObserver | undefined;
+    if ("ResizeObserver" in window) {
+      resizeObserver = new ResizeObserver(updateScrollState);
+      resizeObserver.observe(scroller);
+      Array.from(scroller.children).forEach((child) => resizeObserver?.observe(child));
+    }
+
+    return () => {
+      scroller.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", updateScrollState);
+      resizeObserver?.disconnect();
+    };
+  }, [updateScrollState]);
+
+  const scrollByDirection = useCallback(
+    (direction: -1 | 1) => {
+      const scroller = scrollerRef.current;
+      if (!scroller) {
+        return;
+      }
+
+      const firstCard = scroller.querySelector<HTMLElement>(".figma-carousel-card");
+      const columnGap = Number.parseFloat(window.getComputedStyle(scroller).columnGap || "0") || 0;
+      const scrollAmount = firstCard ? firstCard.offsetWidth + columnGap : scroller.clientWidth * 0.82;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      scroller.scrollBy({
+        left: direction * scrollAmount,
+        behavior: reduceMotion ? "auto" : "smooth"
+      });
+
+      window.setTimeout(updateScrollState, reduceMotion ? 0 : 260);
+    },
+    [updateScrollState]
+  );
+
+  return (
+    <div
+      className="figma-carousel-shell"
+      data-can-scroll-left={scrollState.canScrollLeft ? "true" : "false"}
+      data-can-scroll-right={scrollState.canScrollRight ? "true" : "false"}
+    >
+      <div ref={scrollerRef} className="figma-carousel" role="list" aria-label={label}>
+        {children}
+      </div>
+      <button
+        type="button"
+        className="figma-carousel-control figma-carousel-control--left"
+        aria-label={`Scroll ${controlLabel} left`}
+        disabled={!scrollState.canScrollLeft}
+        onClick={() => scrollByDirection(-1)}
+      >
+        <ArrowLeft size={15} aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        className="figma-carousel-control figma-carousel-control--right"
+        aria-label={`Scroll ${controlLabel} right`}
+        disabled={!scrollState.canScrollRight}
+        onClick={() => scrollByDirection(1)}
+      >
+        <ArrowRight size={15} aria-hidden="true" />
+      </button>
+    </div>
+  );
+}
 
 function SectionHeader({ id, title }: { id: string; title: string }) {
   return (
@@ -686,13 +814,13 @@ function FeaturedWorkSection() {
     <section className="figma-section figma-featured-work" aria-labelledby="featured-work-title">
       <SectionHeader id="featured-work-title" title="Featured projects" />
 
-      <div className="figma-carousel" role="list" aria-label="Featured projects">
+      <CarouselControls label="Featured projects" controlLabel="projects">
         {projects.map((project) => (
           <a key={project.title} href={project.href ?? "#"} className="figma-carousel-card" role="listitem">
             <ProjectArtwork />
             <span className="figma-carousel-copy">
               <span className="figma-carousel-meta">
-                {project.focus} / {project.year}
+                {project.period.start}&mdash;{project.period.end}
               </span>
               <span className="figma-carousel-title">{project.title}</span>
               <span className="figma-carousel-description">{project.description}</span>
@@ -700,7 +828,7 @@ function FeaturedWorkSection() {
             <ArrowUpRight size={16} className="figma-carousel-arrow" aria-hidden="true" />
           </a>
         ))}
-      </div>
+      </CarouselControls>
     </section>
   );
 }
@@ -710,18 +838,18 @@ function MusicSection() {
     <section className="figma-section figma-music" aria-labelledby="music-title">
       <SectionHeader id="music-title" title="Music" />
 
-      <div className="figma-carousel" role="list" aria-label="Music">
-        {musicDisciplines.map((discipline, index) => (
-          <article key={discipline.title} className="figma-carousel-card" role="listitem">
+      <CarouselControls label="Music" controlLabel="music">
+        {musicDisciplines.map((discipline) => (
+          <a key={discipline.title} href={discipline.href} className="figma-carousel-card" role="listitem">
             <MusicArtwork title={discipline.title} />
-            <div className="figma-carousel-copy">
-              <p className="figma-carousel-meta">{MUSIC_NUMERALS[index]}</p>
-              <h3 className="figma-carousel-title">{discipline.title}</h3>
-              <p className="figma-carousel-description">{discipline.description}</p>
-            </div>
-          </article>
+            <span className="figma-carousel-copy">
+              <span className="figma-carousel-title">{discipline.title}</span>
+              <span className="figma-carousel-description">{discipline.description}</span>
+            </span>
+            <ArrowUpRight size={16} className="figma-carousel-arrow" aria-hidden="true" />
+          </a>
         ))}
-      </div>
+      </CarouselControls>
     </section>
   );
 }
@@ -731,21 +859,19 @@ function WritingsSection() {
     <section className="figma-section figma-writings" aria-labelledby="writings-title">
       <SectionHeader id="writings-title" title="Writings" />
 
-      <div className="figma-carousel" role="list" aria-label="Writings">
+      <CarouselControls label="Writings" controlLabel="writings">
         {writings.map((writing) => (
           <a key={writing.title} href={writing.href} className="figma-carousel-card" role="listitem">
             <WritingArtwork />
             <span className="figma-carousel-copy">
-              <span className="figma-carousel-meta">
-                {writing.date} / {writing.readingTime}
-              </span>
+              <span className="figma-carousel-meta">{writing.legend}</span>
               <span className="figma-carousel-title">{writing.title}</span>
               <span className="figma-carousel-description">{writing.summary}</span>
             </span>
             <ArrowUpRight size={16} className="figma-carousel-arrow" aria-hidden="true" />
           </a>
         ))}
-      </div>
+      </CarouselControls>
     </section>
   );
 }
@@ -823,6 +949,8 @@ export default function FigmaHome() {
             same question that draws me to systems built with care: <strong>what makes structure feel meaningful</strong>.
           </p>
         </section>
+
+        <IntroContactRow />
 
         <FeaturedWorkSection />
         <MusicSection />
