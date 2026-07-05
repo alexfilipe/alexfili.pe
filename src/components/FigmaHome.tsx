@@ -869,17 +869,34 @@ function EssaysSection() {
       <SectionHeader id="essays-title" title="Essays" />
 
       <CarouselControls label="Essays" controlLabel="essays">
-        {essays.map((writing) => (
-          <a key={writing.title} href={writing.href} className="figma-carousel-card" role="listitem">
-            <WritingArtwork />
-            <span className="figma-carousel-copy">
-              <span className="figma-carousel-meta">{writing.legend}</span>
-              <span className="figma-carousel-title">{writing.title}</span>
-              <span className="figma-carousel-description">{writing.summary}</span>
-            </span>
-            <ArrowUpRight size={16} className="figma-carousel-arrow" aria-hidden="true" />
-          </a>
-        ))}
+        {essays.map((writing) =>
+          writing.upcoming ? (
+            <div
+              key={writing.title}
+              className="figma-carousel-card figma-carousel-card--upcoming"
+              role="listitem"
+            >
+              <WritingArtwork />
+              <span className="figma-carousel-copy">
+                <span className="figma-carousel-meta">
+                  <span className="figma-upcoming-tag">Upcoming</span>
+                </span>
+                <span className="figma-carousel-title">{writing.title}</span>
+                <span className="figma-carousel-description">{writing.summary}</span>
+              </span>
+            </div>
+          ) : (
+            <a key={writing.title} href={writing.href} className="figma-carousel-card" role="listitem">
+              <WritingArtwork />
+              <span className="figma-carousel-copy">
+                <span className="figma-carousel-meta">{writing.legend}</span>
+                <span className="figma-carousel-title">{writing.title}</span>
+                <span className="figma-carousel-description">{writing.summary}</span>
+              </span>
+              <ArrowUpRight size={16} className="figma-carousel-arrow" aria-hidden="true" />
+            </a>
+          )
+        )}
       </CarouselControls>
     </section>
   );
@@ -1011,7 +1028,7 @@ export default function FigmaHome() {
           This site is an AI-first experiment in front-end interaction, design systems, and agentic workflows.
         </footer>
 
-        <p className="figma-home-copyright">© {new Date().getFullYear()} Álex Filipe Santos</p>
+        <p className="figma-home-copyright">© {new Date().getFullYear()} Álex Filipe Santos<span className="figma-copyright-sep" aria-hidden="true">·</span>San Francisco, CA</p>
       </div>
     </div>
   );
