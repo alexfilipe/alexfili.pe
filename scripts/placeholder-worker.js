@@ -1,5 +1,5 @@
-const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/573daa38dd3e1299ff7125d9e6c5c139ea016f5a";
-const SOURCE_VERSION = "20260704-seo-refresh";
+const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/31e262c8a9ec296b65f195c13249eedb4e46c620";
+const SOURCE_VERSION = "20260706-indexnow-c082a173";
 const HTML_ASSET = {
   path: "launch-placeholder.html",
   contentType: "text/html; charset=UTF-8",
