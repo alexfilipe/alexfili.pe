@@ -8,8 +8,8 @@ export const profile = {
   homeSeo: {
     title: "Álex Filipe Santos — Software & AI Engineer in San Francisco",
     description: "Software & AI Engineer based in San Francisco, guided by mathematical thought and classical musicianship.",
-    socialTitle: "Álex Filipe Santos — Software & AI Engineer",
-    socialDescription: "Based in San Francisco, guided by mathematical thought and classical musicianship."
+    socialTitle: "Álex Filipe Santos — Software & AI Engineer in San Francisco",
+    socialDescription: "Software & AI Engineer based in San Francisco, guided by mathematical thought and classical musicianship."
   },
   email: "hi@alexfili.pe",
   github: "https://github.com/alexfilipe",
