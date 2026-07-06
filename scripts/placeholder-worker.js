@@ -13,7 +13,7 @@ const STATIC_ASSETS = {
   "/favicon-16x16.png": ["public/favicon-16x16.png", "image/png"],
   "/favicon-32x32.png": ["public/favicon-32x32.png", "image/png"],
   "/apple-touch-icon.png": ["public/apple-touch-icon.png", "image/png"],
-  "/c082a1734b42943e618231fe10f71617.txt": ["public/c082a1734b42943e618231fe10f71617.txt", "text/plain; charset=UTF-8"],
+  "/f6e3c621211968d064ebaf5b5ac5f92f.txt": ["public/f6e3c621211968d064ebaf5b5ac5f92f.txt", "text/plain; charset=UTF-8"],
   "/og-image.png": ["public/og-image.png", "image/png"],
   "/site.webmanifest": ["public/site.webmanifest", "application/manifest+json; charset=UTF-8"],
   "/icons/favicon-16.png": ["public/icons/favicon-16.png", "image/png"],

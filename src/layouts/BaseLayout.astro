@@ -27,7 +27,7 @@ const pageTitle =
       : `${title} | ${profile.name}`;
 const metaDescription = isHome ? profile.homeSeo.description : description;
 const socialTitle = isHome ? profile.homeSeo.socialTitle : pageTitle;
-const socialDescription = isHome ? profile.homeSeo.socialDescription : metaDescription;
+const socialDescription = profile.homeSeo.socialDescription;
 const canonicalUrl = new URL(canonical, Astro.site ?? "https://alexfili.pe").toString();
 const assetVersion = "20260624-dodecahedron";
 const assetSuffix = `?v=${assetVersion}`;
