@@ -127,6 +127,81 @@ Notes:
   Cloudflare dashboard. `wrangler deploy --name` only updates worker code and
   leaves those routes untouched.
 
+### SEO metadata and IndexNow
+
+Keep normal page metadata and social preview metadata separate:
+
+- Page titles and `<meta name="description">` live in `src/data/profile.ts`,
+  `src/layouts/BaseLayout.astro`, and `launch-placeholder.html`.
+- OpenGraph and Twitter/X preview text uses `profile.homeSeo.socialDescription`
+  in the Astro site and explicit `og:description` / `twitter:description` tags
+  in `launch-placeholder.html`.
+- Do not change page titles or normal page meta descriptions when the requested
+  update is only for OpenGraph and Twitter/X descriptions.
+
+IndexNow should only be pinged for the production apex URL after the key file is
+live at `https://alexfili.pe/<key>.txt`. Do **not** ping
+`alpha.alexfili.pe`.
+
+Current placeholder flow:
+
+1. Generate a fresh 32-character hex key:
+
+   ```bash
+   openssl rand -hex 16
+   ```
+
+2. Save it as `public/<key>.txt` containing exactly the key. Avoid a trailing
+   newline; `wc -c public/<key>.txt` should report `32`.
+3. In `scripts/placeholder-worker.js`, add `"/<key>.txt"` to `STATIC_ASSETS`
+   with the source path `public/<key>.txt` and content type
+   `text/plain; charset=UTF-8`. Remove any old IndexNow key mapping/file unless
+   there is a reason to keep it active.
+4. Run lightweight checks:
+
+   ```bash
+   node --check scripts/placeholder-worker.js
+   npm run check
+   npm run build
+   ```
+
+5. Commit the source changes and push them to `main`.
+6. Update `RAW_BASE` in `scripts/placeholder-worker.js` to the source commit
+   SHA that contains `public/<key>.txt`, bump `SOURCE_VERSION`, then commit and
+   push that repin.
+7. Deploy the placeholder worker:
+
+   ```bash
+   npx wrangler deploy scripts/placeholder-worker.js \
+     --name alexfilipe-placeholder \
+     --compatibility-date <today>
+   ```
+
+8. Verify production before pinging IndexNow:
+
+   ```bash
+   curl -i https://alexfili.pe/<key>.txt
+   curl -i https://alexfili.pe/robots.txt
+   curl -I https://alexfili.pe/some-missing-path
+   ```
+
+   The key file and `robots.txt` should return `200` as bare text files. A
+   missing placeholder path should still redirect to `https://alexfili.pe/`.
+
+9. After the key file is verified live, send the one-time IndexNow signal:
+
+   ```bash
+   curl -i "https://api.indexnow.org/indexnow?url=https://alexfili.pe/&key=<key>"
+   ```
+
+   A successful submission usually returns `202`.
+
+When the full Astro site is promoted to production, keep the same IndexNow
+rules: serve `public/<key>.txt` at the apex root, verify it at
+`https://alexfili.pe/<key>.txt`, and ping only
+`https://api.indexnow.org/indexnow?url=https://alexfili.pe/&key=<key>` after the
+production apex deploy is live.
+
 ### Restoring the full site to production
 
 - `npm run build` currently publishes only `launch-placeholder.html` as

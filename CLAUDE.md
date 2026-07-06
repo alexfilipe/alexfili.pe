@@ -36,3 +36,27 @@ Two independent targets — see the Deployment section of `README.md` for the fu
 - **`alexfili.pe` / `www.alexfili.pe`** (production placeholder): served by the `alexfilipe-placeholder` Worker (`scripts/placeholder-worker.js`), which proxies `launch-placeholder.html` + `public/` assets from a pinned commit. Deploy is **manual** — bump `RAW_BASE` to the new commit SHA and `SOURCE_VERSION`, push, then `npx wrangler deploy scripts/placeholder-worker.js --name alexfilipe-placeholder --compatibility-date <today>`.
 
 Pushing to `main` does **not** update the production placeholder.
+
+## SEO and IndexNow
+
+Keep page metadata and social preview metadata separate. If asked to update only
+OpenGraph or Twitter/X descriptions, do not change titles or normal
+`<meta name="description">` values.
+
+For IndexNow on the current production placeholder:
+
+- Generate a fresh 32-hex-character key with `openssl rand -hex 16`.
+- Save it as `public/<key>.txt` containing exactly the key; verify `wc -c`
+  reports `32`.
+- Add only the active `/<key>.txt` root path to `STATIC_ASSETS` in
+  `scripts/placeholder-worker.js` with `text/plain; charset=UTF-8`.
+- Commit/push the source change, then repin `RAW_BASE` to that source commit,
+  bump `SOURCE_VERSION`, commit/push again, and deploy
+  `alexfilipe-placeholder`.
+- Verify `https://alexfili.pe/<key>.txt` and `https://alexfili.pe/robots.txt`
+  return `200` as bare text files before pinging IndexNow.
+- Verify an unknown placeholder path still redirects to `https://alexfili.pe/`.
+- Only after the production key file is live, ping
+  `https://api.indexnow.org/indexnow?url=https://alexfili.pe/&key=<key>`.
+
+Do **not** ping IndexNow for `alpha.alexfili.pe`.
