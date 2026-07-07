@@ -1,0 +1,10 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import WorkIndex from "@/components/WorkIndex.tsx";
+import "@/styles/global.css";
+import "@/styles/pages.css";
+---
+
+<BaseLayout title="Álex Filipe Santos — Featured Work" description="Independent engineering across AI systems, social-impact products, and open source.">
+  <WorkIndex client:visible />
+</BaseLayout>

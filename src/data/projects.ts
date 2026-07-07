@@ -31,7 +31,7 @@ export const projects: Project[] = [
       start: "2015",
       end: "2018"
     },
-    href: "https://www.inspirasonho.com.br/"
+    href: "/projects#inspirasonho"
   },
   {
     title: "Home Assistant Extensions",
@@ -41,7 +41,8 @@ export const projects: Project[] = [
     period: {
       start: "2025",
       end: "Present"
-    }
+    },
+    href: "/projects#home-assistant"
   },
   {
     title: "LabStocker",
@@ -51,6 +52,7 @@ export const projects: Project[] = [
     period: {
       start: "2014",
       end: "2015"
-    }
+    },
+    href: "/projects#labstocker"
   }
 ];

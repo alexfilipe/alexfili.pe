@@ -1,0 +1,11 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProjectsCarousel from "@/components/ProjectsCarousel.tsx";
+import "@/styles/global.css";
+import "@/styles/pages.css";
+---
+
+<BaseLayout title="Álex Filipe Santos — Projects" description="Full project detail pages — engineering depth across independent work.">
+  <!-- client:load: reads the URL hash on mount and handles keyboard / edge nav. -->
+  <ProjectsCarousel client:load />
+</BaseLayout>

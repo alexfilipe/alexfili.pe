@@ -1,0 +1,59 @@
+import { ArrowUpRight } from "lucide-react";
+import SiteNav from "@/components/SiteNav";
+import { projectGlyphs } from "@/components/ProjectGlyphs";
+import { projectPages } from "@/data/projectPages";
+
+/**
+ * WorkIndex — the "Featured Work" index: hairline-separated rows, sans-serif
+ * titles, 4:3 glyph tiles. Each row deep-links into the project carousel at
+ * /projects#<id>. Ported from the design-system work.html recreation.
+ */
+export default function WorkIndex() {
+  return (
+    <div>
+      <SiteNav
+        links={[
+          { label: "Projects", href: "/work", current: true },
+          { label: "Music", href: "/music" },
+          { label: "Essays", href: "/essays" }
+        ]}
+      />
+      <div className="wk-wrap">
+        <header className="wk-head">
+          <h1 className="wk-title">Featured Work</h1>
+          <p className="wk-intro">
+            Independent engineering across AI systems, social-impact products, open source, and the early builds
+            that taught me how to think in systems.
+          </p>
+        </header>
+
+        <div className="wk-list">
+          {projectPages.map((p) => (
+            <a className="wk-item" key={p.id} href={`/projects#${p.id}`}>
+              <span className="wk-glyph" aria-hidden="true">
+                <span>{projectGlyphs[p.id]}</span>
+              </span>
+              <span className="wk-when">
+                <span className="wk-year">{p.period}</span>
+                <span className="wk-focus">{p.focus}</span>
+              </span>
+              <span className="wk-main">
+                <h2 className="wk-name">{p.name}</h2>
+                <p className="wk-desc">{p.tagline}</p>
+              </span>
+              <span className="wk-arrow" aria-hidden="true">
+                <ArrowUpRight size={22} strokeWidth={2.4} />
+              </span>
+            </a>
+          ))}
+        </div>
+
+        <footer className="wk-foot">
+          <span>© 2026 Álex Filipe Santos</span>
+          <span className="wk-foot-sep">·</span>
+          <span>San Francisco, CA</span>
+        </footer>
+      </div>
+    </div>
+  );
+}

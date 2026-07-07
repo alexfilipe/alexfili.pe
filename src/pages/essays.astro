@@ -1,0 +1,11 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import EssaysIndex from "@/components/EssaysIndex.tsx";
+import "@/styles/global.css";
+import "@/styles/pages.css";
+---
+
+<BaseLayout title="Álex Filipe Santos — Essays" description="Notes on engineering, music, and the long work of getting better.">
+  <!-- The index has no client state; client:visible is enough (hover states aside). -->
+  <EssaysIndex client:visible />
+</BaseLayout>

@@ -741,11 +741,18 @@ function CarouselControls({ children, label, controlLabel }: { children: ReactNo
   );
 }
 
-function SectionHeader({ id, title }: { id: string; title: string }) {
+function SectionHeader({ id, title, href }: { id: string; title: string; href?: string }) {
   return (
     <header className="figma-section-header">
       <h2 id={id} className="figma-section-title">
-        {title}
+        {href ? (
+          <a className="figma-section-title-link" href={href}>
+            <span>{title}</span>
+            <ArrowUpRight size={18} className="figma-section-title-arrow" aria-hidden="true" />
+          </a>
+        ) : (
+          title
+        )}
       </h2>
     </header>
   );
@@ -825,7 +832,7 @@ function WritingArtwork() {
 function FeaturedWorkSection() {
   return (
     <section id="projects" className="figma-section figma-featured-work" aria-labelledby="featured-work-title">
-      <SectionHeader id="featured-work-title" title="Things I’ve Built" />
+      <SectionHeader id="featured-work-title" title="Things I’ve Built" href="/work" />
 
       <CarouselControls label="Featured projects" controlLabel="projects">
         {projects.map((project) => {
@@ -858,7 +865,7 @@ function FeaturedWorkSection() {
 function MusicSection() {
   return (
     <section id="music" className="figma-section figma-music" aria-labelledby="music-title">
-      <SectionHeader id="music-title" title="Music" />
+      <SectionHeader id="music-title" title="Music" href="/music" />
 
       <CarouselControls label="Music" controlLabel="music">
         {musicDisciplines.map((discipline) => (
@@ -879,7 +886,7 @@ function MusicSection() {
 function EssaysSection() {
   return (
     <section id="essays" className="figma-section figma-essays" aria-labelledby="essays-title">
-      <SectionHeader id="essays-title" title="Essays" />
+      <SectionHeader id="essays-title" title="Essays" href="/essays" />
 
       <CarouselControls label="Essays" controlLabel="essays">
         {essays.map((writing) =>

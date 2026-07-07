@@ -1,0 +1,11 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import EssayReader from "@/components/EssayReader.tsx";
+import "@/styles/global.css";
+import "@/styles/pages.css";
+---
+
+<BaseLayout title="Álex Filipe Santos — Essay" description="Notes on engineering, music, and the long work of getting better.">
+  <!-- client:load: reads the URL hash on mount and handles keyboard / strip nav. -->
+  <EssayReader client:load />
+</BaseLayout>
