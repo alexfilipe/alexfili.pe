@@ -246,6 +246,32 @@
       transform: translate(1px, -1px);
     }
 
+    .project-link {
+      display: inline-block;
+      margin-top: 1.75rem;
+      color: var(--quiet);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 180ms ease;
+    }
+
+    .project-link::after {
+      content: "\2197";
+      display: inline-block;
+      margin-left: 0.24em;
+      font-size: 0.86em;
+      transition: transform 180ms ease;
+    }
+
+    .project-link:hover {
+      color: var(--gold);
+    }
+
+    .project-link:hover::after {
+      transform: translate(1px, -1px);
+    }
+
     .footer {
       margin-top: 2.25rem;
       color: var(--quiet);
@@ -354,6 +380,8 @@
       <a href="https://github.com/alexfilipe" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="mailto:hi@alexfili.pe">Email</a>
     </nav>
+
+    <a class="project-link" href="https://aetherloom.app" target="_blank" rel="noopener noreferrer">Check out Aetherloom App</a>
 
     <div class="footer">
       Brazilian by birth. San Franciscan by heart.
