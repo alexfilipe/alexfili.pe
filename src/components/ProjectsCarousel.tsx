@@ -7,11 +7,25 @@ import { projectPages, type ProjectPage } from "@/data/projectPages";
 /**
  * ProjectsCarousel — an interactive carousel of full project detail pages you
  * cycle through with edge arrows, the top prev/next, dots, or ← / → keys. The
- * current project is tracked in the URL hash (/projects#<id>), so the Work
+ * current project is tracked in the URL path (/projects/<id>), so the Work
  * index can deep-link into any project. A small tweaks panel switches the
  * project-title font between serif and sans (persisted). No piano — that motif
  * is home-only. Ported from the design-system projects.html recreation.
  */
+
+type ProjectsCarouselProps = {
+  initialProjectId?: string;
+};
+
+function projectIndexFromId(projectId?: string) {
+  if (!projectId) return 0;
+  const index = projectPages.findIndex((p) => p.id === projectId);
+  return index === -1 ? 0 : index;
+}
+
+function projectPath(projectId: string) {
+  return `/projects/${projectId}`;
+}
 
 function ProjectDetail({ project }: { project: ProjectPage }) {
   if (project.stub) {
@@ -102,15 +116,18 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
 
 type TitleFont = "serif" | "sans";
 
-export default function ProjectsCarousel() {
-  const [i, setI] = useState(0);
+export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselProps) {
+  const [i, setI] = useState(() => projectIndexFromId(initialProjectId));
   const [dir, setDir] = useState<1 | -1>(1);
   const [titleFont, setTitleFont] = useState<TitleFont>("serif");
 
-  // Apply hash deep-links after hydration so SSR and the first client render match.
+  // Preserve old hash deep-links, but normalize them into project path URLs.
   useEffect(() => {
-    const n = projectPages.findIndex((p) => p.id === window.location.hash.slice(1));
-    if (n !== -1) setI(n);
+    const hashProjectId = window.location.hash.slice(1);
+    const n = projectPages.findIndex((p) => p.id === hashProjectId);
+    if (n === -1) return;
+    setI(n);
+    history.replaceState(null, "", projectPath(projectPages[n].id));
   }, []);
 
   // Restore persisted title-font tweak on mount (client only).
@@ -137,7 +154,7 @@ export default function ProjectsCarousel() {
       setDir(next > i || (i === projectPages.length - 1 && next === 0) ? 1 : -1);
       const n = (next + projectPages.length) % projectPages.length;
       setI(n);
-      history.replaceState(null, "", `#${projectPages[n].id}`);
+      history.replaceState(null, "", projectPath(projectPages[n].id));
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [i]
@@ -183,9 +200,8 @@ export default function ProjectsCarousel() {
 
       <SiteNav
         links={[
-          { label: "Projects", href: "/work", current: true },
-          { label: "Music", href: "/music" },
-          { label: "Essays", href: "/essays" }
+          { label: "Work", href: "/work", current: true },
+          { label: "Music", href: "/music" }
         ]}
       />
 

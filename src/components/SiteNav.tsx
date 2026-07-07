@@ -28,7 +28,7 @@ const EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
 
 function NavLink({ label, href, current = false }: NavLinkItem) {
   const [hover, setHover] = useState(false);
-  const shown = hover || current;
+  const shown = hover;
   return (
     <a
       href={href}
@@ -72,9 +72,8 @@ export default function SiteNav({
   logoSrc = "/logo-mark.svg",
   href = "/",
   links = [
-    { label: "Projects", href: "/work" },
-    { label: "Music", href: "/music" },
-    { label: "Essays", href: "/essays" }
+    { label: "Work", href: "/work" },
+    { label: "Music", href: "/music" }
   ],
   revealOnScroll = false
 }: SiteNavProps) {

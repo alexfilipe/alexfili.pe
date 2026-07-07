@@ -1,0 +1,20 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProjectsCarousel from "@/components/ProjectsCarousel.tsx";
+import { projectPages } from "@/data/projectPages";
+import "@/styles/global.css";
+import "@/styles/pages.css";
+
+export function getStaticPaths() {
+  return projectPages.map((project) => ({
+    params: { id: project.id },
+    props: { project }
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<BaseLayout title={`Álex Filipe Santos — ${project.name}`} description={project.lede}>
+  <ProjectsCarousel client:load initialProjectId={project.id} />
+</BaseLayout>

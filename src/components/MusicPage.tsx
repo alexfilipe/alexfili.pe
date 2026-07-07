@@ -184,9 +184,8 @@ export default function MusicPage() {
     <div className="mu">
       <SiteNav
         links={[
-          { label: "Projects", href: "/work" },
-          { label: "Music", href: "/music", current: true },
-          { label: "Essays", href: "/essays" }
+          { label: "Work", href: "/work" },
+          { label: "Music", href: "/music", current: true }
         ]}
       />
       <SectionNav active={active} />

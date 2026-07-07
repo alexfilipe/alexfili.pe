@@ -20,7 +20,7 @@ export const projects: Project[] = [
       start: "2026",
       end: "Present"
     },
-    href: "https://aetherloom.app/"
+    href: "/projects/aetherloom"
   },
   {
     title: "InspiraSonho",
@@ -31,7 +31,7 @@ export const projects: Project[] = [
       start: "2015",
       end: "2018"
     },
-    href: "/projects#inspirasonho"
+    href: "/projects/inspirasonho"
   },
   {
     title: "Home Assistant Extensions",
@@ -42,7 +42,7 @@ export const projects: Project[] = [
       start: "2025",
       end: "Present"
     },
-    href: "/projects#home-assistant"
+    href: "/projects/home-assistant"
   },
   {
     title: "LabStocker",
@@ -53,6 +53,6 @@ export const projects: Project[] = [
       start: "2014",
       end: "2015"
     },
-    href: "/projects#labstocker"
+    href: "/projects/labstocker"
   }
 ];

@@ -2,7 +2,7 @@
 //
 // This extends the lightweight `projects.ts` seed (used by the home carousel)
 // with the full narrative each detail page needs. Keyed by `id`, which is also
-// the URL hash used to deep-link into the carousel (e.g. /projects#labstocker).
+// the URL slug used to deep-link into the carousel (e.g. /projects/labstocker).
 //
 // The line-art glyph for each project is a React node, so it lives in
 // components/ProjectGlyphs.tsx keyed by this same `id` — not here (data files

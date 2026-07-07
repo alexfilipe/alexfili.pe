@@ -6,16 +6,15 @@ import { projectPages } from "@/data/projectPages";
 /**
  * WorkIndex — the "Featured Work" index: hairline-separated rows, sans-serif
  * titles, 4:3 glyph tiles. Each row deep-links into the project carousel at
- * /projects#<id>. Ported from the design-system work.html recreation.
+ * /projects/<id>. Ported from the design-system work.html recreation.
  */
 export default function WorkIndex() {
   return (
     <div>
       <SiteNav
         links={[
-          { label: "Projects", href: "/work", current: true },
-          { label: "Music", href: "/music" },
-          { label: "Essays", href: "/essays" }
+          { label: "Work", href: "/work", current: true },
+          { label: "Music", href: "/music" }
         ]}
       />
       <div className="wk-wrap">
@@ -29,7 +28,7 @@ export default function WorkIndex() {
 
         <div className="wk-list">
           {projectPages.map((p) => (
-            <a className="wk-item" key={p.id} href={`/projects#${p.id}`}>
+            <a className="wk-item" key={p.id} href={`/projects/${p.id}`}>
               <span className="wk-glyph" aria-hidden="true">
                 <span>{projectGlyphs[p.id]}</span>
               </span>

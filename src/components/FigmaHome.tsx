@@ -5,7 +5,6 @@ import PianoSeparator from "@/components/PianoSeparator";
 import { musicDisciplines } from "@/data/music";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
-import { essays } from "@/data/essays";
 
 const ACCENT = "#c8a96e";
 
@@ -816,19 +815,6 @@ function MusicArtwork({ title }: { title: string }) {
   );
 }
 
-function WritingArtwork() {
-  return (
-    <ArtworkFrame>
-      <svg viewBox="0 0 44 44" focusable="false">
-        <path d="M11 13h22" />
-        <path d="M11 21h17" />
-        <path d="M11 29h22" />
-        <path d="M31 10v24" />
-      </svg>
-    </ArtworkFrame>
-  );
-}
-
 function FeaturedWorkSection() {
   return (
     <section id="projects" className="figma-section figma-featured-work" aria-labelledby="featured-work-title">
@@ -878,45 +864,6 @@ function MusicSection() {
             <ArrowUpRight size={16} className="figma-carousel-arrow" aria-hidden="true" />
           </a>
         ))}
-      </CarouselControls>
-    </section>
-  );
-}
-
-function EssaysSection() {
-  return (
-    <section id="essays" className="figma-section figma-essays" aria-labelledby="essays-title">
-      <SectionHeader id="essays-title" title="Essays" href="/essays" />
-
-      <CarouselControls label="Essays" controlLabel="essays">
-        {essays.map((writing) =>
-          writing.upcoming ? (
-            <div
-              key={writing.title}
-              className="figma-carousel-card figma-carousel-card--upcoming"
-              role="listitem"
-            >
-              <WritingArtwork />
-              <span className="figma-carousel-copy">
-                <span className="figma-carousel-meta">
-                  <span className="figma-upcoming-tag">Upcoming</span>
-                </span>
-                <span className="figma-carousel-title">{writing.title}</span>
-                <span className="figma-carousel-description">{writing.summary}</span>
-              </span>
-            </div>
-          ) : (
-            <a key={writing.title} href={writing.href} className="figma-carousel-card" role="listitem">
-              <WritingArtwork />
-              <span className="figma-carousel-copy">
-                <span className="figma-carousel-meta">{writing.legend}</span>
-                <span className="figma-carousel-title">{writing.title}</span>
-                <span className="figma-carousel-description">{writing.summary}</span>
-              </span>
-              <ArrowUpRight size={16} className="figma-carousel-arrow" aria-hidden="true" />
-            </a>
-          )
-        )}
       </CarouselControls>
     </section>
   );
@@ -977,9 +924,8 @@ export default function FigmaHome() {
             <span className="figma-navbar-name">{profile.name}</span>
           </a>
           <div className="figma-navbar-links">
-            <a href="#projects">Projects</a>
-            <a href="#music">Music</a>
-            <a href="#essays">Essays</a>
+            <a href="/work">Work</a>
+            <a href="/music">Music</a>
           </div>
         </nav>
       </header>
@@ -1032,7 +978,6 @@ export default function FigmaHome() {
 
         <FeaturedWorkSection />
         <MusicSection />
-        <EssaysSection />
 
         <nav className="figma-socials" aria-label="Social links">
           {socialLinks.map(({ href, Icon, label }) => (
