@@ -1,5 +1,5 @@
-const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/6a8fd2c4deae865a60187500027b2f25443f0d6b";
-const SOURCE_VERSION = "20260706-indexnow-f6e3c621";
+const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/8f6be55cc9e72c979240189dc254f9e63c391e73";
+const SOURCE_VERSION = "20260707-aetherloom-link";
 const HTML_ASSET = {
   path: "launch-placeholder.html",
   contentType: "text/html; charset=UTF-8",
