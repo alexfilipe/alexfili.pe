@@ -1,4 +1,4 @@
-// Project detail content for the `/work` index and `/projects` carousel.
+// Project detail content for the `/projects` index and `/projects/<id>` detail pages.
 //
 // This extends the lightweight `projects.ts` seed (used by the home carousel)
 // with the full narrative each detail page needs. Keyed by `id`, which is also

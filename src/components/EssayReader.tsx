@@ -54,7 +54,7 @@ export default function EssayReader() {
     <div>
       <SiteNav
         links={[
-          { label: "Projects", href: "/work" },
+          { label: "Work", href: "/projects" },
           { label: "Music", href: "/music" },
           { label: "Essays", href: "/essays", current: true }
         ]}

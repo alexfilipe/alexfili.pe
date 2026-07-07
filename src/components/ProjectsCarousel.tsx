@@ -34,7 +34,7 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
         <header className="pp-hero">
           <div className="pp-hero-copy">
             <span className="item-kicker">
-              {project.focus} &nbsp;·&nbsp; {project.period}
+              {project.period}
             </span>
             <h1 className="pp-title">{project.name}</h1>
             <p className="pp-tagline">{project.tagline}</p>
@@ -65,7 +65,7 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
       <header className="pp-hero">
         <div className="pp-hero-copy">
           <span className="item-kicker">
-            {project.focus} &nbsp;·&nbsp; {project.period}
+            {project.period}
           </span>
           <h1 className="pp-title">{project.name}</h1>
           <p className="pp-tagline">{project.tagline}</p>
@@ -200,7 +200,7 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
 
       <SiteNav
         links={[
-          { label: "Work", href: "/work", current: true },
+          { label: "Work", href: "/projects", current: true },
           { label: "Music", href: "/music" }
         ]}
       />
@@ -215,7 +215,7 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
       <div className="pp-scroll">
         <div className="pp-wrap">
           <div className="pp-topbar">
-            <a className="pp-back" href="/work">
+            <a className="pp-back" href="/projects">
               <ArrowLeft size={15} />
               <span>All work</span>
             </a>

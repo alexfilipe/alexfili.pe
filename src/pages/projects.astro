@@ -1,11 +1,10 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import ProjectsCarousel from "@/components/ProjectsCarousel.tsx";
+import WorkIndex from "@/components/WorkIndex.tsx";
 import "@/styles/global.css";
 import "@/styles/pages.css";
 ---
 
-<BaseLayout title="Álex Filipe Santos — Projects" description="Full project detail pages — engineering depth across independent work.">
-  <!-- client:load: handles keyboard / edge nav and keeps the project URL in sync. -->
-  <ProjectsCarousel client:load />
+<BaseLayout title="Álex Filipe Santos — Featured Work" description="Independent engineering across AI systems, social-impact products, and open source.">
+  <WorkIndex client:visible />
 </BaseLayout>

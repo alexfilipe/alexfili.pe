@@ -818,7 +818,7 @@ function MusicArtwork({ title }: { title: string }) {
 function FeaturedWorkSection() {
   return (
     <section id="projects" className="figma-section figma-featured-work" aria-labelledby="featured-work-title">
-      <SectionHeader id="featured-work-title" title="Things I’ve Built" href="/work" />
+      <SectionHeader id="featured-work-title" title="Things I’ve Built" href="/projects" />
 
       <CarouselControls label="Featured projects" controlLabel="projects">
         {projects.map((project) => {
@@ -924,7 +924,7 @@ export default function FigmaHome() {
             <span className="figma-navbar-name">{profile.name}</span>
           </a>
           <div className="figma-navbar-links">
-            <a href="/work">Work</a>
+            <a href="/projects">Work</a>
             <a href="/music">Music</a>
           </div>
         </nav>

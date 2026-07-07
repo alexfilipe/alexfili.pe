@@ -72,7 +72,7 @@ export default function SiteNav({
   logoSrc = "/logo-mark.svg",
   href = "/",
   links = [
-    { label: "Work", href: "/work" },
+    { label: "Work", href: "/projects" },
     { label: "Music", href: "/music" }
   ],
   revealOnScroll = false

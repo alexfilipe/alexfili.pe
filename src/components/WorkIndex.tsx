@@ -13,7 +13,7 @@ export default function WorkIndex() {
     <div>
       <SiteNav
         links={[
-          { label: "Work", href: "/work", current: true },
+          { label: "Work", href: "/projects", current: true },
           { label: "Music", href: "/music" }
         ]}
       />

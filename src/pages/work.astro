@@ -1,10 +1,16 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import WorkIndex from "@/components/WorkIndex.tsx";
-import "@/styles/global.css";
-import "@/styles/pages.css";
+const target = "/projects";
 ---
 
-<BaseLayout title="Álex Filipe Santos — Featured Work" description="Independent engineering across AI systems, social-impact products, and open source.">
-  <WorkIndex client:visible />
-</BaseLayout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>Redirecting to projects</title>
+  </head>
+  <body>
+    <p><a href={target}>Go to projects</a></p>
+  </body>
+</html>
