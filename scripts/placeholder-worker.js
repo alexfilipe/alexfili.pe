@@ -1,5 +1,5 @@
-const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/8f6be55cc9e72c979240189dc254f9e63c391e73";
-const SOURCE_VERSION = "20260707-aetherloom-link";
+const RAW_BASE = "https://raw.githubusercontent.com/alexfilipe/alexfili.pe/ece8b340d0203f2efda3acccc67500aa2deefa64";
+const SOURCE_VERSION = "20260707-placeholder-pill-label";
 const HTML_ASSET = {
   path: "launch-placeholder.html",
   contentType: "text/html; charset=UTF-8",
