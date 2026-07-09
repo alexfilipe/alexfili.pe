@@ -238,7 +238,7 @@ select {
   }
 
   .figma-navbar-links {
-    gap: 0.9rem;
+    gap: 1.5rem;
     flex: 0 0 auto;
     font-size: 0.74rem;
     letter-spacing: 0.04em;
@@ -1145,7 +1145,7 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
   }
 
   .figma-carousel {
-    --carousel-card-width: 78%;
+    --carousel-card-width: 66%;
   }
 
   .figma-carousel-card,
