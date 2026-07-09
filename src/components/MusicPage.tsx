@@ -25,11 +25,12 @@ import PageFooter from "@/components/PageFooter";
 type SoundFieldProps = {
   variant: "flow" | "strings";
   color?: [number, number, number];
+  className?: string;
 };
 
 // Canvas sound-field: flowing gesture curves ("flow") or plucked oscillating
 // strings ("strings"). Faint, in-palette motion; respects reduced-motion.
-function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
+function SoundField({ variant, color = [200, 169, 110], className }: SoundFieldProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pluck = useRef({ x: -1, y: -1, t: 8, force: 0, dragging: false });
@@ -113,6 +114,10 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
     };
     const draw = () => {
       updateScrollPluck();
+      if (W <= 0 || H <= 0) {
+        if (!reduce) id = requestAnimationFrame(draw);
+        return;
+      }
       ctx.clearRect(0, 0, W, H);
       const drawLines = variant === "strings" && !hoverReactive ? Math.max(12, Math.ceil(H / 90) + 2) : lines;
       if (variant === "strings" && stringInfluence.current.length !== drawLines) {
@@ -246,7 +251,7 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
   }, [variant, color]);
 
   return (
-    <div ref={wrapRef} className="mu-field">
+    <div ref={wrapRef} className={["mu-field", className].filter(Boolean).join(" ")}>
       <canvas ref={canvasRef} style={{ pointerEvents: variant === "strings" ? "auto" : "none" }} />
     </div>
   );
@@ -352,10 +357,21 @@ function RenderRichText({ value }: { value: RichText }) {
 function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<number | null>(null);
+  const [loadedPhotoIds, setLoadedPhotoIds] = useState<Set<string>>(() => new Set());
   const [scrollState, setScrollState] = useState<CarouselScrollState>({
     canScrollLeft: false,
     canScrollRight: false
   });
+
+  const markPhotoLoaded = useCallback((photoId: string) => {
+    setLoadedPhotoIds((currentIds) => {
+      if (currentIds.has(photoId)) return currentIds;
+
+      const nextIds = new Set(currentIds);
+      nextIds.add(photoId);
+      return nextIds;
+    });
+  }, []);
 
   const updateScrollState = useCallback(() => {
     const scroller = scrollerRef.current;
@@ -439,13 +455,14 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
         {photos.map((photo) => (
           <div className="mu-violin-photo" role="listitem" key={photo.id}>
             <img
-              className="mu-violin-photo-img"
+              className={"mu-violin-photo-img" + (loadedPhotoIds.has(photo.id) ? " is-loaded" : "")}
               src={photo.src}
               alt={photo.alt}
               width={photo.width}
               height={photo.height}
               loading="lazy"
               decoding="async"
+              onLoad={() => markPhotoLoaded(photo.id)}
             />
           </div>
         ))}
@@ -481,6 +498,7 @@ export default function MusicPage() {
   const [isPianoVideoHovered, setIsPianoVideoHovered] = useState(false);
   const [isPianoVideoPlaying, setIsPianoVideoPlaying] = useState(false);
   const [pianoVideoEndedAt, setPianoVideoEndedAt] = useState(0);
+  const [isCompactViolinLayout, setIsCompactViolinLayout] = useState(false);
   const pianoVideoFrameRef = useRef<HTMLDivElement>(null);
   const isPianoVideoTransitioningRef = useRef(false);
   const pianoVideoTouchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -564,6 +582,16 @@ export default function MusicPage() {
       releasePianoVideoTransition();
     }
   };
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 820px)");
+    const updateLayout = () => setIsCompactViolinLayout(mediaQuery.matches);
+
+    updateLayout();
+    mediaQuery.addEventListener("change", updateLayout);
+
+    return () => mediaQuery.removeEventListener("change", updateLayout);
+  }, []);
 
   useEffect(() => {
     const secs = Array.from(document.querySelectorAll<HTMLElement>(".mu-sec"));
@@ -868,9 +896,14 @@ export default function MusicPage() {
 
       {/* Violin */}
       <section id="violin" className="mu-sec mu-violin">
-        <SoundField variant="strings" color={[201, 156, 96]} />
         <div className="mu-sec-grid">
-          <div className="mu-sec-copy">
+          {!isCompactViolinLayout ? (
+            <SoundField className="mu-violin-strings mu-violin-strings--desktop" variant="strings" color={[201, 156, 96]} />
+          ) : null}
+          <div className="mu-sec-copy mu-violin-copy">
+            {isCompactViolinLayout ? (
+              <SoundField className="mu-violin-strings mu-violin-strings--mobile" variant="strings" color={[201, 156, 96]} />
+            ) : null}
             <Reveal as="span" className="mu-kicker">
               {violinMovement.kicker}
             </Reveal>
