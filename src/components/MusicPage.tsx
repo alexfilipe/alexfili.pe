@@ -349,6 +349,7 @@ export default function MusicPage() {
   const [isPianoVideoTrackSnapping, setIsPianoVideoTrackSnapping] = useState(false);
   const [isPianoVideoHovered, setIsPianoVideoHovered] = useState(false);
   const [isPianoVideoPlaying, setIsPianoVideoPlaying] = useState(false);
+  const [pianoVideoEndedAt, setPianoVideoEndedAt] = useState(0);
   const pianoVideoFrameRef = useRef<HTMLDivElement>(null);
   const isPianoVideoTransitioningRef = useRef(false);
   const pianoVideoTouchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -370,6 +371,7 @@ export default function MusicPage() {
 
     isPianoVideoTransitioningRef.current = true;
     setIsPianoVideoTrackSnapping(false);
+    setPianoVideoEndedAt(0);
     setPianoVideoReelPosition((position) => position + direction);
     setActivePianoVideoIndex((index) => (index + direction + pianoVideos.length) % pianoVideos.length);
     return true;
@@ -381,6 +383,13 @@ export default function MusicPage() {
 
     if (!movePianoVideo(index > activePianoVideoIndex ? 1 : -1)) return;
     setActivePianoVideoIndex(index);
+  };
+  const playActivePianoVideo = () => {
+    const iframe = pianoVideoFrameRef.current?.querySelectorAll<HTMLIFrameElement>("iframe")[pianoVideoReelPosition];
+    iframe?.contentWindow?.postMessage(
+      JSON.stringify({ event: "command", func: "playVideo", args: [] }),
+      "https://www.youtube-nocookie.com"
+    );
   };
   const onPianoVideoTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
     if (!window.matchMedia("(max-width: 820px)").matches) return;
@@ -396,10 +405,22 @@ export default function MusicPage() {
     const touch = event.changedTouches[0];
     const deltaX = touch.clientX - start.x;
     const deltaY = touch.clientY - start.y;
-    if (Math.abs(deltaX) < 42 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
 
+    if (absX < 12 && absY < 12) {
+      playActivePianoVideo();
+      return;
+    }
+
+    if (absX < 42 || absX < absY * 1.25) return;
+
+    event.preventDefault();
     if (deltaX < 0) showNextPianoVideo();
     else showPreviousPianoVideo();
+  };
+  const onPianoVideoTouchCancel = () => {
+    pianoVideoTouchStartRef.current = null;
   };
   const snapPianoVideoReel = () => {
     if (pianoVideoReelPosition === 0) {
@@ -485,6 +506,8 @@ export default function MusicPage() {
       const playerState = typeof message.info === "number" ? message.info : message.info?.playerState;
       if ((message.event === "onStateChange" || message.event === "infoDelivery") && typeof playerState === "number") {
         setIsPianoVideoPlaying(playerState === 1 || playerState === 3);
+        if (playerState === 0) setPianoVideoEndedAt(Date.now());
+        else setPianoVideoEndedAt(0);
       }
     };
 
@@ -504,6 +527,17 @@ export default function MusicPage() {
 
     return () => window.clearInterval(cycleId);
   }, [active, isPianoVideoHovered, isPianoVideoPlaying]);
+
+  useEffect(() => {
+    if (!pianoVideoEndedAt || active !== "piano" || isPianoVideoHovered || isPianoVideoPlaying || pianoVideos.length < 2) return;
+
+    const timeoutId = window.setTimeout(() => {
+      movePianoVideo(1);
+      setPianoVideoEndedAt(0);
+    }, 1000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [pianoVideoEndedAt, active, isPianoVideoHovered, isPianoVideoPlaying]);
 
   return (
     <div className="mu">
@@ -620,8 +654,6 @@ export default function MusicPage() {
               onBlur={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget)) setIsPianoVideoHovered(false);
               }}
-              onTouchStart={onPianoVideoTouchStart}
-              onTouchEnd={onPianoVideoTouchEnd}
             >
               <div className="mu-piano-video-frame" ref={pianoVideoFrameRef}>
                 <div
@@ -645,6 +677,13 @@ export default function MusicPage() {
                     </div>
                   ))}
                 </div>
+                <div
+                  className={"mu-piano-video-swipe-layer" + (isPianoVideoPlaying ? " is-disabled" : "")}
+                  aria-hidden="true"
+                  onTouchStart={onPianoVideoTouchStart}
+                  onTouchEnd={onPianoVideoTouchEnd}
+                  onTouchCancel={onPianoVideoTouchCancel}
+                />
               </div>
               <div className="mu-piano-carousel" aria-label="Piano video excerpts">
                 <button type="button" className="mu-piano-carousel-arrow" onClick={showPreviousPianoVideo} aria-label="Show previous piano video">

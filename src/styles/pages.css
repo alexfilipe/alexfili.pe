@@ -164,6 +164,7 @@
   .mu-piano-video-track.is-snapping { transition: none; }
   .mu-piano-video-slide { position: relative; flex: 0 0 100%; min-width: 100%; height: 100%; background: #000; }
   .mu-piano-video-slide iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .mu-piano-video-swipe-layer { display: none; }
   .mu-piano-carousel { display: grid; grid-template-columns: 38px 1fr 38px; align-items: center;
     width: 100%; margin-top: 1rem; }
   .mu-piano-carousel-arrow { appearance: none; display: grid; place-items: center; width: 38px; height: 38px; padding: 0;
@@ -282,6 +283,8 @@
     .mu-conducting:has(.mu-conducting-body .reveal.is-in)::after { opacity: var(--conducting-baton-opacity); }
     .mu-piano { padding-top: 3.125rem; }
     .mu-piano-video { order: -1; justify-self: center; width: min(100%, 21.5rem); margin-left: 0; margin-bottom: clamp(.2rem, 1.2vw, .45rem); }
+    .mu-piano-video-swipe-layer { position: absolute; inset: 0; z-index: 3; display: block; background: transparent; touch-action: pan-y; }
+    .mu-piano-video-swipe-layer.is-disabled { pointer-events: none; }
     .mu-piano-carousel { grid-template-columns: 1fr; margin-top: 1.5rem; }
     .mu-piano-carousel-arrow { display: none; }
     .mu-recs a { grid-template-columns: 2.2rem 1fr; }
