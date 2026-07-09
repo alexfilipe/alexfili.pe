@@ -232,6 +232,7 @@
       .mu-hero { min-height: 100dvh; }
     }
 
+    .mu-eyebrow-list { margin-top: clamp(1.75rem, 8vw, 3rem); }
     .mu-sec-grid { grid-template-columns: 1fr; }
     .mu-conducting-grid { grid-template-areas: "heading" "video" "body"; row-gap: clamp(2rem, 5vw, 3.5rem); }
     .mu-sec-title { font-size: clamp(3.35rem, 10vw, 5rem); }
