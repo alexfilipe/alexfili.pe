@@ -589,7 +589,7 @@ select {
 .figma-section-title-link::after {
   position: absolute;
   right: 0;
-  bottom: -0.34rem;
+  bottom: -0.5rem;
   left: 0;
   height: 1px;
   content: "";

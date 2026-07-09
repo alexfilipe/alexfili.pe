@@ -78,7 +78,8 @@ export const musicMovements: MusicMovement[] = [
         { bold: "conducting première" },
         " with the Amherst Symphony Orchestra, leading Schumann’s Piano Concerto in A minor, Op. 54, with Faith Wen as soloist. To close my senior year by conducting the orchestra I had been part of for four years felt deeply personal — stepping into the music from the other side."
       ],
-      "With the mentorship of Mark Swanson, the orchestra’s director, I learned not only to study a score and lead through gestures, but to rehearse a full group of musicians — to listen across sections, make decisions in real time, and guide a collective interpretation. It remains one of the most complex musical achievements I have pursued, and one of the clearest reminders that you never stop learning how music works."
+      "With the mentorship of Mark Swanson, the orchestra’s director, I learned not only to study a score and lead through gestures, but to rehearse a full group of musicians — to listen across sections, make decisions in real time, and guide a collective interpretation.",
+      "It remains one of the most complex musical achievements I have pursued, and one of the clearest reminders that you never stop learning how music works. In San Francisco, those skills continue to shape how I lead rehearsals for music groups today: with intention, knowledge, and musicality."
     ]
   },
   {
@@ -90,7 +91,7 @@ export const musicMovements: MusicMovement[] = [
     lede: "In 2015, with almost no experience, I decided to learn the piano — and devoted myself to it with an intensity that changed the course of my musical life.",
     body: [
       [
-        "During my five years at Amherst, I studied with Chonghyo Shin, built a technique I never thought I would reach, and performed my ",
+        "During my four years at Amherst, I studied with Chonghyo Shin, built a technique I never thought I would reach, and performed my ",
         { bold: "Senior Piano Recital" },
         "  in March 2020. The recordings below are from those years."
       ],
@@ -100,7 +101,7 @@ export const musicMovements: MusicMovement[] = [
         ", featuring works by Mozart, Chopin, Haydn, and Scarlatti."
       ],
       [
-        "Piano also deepened my work as a conductor: learning to perform multiple voices at once, each with care and musical independence, changed the way I hear and shape an ensemble."
+        "Piano also deepened my work as a conductor: learning to perform multiple voices at once, each with care and musical independence, changed the way I hear and shape an ensemble. It also taught me that patience and persistence are worth carrying into every area of life — because the results, when they finally arrive, are profoundly fulfilling."
       ]
     ]
   },
@@ -112,8 +113,9 @@ export const musicMovements: MusicMovement[] = [
     title: "Violin",
     lede: "My first musical language. I picked up the violin at three and have never really put it down.",
     body: [
-      "It carried me from a church philharmonic in Natal at ten, to the conservatory at the Federal University of Rio Grande do Norte in 2011, to the Amherst Symphony Orchestra, where I played throughout all my college years and led the second violin section, alongside a few chamber programs each season.",
-      "In San Francisco, it continues through string quartets, music groups, and recitals — keeping chamber music present in my life in a more intimate, living way, and making music one of the ways I build community here."
+      "It carried me from a church philharmonic in Natal at ten, to the conservatory at the Federal University of Rio Grande do Norte in 2011, to the Amherst Symphony Orchestra, where I played throughout all my college years and every semester I was there, led the second violin section, and joined a few chamber programs each season.",
+      "When I lived in Germany in 2017, I also brought the violin into a different musical space, performing pop music on violin and keyboard with a band I put together with other international students for university events.",
+      "In San Francisco, it continues through string quartets, music groups, recitals, and musical lounges — keeping chamber music present in my life in a more intimate, living way, while also making space for pop music and improvisation with friends. Music has become one of the ways I build community here."
     ]
   }
 ];
@@ -162,8 +164,9 @@ export const violinTimeline: TimelineEntry[] = [
   { when: "Age 3", what: { main: "First lessons", detail: "Natal, Brazil" } },
   { when: "Age 10", what: { main: "Genesis Philharmonic Orchestra", detail: "Natal, Brazil" } },
   { when: "2011", what: { main: "Conservatory lessons", detail: "Prof. Ronedilk Dantas" } },
-  { when: "2015", what: { main: "Amherst Symphony Orchestra", detail: ["Principal 2", { sup: "nd" }, " Violinist"] } },
-  { when: "2026—", what: { main: "String Quartets & Recitals", detail: "San Francisco" } }
+  { when: "2015", what: { main: "Amherst Symphony Orchestra", detail: ["Principal 2", { sup: "nd" }, " Violin"] } },
+  { when: "2017", what: { main: "Pop violin & keyboard", detail: "International student band, Germany" } },
+  { when: "2025—", what: { main: "String quartets & recitals", detail: "San Francisco" } }
 ];
 
 // The conducting première embed on the Conducting movement.

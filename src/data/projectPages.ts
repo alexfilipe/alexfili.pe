@@ -47,7 +47,7 @@ export const projectPages: ProjectPage[] = [
     period: "2026 — Present",
     tagline: "Your files, safely interwoven.",
     stub: true,
-    lede: "An AI-first native macOS app for safe, local-first sync across iCloud Drive, Google Drive, OneDrive, and NAS-backed storage.",
+    lede: "An AI-first native macOS app for safe, local-first sync across iCloud Drive, Google Drive, OneDrive, and NAS-backed storage — built from a belief that personal files, privacy, and AI-assisted workflows should remain under your control.",
     link: { label: "Visit aetherloom.app", href: "https://aetherloom.app/" },
     tags: ["macOS", "Swift", "Local-first", "Multi-cloud", "AI-first development", "Open source"]
   },

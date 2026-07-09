@@ -172,7 +172,7 @@
   .mu-foot { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; width: min(calc(100% - 2.5rem), 944px); margin: 0 auto; padding: 1.4rem 0 3rem;
     border-top: 1px solid var(--line); color: var(--text-faint); font-size: .82rem; }
 
-  @media (max-width: 1050px) {
+  @media (max-width: 1200px) {
     .mu-timeline .mu-timeline-detail,
     .mu-timeline .mu-timeline-detail span {
       display: block;
