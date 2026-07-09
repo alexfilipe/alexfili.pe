@@ -777,7 +777,15 @@ function ProjectArtwork() {
   );
 }
 
-function MusicArtwork({ title }: { title: string }) {
+function MusicArtwork({ title, image }: { title: string; image?: string }) {
+  if (image) {
+    return (
+      <span className="figma-carousel-media figma-carousel-media--image" aria-hidden="true">
+        <img className="figma-carousel-image" src={image} alt="" width="960" height="720" loading="lazy" decoding="async" />
+      </span>
+    );
+  }
+
   if (title === "Conducting") {
     return (
       <ArtworkFrame>
@@ -857,7 +865,7 @@ function MusicSection() {
       <CarouselControls label="Music" controlLabel="music">
         {musicDisciplines.map((discipline) => (
           <a key={discipline.title} href={discipline.href} className="figma-carousel-card" role="listitem">
-            <MusicArtwork title={discipline.title} />
+            <MusicArtwork title={discipline.title} image={discipline.homeImage} />
             <span className="figma-carousel-copy">
               <span className="figma-carousel-title">{discipline.title}</span>
               <span className="figma-carousel-description">{discipline.description}</span>

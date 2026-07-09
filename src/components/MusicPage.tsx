@@ -476,14 +476,14 @@ export default function MusicPage() {
   }, []);
 
   useEffect(() => {
-    if (isPianoVideoHovered || isPianoVideoPlaying || pianoVideos.length < 2) return;
+    if (active !== "piano" || isPianoVideoHovered || isPianoVideoPlaying || pianoVideos.length < 2) return;
 
     const cycleId = window.setInterval(() => {
       movePianoVideo(1);
     }, 10000);
 
     return () => window.clearInterval(cycleId);
-  }, [isPianoVideoHovered, isPianoVideoPlaying]);
+  }, [active, isPianoVideoHovered, isPianoVideoPlaying]);
 
   return (
     <div className="mu">
@@ -530,9 +530,6 @@ export default function MusicPage() {
 
       {/* Conducting */}
       <section id="conducting" className="mu-sec mu-conducting">
-        <div className="mu-sec-mark" aria-hidden="true">
-          {conductingMovement.numeral}
-        </div>
         <div className="mu-sec-grid mu-conducting-grid">
           <div className="mu-sec-copy mu-conducting-heading">
             <Reveal as="span" className="mu-kicker">
@@ -569,9 +566,6 @@ export default function MusicPage() {
 
       {/* Piano */}
       <section id="piano" className="mu-sec mu-piano">
-        <div className="mu-sec-mark" aria-hidden="true">
-          {pianoMovement.numeral}
-        </div>
         <div className="mu-sec-grid">
           <div className="mu-sec-copy">
             <Reveal as="span" className="mu-kicker">
@@ -683,9 +677,6 @@ export default function MusicPage() {
       {/* Violin */}
       <section id="violin" className="mu-sec mu-violin">
         <SoundField variant="strings" color={[201, 156, 96]} />
-        <div className="mu-sec-mark" aria-hidden="true">
-          {violinMovement.numeral}
-        </div>
         <div className="mu-sec-grid">
           <div className="mu-sec-copy">
             <Reveal as="span" className="mu-kicker">

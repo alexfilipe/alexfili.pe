@@ -860,6 +860,31 @@ a.figma-carousel-card:hover {
   stroke-width: 1.2;
 }
 
+.figma-carousel-media--image {
+  place-items: stretch;
+}
+
+.figma-carousel-media--image::before {
+  content: none;
+}
+
+.figma-carousel-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.88;
+  transform: scale(1.001);
+  transition:
+    opacity 520ms ease,
+    transform 520ms ease;
+}
+
+a.figma-carousel-card:hover .figma-carousel-image {
+  opacity: 1;
+  transform: scale(1.035);
+}
+
 .figma-carousel-copy {
   display: grid;
   align-content: start;
