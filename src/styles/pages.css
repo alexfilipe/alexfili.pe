@@ -280,7 +280,8 @@
       --conducting-baton-opacity: .18;
     }
     .mu-conducting:has(.mu-conducting-body .reveal.is-in)::after { opacity: var(--conducting-baton-opacity); }
-    .mu-piano-video { order: -1; justify-self: center; width: min(100%, 18rem); margin-left: 0; margin-bottom: clamp(.2rem, 1.2vw, .45rem); }
+    .mu-piano { padding-top: 3.125rem; }
+    .mu-piano-video { order: -1; justify-self: center; width: min(100%, 21.5rem); margin-left: 0; margin-bottom: clamp(.2rem, 1.2vw, .45rem); }
     .mu-piano-carousel { grid-template-columns: 1fr; margin-top: 1.5rem; }
     .mu-piano-carousel-arrow { display: none; }
     .mu-recs a { grid-template-columns: 2.2rem 1fr; }

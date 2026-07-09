@@ -290,7 +290,7 @@ function Reveal({ children, className = "", as = "div" }: RevealProps) {
 const conductingMovement = musicMovements.find((movement) => movement.id === "conducting")!;
 const pianoMovement = musicMovements.find((movement) => movement.id === "piano")!;
 const violinMovement = musicMovements.find((movement) => movement.id === "violin")!;
-const quietYoutubeParams = "modestbranding=1&rel=0&iv_load_policy=3";
+const quietYoutubeParams = "modestbranding=1&rel=0&iv_load_policy=3&cc_load_policy=0";
 const pianoYoutubeParams = `${quietYoutubeParams}&enablejsapi=1&playsinline=1`;
 const pianoVideos = [
   {
@@ -351,6 +351,7 @@ export default function MusicPage() {
   const [isPianoVideoPlaying, setIsPianoVideoPlaying] = useState(false);
   const pianoVideoFrameRef = useRef<HTMLDivElement>(null);
   const isPianoVideoTransitioningRef = useRef(false);
+  const pianoVideoTouchStartRef = useRef<{ x: number; y: number } | null>(null);
   const registerPianoVideoListeners = () => {
     const iframes = pianoVideoFrameRef.current?.querySelectorAll<HTMLIFrameElement>("iframe");
     iframes?.forEach((iframe) => {
@@ -380,6 +381,25 @@ export default function MusicPage() {
 
     if (!movePianoVideo(index > activePianoVideoIndex ? 1 : -1)) return;
     setActivePianoVideoIndex(index);
+  };
+  const onPianoVideoTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (!window.matchMedia("(max-width: 820px)").matches) return;
+
+    const touch = event.touches[0];
+    pianoVideoTouchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+  const onPianoVideoTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    const start = pianoVideoTouchStartRef.current;
+    pianoVideoTouchStartRef.current = null;
+    if (!start || !window.matchMedia("(max-width: 820px)").matches) return;
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - start.x;
+    const deltaY = touch.clientY - start.y;
+    if (Math.abs(deltaX) < 42 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
+
+    if (deltaX < 0) showNextPianoVideo();
+    else showPreviousPianoVideo();
   };
   const snapPianoVideoReel = () => {
     if (pianoVideoReelPosition === 0) {
@@ -600,6 +620,8 @@ export default function MusicPage() {
               onBlur={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget)) setIsPianoVideoHovered(false);
               }}
+              onTouchStart={onPianoVideoTouchStart}
+              onTouchEnd={onPianoVideoTouchEnd}
             >
               <div className="mu-piano-video-frame" ref={pianoVideoFrameRef}>
                 <div
