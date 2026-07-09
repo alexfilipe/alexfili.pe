@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ProjectsCarousel from "@/components/ProjectsCarousel.tsx";
 import { projectPages } from "@/data/projectPages";
+import { getProjectCreativeWork, getProjectSeo } from "@/data/seo";
 import "@/styles/global.css";
 import "@/styles/pages.css";
 
@@ -13,8 +14,10 @@ export function getStaticPaths() {
 }
 
 const { project } = Astro.props;
+const seo = getProjectSeo(project);
+const structuredData = getProjectCreativeWork(project, Astro.site);
 ---
 
-<BaseLayout title={`Álex Filipe Santos — ${project.name}`} description={project.lede}>
+<BaseLayout {...seo} canonical={seo.path} structuredData={structuredData} ogType="article">
   <ProjectsCarousel client:load initialProjectId={project.id} />
 </BaseLayout>

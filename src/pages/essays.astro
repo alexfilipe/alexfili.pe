@@ -5,7 +5,12 @@ import "@/styles/global.css";
 import "@/styles/pages.css";
 ---
 
-<BaseLayout title="Álex Filipe Santos — Essays" description="Notes on engineering, music, and the long work of getting better.">
+<BaseLayout
+  title="Essays"
+  description="Notes on engineering, music, and the long work of getting better."
+  canonical="/essays/"
+  robots="noindex, follow"
+>
   <!-- The index has no client state; client:visible is enough (hover states aside). -->
   <EssaysIndex client:visible />
 </BaseLayout>

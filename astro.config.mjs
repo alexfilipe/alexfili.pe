@@ -1,11 +1,10 @@
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
-import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
   site: process.env.PUBLIC_SITE_URL ?? "https://alexfili.pe",
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [react(), mdx()],
   prefetch: true,
   devToolbar: {
     enabled: false

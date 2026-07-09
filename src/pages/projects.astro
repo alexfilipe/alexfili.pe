@@ -1,10 +1,13 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import WorkIndex from "@/components/WorkIndex.tsx";
+import { getProjectsItemList, seoPages } from "@/data/seo";
 import "@/styles/global.css";
 import "@/styles/pages.css";
+
+const structuredData = getProjectsItemList(Astro.site);
 ---
 
-<BaseLayout title="Álex Filipe Santos — Featured Work" description="Independent engineering across AI systems, social-impact products, and open source.">
+<BaseLayout {...seoPages.projects} canonical={seoPages.projects.path} structuredData={structuredData}>
   <WorkIndex client:visible />
 </BaseLayout>

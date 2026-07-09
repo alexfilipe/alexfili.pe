@@ -1,11 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import MusicPage from "@/components/MusicPage.tsx";
+import { getMusicCreativeWork, seoPages } from "@/data/seo";
 import "@/styles/global.css";
 import "@/styles/pages.css";
+
+const structuredData = getMusicCreativeWork(Astro.site);
 ---
 
-<BaseLayout title="Álex Filipe Santos — Music" description="Violin, piano, and conducting — the discipline that taught me how to listen.">
+<BaseLayout {...seoPages.music} canonical={seoPages.music.path} structuredData={structuredData}>
   <!-- client:load: the page has canvases, scroll reveals, and a scroll-tracked movement nav. -->
   <MusicPage client:load />
 </BaseLayout>

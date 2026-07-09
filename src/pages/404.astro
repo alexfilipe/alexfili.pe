@@ -2,7 +2,12 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Page Not Found" description="The requested page could not be found.">
+<BaseLayout
+  title="Page Not Found"
+  description="The requested page could not be found."
+  canonical="/404"
+  robots="noindex, follow"
+>
   <section class="page-hero" aria-labelledby="not-found-title">
     <h1 class="page-title" id="not-found-title">Not Found</h1>
     <p class="page-intro">

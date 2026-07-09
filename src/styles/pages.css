@@ -140,6 +140,15 @@
   .mu-conducting .mu-video { grid-area: video; }
   @media (min-width: 821px) and (max-width: 1180px) {
     .mu-video { margin-top: clamp(7.5rem, 9vw, 9.5rem); }
+    .mu-piano .mu-sec-grid { column-gap: clamp(1rem, 2vw, 1.5rem); }
+    .mu-piano-video { margin-left: clamp(-5.25rem, -6vw, -3rem); }
+    .mu-conducting::after {
+      top: 50%;
+      right: clamp(-7rem, -6vw, -3rem);
+      bottom: auto;
+      width: clamp(35rem, 62vw, 44rem);
+      transform: translateY(-12%) rotate(-5deg);
+    }
   }
   @media (min-width: 1181px) {
     .mu-video { margin-top: clamp(10.25rem, 8.8vw, 11rem); }
@@ -274,7 +283,7 @@
     display: none;
   }
   .mu-violin-carousel-shell {
-    --violin-carousel-rail: clamp(1.75rem, 4vw, 2.35rem);
+    --violin-carousel-rail: clamp(2.75rem, 5vw, 3.35rem);
     --violin-carousel-line: rgba(240, 237, 230, .055);
     --violin-carousel-gold-line: rgba(200, 169, 110, .34);
     position: relative;
@@ -351,11 +360,14 @@
     place-items: center;
     border: 0;
     border-radius: 0;
-    background: rgba(8, 8, 7, .72);
-    color: var(--gold);
+    background: rgba(240, 237, 230, .28);
+    color: rgba(8, 8, 7, .88);
     cursor: pointer;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+    backdrop-filter: blur(14px) saturate(1.15);
+    box-shadow:
+      inset 0 0 0 1px rgba(240, 237, 230, .24),
+      0 16px 36px rgba(0, 0, 0, .34);
     opacity: 0;
     pointer-events: none;
     will-change: opacity;
@@ -363,6 +375,11 @@
       background-color .19s var(--ease),
       color .19s var(--ease),
       opacity .32s var(--ease);
+  }
+  .mu-violin-carousel-control svg {
+    width: 1.35rem;
+    height: 1.35rem;
+    filter: drop-shadow(0 1px 2px rgba(240, 237, 230, .2));
   }
   .mu-violin-carousel-control--left {
     left: 0;
@@ -377,8 +394,8 @@
   }
   .mu-violin-carousel-control:hover,
   .mu-violin-carousel-control:focus-visible {
-    background: rgba(8, 8, 7, .86);
-    color: var(--gold);
+    background: rgba(240, 237, 230, .42);
+    color: rgba(8, 8, 7, .96);
   }
   .mu-violin-carousel-control:focus-visible {
     outline: 2px solid rgba(211,178,112,.38);

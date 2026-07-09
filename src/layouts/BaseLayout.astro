@@ -1,12 +1,31 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import { profile } from "@/data/profile";
+import {
+  CONTENT_LANGUAGE,
+  DEFAULT_SITE_URL,
+  OPEN_GRAPH_LOCALE,
+  defaultShareImage,
+  getSiteRoot,
+  type SocialImage
+} from "@/data/seo";
 import "@/styles/global.css";
+
+type JsonLd = Record<string, unknown>;
 
 type Props = {
   title?: string;
   description?: string;
   canonical?: string;
+  socialTitle?: string;
+  socialDescription?: string;
+  image?: SocialImage;
+  keywords?: string[];
+  robots?: string;
+  ogType?: "website" | "profile" | "article";
+  schemaType?: string | string[];
+  structuredData?: JsonLd | JsonLd[];
+  lastmod?: string;
   hideChrome?: boolean;
 };
 
@@ -14,45 +33,133 @@ const {
   title = profile.name,
   description = profile.role,
   canonical = Astro.url.pathname,
+  socialTitle: socialTitleProp,
+  socialDescription: socialDescriptionProp,
+  image = defaultShareImage,
+  keywords = [],
+  robots = "index, follow, max-image-preview:large",
+  ogType = Astro.url.pathname === "/" ? "profile" : "website",
+  schemaType = "WebPage",
+  structuredData = [],
   hideChrome = false
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
 const isHome = currentPath === "/";
+const siteRoot = getSiteRoot(Astro.site ?? DEFAULT_SITE_URL);
 const pageTitle =
-  isHome
-    ? profile.homeSeo.title
-    : title === profile.name
-      ? title
-      : `${title} | ${profile.name}`;
-const metaDescription = isHome ? profile.homeSeo.description : description;
-const socialTitle = isHome ? profile.homeSeo.socialTitle : pageTitle;
-const socialDescription = profile.homeSeo.socialDescription;
-const canonicalUrl = new URL(canonical, Astro.site ?? "https://alexfili.pe").toString();
+  title.includes(profile.name) || isHome
+    ? title
+    : `${title} | ${profile.name}`;
+const metaDescription = description;
+const socialTitle = socialTitleProp ?? pageTitle;
+const socialDescription = socialDescriptionProp ?? metaDescription;
+const canonicalUrl = new URL(canonical, siteRoot).toString();
 const assetVersion = "20260624-dodecahedron";
 const assetSuffix = `?v=${assetVersion}`;
-const ogImageUrl = new URL(`/og-image.png${assetSuffix}`, Astro.site ?? "https://alexfili.pe").toString();
+const versionedAsset = (src: string) => {
+  if (!src.startsWith("/")) return src;
+  return `${src}${src.includes("?") ? "&" : "?"}v=${assetVersion}`;
+};
+const ogImageUrl = new URL(versionedAsset(image.src), siteRoot).toString();
+const profileImageUrl = new URL(versionedAsset(defaultShareImage.src), siteRoot).toString();
 const websiteJsonLd = {
-  "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": `${siteRoot}#website`,
   name: profile.name,
   alternateName: [profile.shortName, profile.domain],
-  url: "https://alexfili.pe/"
+  url: siteRoot,
+  publisher: {
+    "@id": `${siteRoot}#person`
+  },
+  inLanguage: CONTENT_LANGUAGE
+};
+const personJsonLd = {
+  "@type": "Person",
+  "@id": `${siteRoot}#person`,
+  name: profile.name,
+  givenName: "Álex Filipe",
+  familyName: "Santos",
+  url: siteRoot,
+  image: profileImageUrl,
+  jobTitle: ["AI Engineer", "Software Engineer", "Classical Musician"],
+  description: profile.homeSeo.description,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "San Francisco",
+    addressRegion: "CA",
+    addressCountry: "US"
+  },
+  sameAs: [profile.linkedin, profile.github],
+  knowsAbout: [
+    "Software engineering",
+    "Artificial intelligence",
+    "Local-first software",
+    "Systems design",
+    "Classical music",
+    "Violin",
+    "Piano",
+    "Conducting"
+  ]
+};
+const imageJsonLd = {
+  "@type": "ImageObject",
+  "@id": `${ogImageUrl}#primaryimage`,
+  url: ogImageUrl,
+  contentUrl: ogImageUrl,
+  width: image.width,
+  height: image.height,
+  caption: image.alt
+};
+const pageJsonLd = {
+  "@type": schemaType,
+  "@id": `${canonicalUrl}#webpage`,
+  url: canonicalUrl,
+  name: pageTitle,
+  description: metaDescription,
+  isPartOf: {
+    "@id": `${siteRoot}#website`
+  },
+  about: {
+    "@id": `${siteRoot}#person`
+  },
+  primaryImageOfPage: {
+    "@id": `${ogImageUrl}#primaryimage`
+  },
+  author: {
+    "@id": `${siteRoot}#person`
+  },
+  inLanguage: CONTENT_LANGUAGE,
+  keywords: keywords.length > 0 ? keywords.join(", ") : undefined
+};
+const extraStructuredData = Array.isArray(structuredData) ? structuredData : [structuredData];
+const jsonLdGraph = [websiteJsonLd, personJsonLd, imageJsonLd, pageJsonLd, ...extraStructuredData];
+const structuredJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": jsonLdGraph
 };
 const navItems: { href: string; label: string }[] = [];
 
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content={robots} />
+    <meta name="googlebot" content={robots} />
+    <meta name="author" content={profile.name} />
     <meta name="theme-color" content="#050504" />
     <meta name="application-name" content={profile.name} />
     <meta name="apple-mobile-web-app-title" content={profile.shortName} />
     <meta name="description" content={metaDescription} />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={canonicalUrl} />
+    <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+    <link rel="me" href={profile.linkedin} />
+    <link rel="me" href={profile.github} />
     <link rel="icon" href={`/favicon.ico${assetSuffix}`} sizes="any" />
     <link rel="shortcut icon" href={`/favicon.ico${assetSuffix}`} />
     <link rel="icon" href={`/favicon.svg${assetSuffix}`} type="image/svg+xml" />
@@ -61,22 +168,45 @@ const navItems: { href: string; label: string }[] = [];
     <link rel="icon" href={`/icons/favicon-48.png${assetSuffix}`} sizes="48x48" type="image/png" />
     <link rel="apple-touch-icon" href={`/apple-touch-icon.png${assetSuffix}`} sizes="180x180" />
     <link rel="manifest" href={`/site.webmanifest${assetSuffix}`} />
-    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={OPEN_GRAPH_LOCALE} />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={profile.name} />
     <meta property="og:title" content={socialTitle} />
     <meta property="og:description" content={socialDescription} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:secure_url" content={ogImageUrl} />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={`${profile.name} - ${profile.tagline}`} />
+    <meta property="og:image:type" content={image.type} />
+    <meta property="og:image:width" content={String(image.width)} />
+    <meta property="og:image:height" content={String(image.height)} />
+    <meta property="og:image:alt" content={image.alt} />
+    <meta property="og:updated_time" content="2026-07-09T00:00:00-07:00" />
+    {
+      ogType === "profile" && (
+        <>
+          <meta property="profile:first_name" content="Álex Filipe" />
+          <meta property="profile:last_name" content="Santos" />
+          <meta property="profile:username" content="alexfilipe" />
+        </>
+      )
+    }
+    {
+      ogType === "article" && (
+        <>
+          <meta property="article:author" content={profile.name} />
+          <meta property="article:modified_time" content="2026-07-09T00:00:00-07:00" />
+          {keywords.slice(0, 8).map((keyword) => (
+            <meta property="article:tag" content={keyword} />
+          ))}
+        </>
+      )
+    }
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={socialTitle} />
     <meta name="twitter:description" content={socialDescription} />
     <meta name="twitter:image" content={ogImageUrl} />
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
+    <meta name="twitter:image:alt" content={image.alt} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredJsonLd)} />
     <script is:inline>
       document.documentElement.classList.add("image-fade-ready");
 

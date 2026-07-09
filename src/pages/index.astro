@@ -1,9 +1,9 @@
 ---
 import FigmaHome from "@/components/FigmaHome";
+import { seoPages } from "@/data/seo";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { profile } from "@/data/profile";
 ---
 
-<BaseLayout title={profile.name} description={profile.description} hideChrome>
+<BaseLayout {...seoPages.home} canonical={seoPages.home.path} hideChrome>
   <FigmaHome client:load />
 </BaseLayout>
