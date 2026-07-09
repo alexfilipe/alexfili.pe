@@ -186,7 +186,7 @@
   .mu-piano-video-swipe-layer { display: none; }
   @media (min-width: 821px) and (max-width: 1080px) {
     .mu-piano .mu-piano-video {
-      margin-left: clamp(-2rem, -3vw, -1rem);
+      margin-left: clamp(1.4rem, 2.8vw, 2.25rem);
     }
   }
   .mu-piano-carousel { display: grid; grid-template-columns: 38px 1fr 38px; align-items: center;
@@ -338,7 +338,7 @@
     gap: 0;
     overflow-x: auto;
     overflow-y: hidden;
-    background: rgba(240, 237, 230, .03);
+    background: transparent;
     padding-bottom: clamp(3.65rem, 5.05vw, 4.625rem);
     scrollbar-color: rgba(200, 169, 110, 0.45) transparent;
     scroll-padding-inline: 0;
@@ -485,7 +485,8 @@
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .45));
   }
   .mu-violin-carousel-control--left {
-    left: 0;
+    left: -1px;
+    width: calc(var(--violin-carousel-rail) + 1px);
     padding-left: clamp(.2rem, .7vw, .5rem);
   }
   .mu-violin-carousel-control--right {
@@ -518,6 +519,12 @@
       font-size: .92rem;
     }
     .mu-timeline-detail::before { content: none; }
+  }
+
+  @media (min-width: 821px) and (max-width: 1200px) {
+    .mu-violin .mu-timeline {
+      margin-left: clamp(1.25rem, 4vw, 2.75rem);
+    }
   }
 
   @media (max-width: 820px) {
