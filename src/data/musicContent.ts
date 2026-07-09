@@ -93,7 +93,7 @@ export const musicMovements: MusicMovement[] = [
       [
         "During my four years at Amherst, I studied with Chonghyo Shin, built a technique I never thought I would reach, and performed my ",
         { bold: "Senior Piano Recital" },
-        "  in March 2020. The recordings below are from those years."
+        "  in March 2020."
       ],
       [
         "After college, piano stayed with me as a serious part of my musical life. I practice almost every day and have since performed three more piano recitals, with another planned for ",
@@ -113,7 +113,7 @@ export const musicMovements: MusicMovement[] = [
     title: "Violin",
     lede: "My first musical language. I picked up the violin at three and have never really put it down.",
     body: [
-      "It carried me from a church philharmonic in Natal at ten, to the conservatory at the Federal University of Rio Grande do Norte in 2011, to the Amherst Symphony Orchestra, where I played throughout all my college years and every semester I was there, led the second violin section, and joined a few chamber programs each season.",
+      "It carried me from a church philharmonic in Natal at ten, to the conservatory at the Federal University of Rio Grande do Norte in 2011, and later to the Amherst Symphony Orchestra. At Amherst, I played every semester throughout all my college years, led the second violin section, and joined a few chamber programs each season.",
       "When I lived in Germany in 2017, I also brought the violin into a different musical space, performing pop music on violin and keyboard with a band I put together with other international students for university events.",
       "In San Francisco, it continues through string quartets, music groups, recitals, and musical lounges — keeping chamber music present in my life in a more intimate, living way, while also making space for pop music and improvisation with friends. Music has become one of the ways I build community here."
     ]
