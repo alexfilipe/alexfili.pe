@@ -81,8 +81,8 @@
   .mu-hero-lede + .mu-hero-lede { margin-top: 1rem; }
   .mu-hero-lede em { color: var(--gold); font-style: italic; }
   .mu-hero-stats { display: flex; flex-wrap: wrap; gap: 1rem 2.6rem; margin-top: 2.4rem;
-    color: var(--text-muted); font-size: .95rem; }
-  .mu-hero-stats b { font-family: var(--display); color: var(--text); font-size: 1.9rem; font-weight: 600; margin-right: .5rem; }
+    color: var(--text-muted); font-size: 1.08rem; }
+  .mu-hero-stats b { font-family: var(--display); color: var(--text); font-size: 2.35rem; font-weight: 600; margin-right: .6rem; }
   .mu-scroll-cue { position: absolute; left: 50%; bottom: 2rem; transform: translateX(-50%); z-index: 2;
     display: flex; flex-direction: column; align-items: center; gap: .6rem; color: var(--text-muted);
     font-size: .68rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
@@ -109,7 +109,13 @@
   .mu-body b, .mu-lede b { color: var(--text); font-weight: 700; }
 
   /* Conducting video */
-  .mu-video { display: block; align-self: start; margin-top: clamp(8.5rem, 10vw, 10.25rem); }
+  .mu-video { display: block; align-self: start; margin-top: clamp(11rem, 12vw, 12.25rem); }
+  @media (min-width: 821px) and (max-width: 1180px) {
+    .mu-video { margin-top: clamp(7.5rem, 9vw, 9.5rem); }
+  }
+  @media (min-width: 1181px) {
+    .mu-video { margin-top: clamp(10.25rem, 8.8vw, 11rem); }
+  }
   .mu-video-frame { position: relative; aspect-ratio: 16 / 9; border: 1px solid var(--line-strong);
     background: #000; overflow: hidden; box-shadow: 0 24px 70px rgba(0,0,0,.55); }
   .mu-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
@@ -143,7 +149,7 @@
 
   /* Repertoire marquee */
   .mu-marquee { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-    margin: 0; padding: clamp(.85rem, 1.8vw, 1.25rem) 0; background: var(--card-wash); }
+    margin: clamp(.8rem, 1.5vw, 1.2rem) 0 0; padding: clamp(.85rem, 1.8vw, 1.25rem) 0; background: var(--card-wash); }
   .mu-marquee-track { display: inline-flex; align-items: center; white-space: nowrap;
     animation: mu-marquee 34s linear infinite; }
   .mu-marquee-track span { display: inline-flex; align-items: center; font-family: var(--display);
@@ -155,7 +161,7 @@
   /* Violin timeline */
   .mu-violin { padding-top: clamp(4.5rem, 9vw, 7rem); }
   .mu-timeline { list-style: none; margin: 0; padding: 0; }
-  .mu-timeline li { position: relative; padding: 0 0 2.5rem 1.6rem; border-left: 1px solid var(--line); }
+  .mu-timeline li { position: relative; padding: 0 0 2.5rem 2.2rem; border-left: 1px solid var(--line); }
   .mu-timeline li:last-child { padding-bottom: 0; }
   .mu-timeline li::before { content: ""; position: absolute; left: -4.5px; top: .35rem; width: 8px; height: 8px;
     border-radius: 999px; background: var(--gold); }
@@ -202,13 +208,22 @@
       margin-top: 0;
     }
     .mu-scroll-dot { height: 36px; }
+    .mu-timeline {
+      padding-left: 1.35rem;
+    }
   }
 
   @media (max-width: 580px) {
     .mu-hero-stats {
       display: grid;
       grid-template-columns: 1fr;
-      gap: .65rem;
+      gap: .25rem;
+    }
+  }
+
+  @media (max-width: 580px) and (max-height: 700px) {
+    .mu-hero {
+      padding-bottom: 9rem;
     }
   }
 
@@ -460,6 +475,9 @@
 .wk-wrap { max-width: 1040px; margin: 0 auto; padding: 6.5rem clamp(1.25rem, 4vw, 3rem) 5rem; }
 
   .wk-head { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  @media (min-width: 861px) {
+    .wk-head { margin-bottom: clamp(1.8rem, 3.5vw, 2.75rem); }
+  }
   .wk-title { margin: .9rem 0 0; font-family: var(--display); font-size: clamp(2.75rem, 6vw, 4.6rem);
     font-weight: 720; line-height: .84; letter-spacing: 0; }
   .wk-intro { max-width: 40rem; margin: 1.6rem 0 0; color: var(--text-soft);
@@ -509,7 +527,7 @@
   .wk-desc { margin: .5rem 0 0; color: var(--text-soft); font-size: 1.02rem; line-height: 1.5;
     max-width: 40rem; }
 
-  .wk-arrow { position: absolute; top: 50%; right: .5rem; transform: translateY(-50%);
+  .wk-arrow { position: absolute; top: 50%; right: 1rem; transform: translateY(-50%);
     color: var(--gold); opacity: .7; transition: opacity .25s var(--ease), transform .25s var(--ease); }
   .wk-item:hover .wk-arrow { opacity: 1; transform: translate(.2rem, -50%); }
 

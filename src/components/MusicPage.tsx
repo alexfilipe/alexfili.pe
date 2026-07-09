@@ -42,6 +42,7 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
     if (!ctx) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
     let W = 0;
     let H = 0;
     const dpr = window.devicePixelRatio || 1;
@@ -73,10 +74,13 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
         let stringGlow = 0;
         if (variant === "strings") {
           const pl = pluck.current;
-          const immediateY = pl.y > 0 ? Math.exp(-Math.pow((base - pl.y) / 44, 2)) : 0;
-          const lingerY = Math.max(immediateY, (stringInfluence.current[k] ?? 0) * 0.96);
+          const hoverRadius = finePointer ? 76 : 44;
+          const immediateY = pl.y > 0 ? Math.exp(-Math.pow((base - pl.y) / hoverRadius, 2)) : 0;
+          const previousY = stringInfluence.current[k] ?? 0;
+          const easedY = finePointer ? immediateY : previousY + (immediateY - previousY) * 0.12;
+          const lingerY = Math.max(easedY, previousY * 0.96);
           stringInfluence.current[k] = lingerY;
-          stringGlow = lingerY * Math.exp(-pl.t * 0.85);
+          stringGlow = lingerY * Math.exp(-pl.t * 0.75);
         }
         ctx.beginPath();
         for (let x = 0; x <= W; x += 8) {
@@ -88,9 +92,11 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
             const nearX = pl.x > 0 ? Math.exp(-Math.pow((x - pl.x) / 210, 2)) : 0.35;
             const decay = Math.exp(-pl.t * 1.35);
             const force = pl.dragging ? Math.max(pl.force, 0.65) : pl.force;
-            const amp = 2.5 + nearY * (12 + force * 12) * decay * (0.25 + nearX);
-            const pull = nearY * nearX * force * 6 * decay;
-            y = base + Math.sin(px * 10 + t * 4.2 + k) * amp * Math.sin(px * Math.PI) + pull;
+            const response = finePointer ? 1.35 : 0.32;
+            const amp = 2.5 + nearY * (12 + force * 12) * response * decay * (0.25 + nearX);
+            const pull = nearY * nearX * force * 6 * response * decay;
+            const oscillation = finePointer ? px * 10 + t * 4.2 + k : px * 3.2 + t * 0.85 + k * 0.35;
+            y = base + Math.sin(oscillation) * amp * Math.sin(px * Math.PI) + pull;
           } else {
             const amp = 12 + k * 4;
             y = base + Math.sin(px * 3.4 + t * 0.9 + k * 0.7) * amp + Math.sin(px * 7 - t * 0.6 + k) * (amp * 0.35);
@@ -98,7 +104,7 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
-        const a = variant === "strings" ? 0.08 + k * 0.012 + stringGlow * 0.18 : 0.11 + k * 0.035;
+        const a = variant === "strings" ? 0.08 + k * 0.012 + stringGlow * (finePointer ? 0.22 : 0.15) : 0.11 + k * 0.035;
         ctx.strokeStyle = C(a);
         ctx.lineWidth = variant === "strings" ? 1 : 1;
         ctx.stroke();

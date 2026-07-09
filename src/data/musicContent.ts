@@ -47,7 +47,7 @@ export const musicPageContent = {
     lede: [
       "The discipline that taught me how listen deeply, perform with intention, and turn structure into expression.",
       [
-        "Three instruments, one lifelong question — ",
+        "Three musical paths, one lifelong question — ",
         { emphasis: "what makes structure feel meaningful" },
         " — worked out in sound and interpretation before I ever worked it out in systems."
       ]
@@ -87,12 +87,20 @@ export const musicMovements: MusicMovement[] = [
     numeral: "II",
     kicker: "Movement II",
     title: "Piano",
-    lede: "In 2015, with almost no experience, I decided to learn the piano — and gave it the kind of hours most people reserve for a first language.",
+    lede: "In 2015, with almost no experience, I decided to learn the piano — and devoted myself to it with an intensity that changed the course of my musical life.",
     body: [
       [
-        "Under Chonghyo Shin I built a technique in four years I never thought I'd reach, and performed my ",
-        { bold: "Senior Recital" },
-        " in March 2020. The recordings below are from those years."
+        "During my five years at Amherst, I studied with Chonghyo Shin, built a technique I never thought I would reach, and performed my ",
+        { bold: "Senior Piano Recital" },
+        "  in March 2020. The recordings below are from those years."
+      ],
+      [
+        "After college, piano stayed with me as a serious part of my musical life. I practice almost every day and have since performed three more piano recitals, with another planned for ",
+        { bold: "December 2026" },
+        ", featuring works by Mozart, Chopin, Haydn, and Scarlatti."
+      ],
+      [
+        "Piano also deepened my work as a conductor: learning to perform multiple voices at once, each with care and musical independence, changed the way I hear and shape an ensemble."
       ]
     ]
   },
@@ -104,8 +112,8 @@ export const musicMovements: MusicMovement[] = [
     title: "Violin",
     lede: "My first musical language. I picked up the violin at three and have never really put it down.",
     body: [
-      "It carried me from a church philharmonic in Natal at ten, to the conservatory at the Federal University of Rio Grande do Norte in 2011, to the Amherst Symphony Orchestra, where I played throughout my college years and led the second violin section, alongside a few chamber programs each season.",
-      "In San Francisco, it continues through string quartets, music groups, and recitals — keeping chamber music present in my life in a more intimate, living way."
+      "It carried me from a church philharmonic in Natal at ten, to the conservatory at the Federal University of Rio Grande do Norte in 2011, to the Amherst Symphony Orchestra, where I played throughout all my college years and led the second violin section, alongside a few chamber programs each season.",
+      "In San Francisco, it continues through string quartets, music groups, and recitals — keeping chamber music present in my life in a more intimate, living way, and making music one of the ways I build community here."
     ]
   }
 ];
