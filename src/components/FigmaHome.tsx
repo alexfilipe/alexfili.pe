@@ -763,7 +763,8 @@ type ProjectLogoPlaceholder = Project["logo"];
 function ArtworkFrame({ children, logo }: { children: ReactNode; logo?: ProjectLogoPlaceholder }) {
   const logoStyle = logo
     ? ({
-        "--figma-project-logo-accent": logo.accent
+        "--figma-project-logo-accent": logo.accent,
+        "--figma-project-logo-scale": logo.scale ?? 1.02
       } as CSSProperties)
     : undefined;
 

@@ -50,7 +50,8 @@ function SpacedMetadata({ value }: { value: ProjectMetaValue }) {
 
 function ProjectVisual({ project }: { project: ProjectPage }) {
   const logoStyle = {
-    "--pp-project-logo-accent": project.logo.accent
+    "--pp-project-logo-accent": project.logo.accent,
+    "--pp-project-logo-scale": project.logo.scale ?? 1.02
   } as CSSProperties;
 
   return (

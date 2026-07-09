@@ -29,6 +29,7 @@ export type ProjectLogo = {
   accent: string;
   webpSrc?: string;
   pngSrc?: string;
+  scale?: number;
 };
 
 export type ProjectPage = {
@@ -98,7 +99,8 @@ export const projectPages: ProjectPage[] = [
       initials: "IS",
       accent: "#d8a85f",
       webpSrc: "/images/project-logos/inspirasonho.webp",
-      pngSrc: "/images/project-logos/inspirasonho.png"
+      pngSrc: "/images/project-logos/inspirasonho.png",
+      scale: 1.08
     },
     tags: ["Full-Stack", "Databases", "SEO"]
   },
@@ -135,7 +137,8 @@ export const projectPages: ProjectPage[] = [
       initials: "HI",
       accent: "#8fb2df",
       webpSrc: "/images/project-logos/home-intelligence.webp",
-      pngSrc: "/images/project-logos/home-intelligence.png"
+      pngSrc: "/images/project-logos/home-intelligence.png",
+      scale: 1.18
     },
     tags: ["Python", "Home Assistant", "MQTT", "Local-first", "AI-first development"]
   },
@@ -172,7 +175,8 @@ export const projectPages: ProjectPage[] = [
       initials: "LS",
       accent: "#cda0b4",
       webpSrc: "/images/project-logos/labstocker.webp",
-      pngSrc: "/images/project-logos/labstocker.png"
+      pngSrc: "/images/project-logos/labstocker.png",
+      scale: 1.16
     },
     tags: ["Java", "SQL", "Dashboards", "Predictive models", "Early work"]
   }

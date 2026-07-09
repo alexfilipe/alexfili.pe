@@ -697,19 +697,19 @@
   .pp-visual-frame { position: absolute; inset: 13%; border: 1px solid var(--line);
     opacity: .5; transform: rotate(-9deg); }
   .pp-visual-glyph { width: 46%; color: var(--gold); opacity: .32; }
-  .pp-project-logo { --pp-project-logo-accent: var(--gold); position: absolute;
+  .pp-project-logo { --pp-project-logo-accent: var(--gold); --pp-project-logo-scale: 1.02; position: absolute;
     right: clamp(1rem, 3vw, 1.35rem); bottom: clamp(1rem, 3vw, 1.35rem); z-index: 1;
     display: grid; width: clamp(3.15rem, 8vw, 4.7rem); aspect-ratio: 1; place-items: center;
     overflow: hidden; border: 0; border-radius: 24%; color: #070706;
     background: linear-gradient(135deg, rgba(255,252,244,.52), rgba(255,252,244,0) 46%), var(--pp-project-logo-accent);
-    box-shadow: 0 1rem 2.6rem rgba(0,0,0,.42); transition: transform .5s var(--ease); }
+    box-shadow: 0 0 0 1px rgba(255,252,244,.28), 0 1rem 2.6rem rgba(0,0,0,.42); transition: transform .5s var(--ease); }
   .pp-project-logo--image { background: transparent; }
   .pp-project-logo::after { content: ""; position: absolute; inset: auto 0 0 auto;
     width: 36%; aspect-ratio: 1; background: rgba(7,7,6,.16); }
   .pp-project-logo--image::after { content: none; }
   .pp-project-logo-picture { position: relative; z-index: 1; display: grid; width: 100%; height: 100%;
     padding: 0; place-items: center; }
-  .pp-project-logo-picture img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.08); }
+  .pp-project-logo-picture img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(var(--pp-project-logo-scale)); }
   .pp-project-logo span { position: relative; z-index: 1; font-family: var(--sans);
     font-size: clamp(.78rem, 2vw, 1rem); font-weight: 800; letter-spacing: 0; line-height: 1; }
 
