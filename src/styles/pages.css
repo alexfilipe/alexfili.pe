@@ -645,9 +645,6 @@
 
   @media (max-width: 1040px) {
     .wk-list { width: 100vw; margin-left: calc(50% - 50vw); }
-    .wk-foot { border-top: 0; }
-    .wk-foot::before { content: ""; position: absolute; left: 50%; top: 0; width: 100vw; height: 1px;
-      margin-left: -50vw; background: var(--line-soft); }
   }
 
   @media (max-width: 600px) {

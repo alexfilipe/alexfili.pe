@@ -474,7 +474,7 @@ select {
 }
 
 .figma-piano-wrap {
-  margin: -1.5rem -1.5rem clamp(2rem, 3.85vw, 3.35rem);
+  margin: -1.5rem -1.5rem 0;
   overflow: visible;
 }
 
@@ -1053,13 +1053,13 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
   }
 
   .figma-piano-wrap {
-    margin: 3.25rem 0 2rem;
+    margin: 3.25rem 0 0;
   }
 }
 
 @media (min-width: 1200px) {
   .figma-piano-wrap {
-    margin-top: 1.65rem;
+    margin-top: 1rem;
     margin-bottom: 0;
   }
 
@@ -1074,12 +1074,16 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
 
 @media (min-width: 1200px) and (max-width: 1600px) {
   .figma-piano-wrap {
-    margin-top: 3.25rem;
-    margin-bottom: 2.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
   }
 }
 
 @media (max-width: 767px) {
+  .figma-hero {
+    margin-bottom: 0;
+  }
+
   .figma-hero-title,
   .figma-tagline {
     text-align: center;
@@ -1094,6 +1098,13 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
     text-align: center;
   }
 
+  .figma-piano-wrap {
+    margin-top: -3rem;
+  }
+
+  .figma-bio {
+    margin-top: 3rem;
+  }
 }
 
 @media (max-width: 600px) {
@@ -1125,8 +1136,8 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
   }
 
   .figma-piano-wrap {
-    margin-top: 1.35rem;
-    margin-bottom: 2.15rem;
+    margin-top: -3rem;
+    margin-bottom: 0;
   }
 
   .figma-home .piano-interaction-label {
