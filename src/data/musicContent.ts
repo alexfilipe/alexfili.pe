@@ -53,14 +53,6 @@ export const musicPageContent = {
       ]
     ],
     scrollCue: "Prélude"
-  },
-  footer: {
-    copyright: "© 2026 Álex Filipe Santos",
-    socialLinksLabel: "Social links",
-    location: "San Francisco, CA",
-    github: "GitHub",
-    linkedin: "LinkedIn",
-    email: "Email"
   }
 } as const;
 

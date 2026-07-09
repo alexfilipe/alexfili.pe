@@ -53,14 +53,14 @@
   .mu-eyebrow-list { display: flex; flex-wrap: wrap; align-items: center; gap: 0 .85rem; }
 
   /* Section nav (fixed, right) */
-  .mu-nav { position: fixed; right: clamp(.9rem, 2.5vw, 2rem); top: 50%; transform: translateY(-50%);
-    z-index: 700; display: flex; flex-direction: column; gap: 1.1rem; opacity: 0; pointer-events: none;
+  .mu-nav { position: fixed; right: 0; top: 50%; transform: translateY(-50%);
+    z-index: 700; display: flex; flex-direction: column; align-items: flex-end; gap: 0; opacity: 0; pointer-events: none;
     transition: opacity .28s var(--ease); }
   .mu-nav.is-visible { opacity: 1; pointer-events: auto; }
-  .mu-nav-item { display: grid; grid-template-columns: 40px 6.5rem; align-items: center; justify-content: flex-end; gap: .4rem; color: var(--text-muted); }
-  .mu-nav-line { width: 20px; height: 1px; background: currentColor; transition: width .3s var(--ease), background .3s var(--ease); }
+  .mu-nav-item { display: grid; grid-template-columns: max-content 40px; align-items: center; justify-content: flex-end; gap: .4rem; padding: .55rem 0; color: var(--text-muted); }
+  .mu-nav-line { justify-self: end; width: 20px; height: 1px; background: currentColor; transition: width .3s var(--ease), background .3s var(--ease); }
   .mu-nav-label { font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-    min-width: 0; overflow: hidden; white-space: nowrap; text-align: right; opacity: 0; transform: translateX(6px); transition: opacity .3s var(--ease), transform .3s var(--ease); }
+    white-space: nowrap; text-align: right; opacity: 0; transform: translateX(6px); transition: opacity .3s var(--ease), transform .3s var(--ease); }
   .mu-nav-item:hover, .mu-nav-item.is-on { color: var(--gold); }
   .mu-nav-item:hover .mu-nav-label, .mu-nav-item.is-on .mu-nav-label { opacity: 1; transform: none; }
   .mu-nav-item.is-on .mu-nav-line { width: 40px; }
@@ -82,7 +82,8 @@
   .mu-hero-lede em { color: var(--gold); font-style: italic; }
   .mu-hero-stats { display: flex; flex-wrap: wrap; gap: 1rem 2.6rem; margin-top: 2.4rem;
     color: var(--text-muted); font-size: 1.08rem; }
-  .mu-hero-stats b { font-family: var(--display); color: var(--text); font-size: 2.35rem; font-weight: 600; margin-right: .6rem; }
+  .mu-hero-stats b { font-family: var(--display); color: var(--text); font-size: 2.35rem; font-weight: 600; margin-right: .5rem; }
+  .mu-hero-stat-label { position: relative; top: -.15rem; }
   .mu-scroll-cue { position: absolute; left: 50%; bottom: 2rem; transform: translateX(-50%); z-index: 2;
     display: flex; flex-direction: column; align-items: center; gap: .6rem; color: var(--text-muted);
     font-size: .68rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
@@ -472,7 +473,7 @@
 /* --------------------------------------------------------------------------
    Featured Work index (.wk-*)
    -------------------------------------------------------------------------- */
-.wk-wrap { max-width: 1040px; margin: 0 auto; padding: 6.5rem clamp(1.25rem, 4vw, 3rem) 5rem; }
+.wk-wrap { max-width: 1040px; margin: 0 auto; padding: 6.5rem clamp(1.25rem, 4vw, 3rem) 3rem; }
 
   .wk-head { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
   @media (min-width: 861px) {

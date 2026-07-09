@@ -221,8 +221,8 @@ function SectionNav({ active, visible }: { active: string; visible: boolean }) {
     >
       {musicMovements.map((s) => (
         <a key={s.id} href={`#${s.id}`} className={"mu-nav-item" + (active === s.id ? " is-on" : "")}>
-          <span className="mu-nav-line" />
           <span className="mu-nav-label">{s.label}</span>
+          <span className="mu-nav-line" />
         </a>
       ))}
     </nav>
@@ -301,7 +301,8 @@ export default function MusicPage() {
           <div className="mu-hero-stats">
             {musicHeroStats.map((s) => (
               <span key={s.label}>
-                <b>{s.value}</b> {s.label}
+                <b>{s.value}</b>
+                <span className="mu-hero-stat-label">{s.label}</span>
               </span>
             ))}
           </div>
@@ -451,12 +452,7 @@ export default function MusicPage() {
         </div>
       </section>
 
-      <PageFooter
-        className="mu-foot"
-        copyright={musicPageContent.footer.copyright}
-        location={musicPageContent.footer.location}
-        socialLinksLabel={musicPageContent.footer.socialLinksLabel}
-      />
+      <PageFooter className="mu-foot" />
     </div>
   );
 }
