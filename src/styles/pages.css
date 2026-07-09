@@ -184,6 +184,11 @@
   .mu-piano-video-slide { position: relative; flex: 0 0 100%; min-width: 100%; height: 100%; background: #000; }
   .mu-piano-video-slide iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
   .mu-piano-video-swipe-layer { display: none; }
+  @media (min-width: 821px) and (max-width: 1080px) {
+    .mu-piano .mu-piano-video {
+      margin-left: clamp(-2rem, -3vw, -1rem);
+    }
+  }
   .mu-piano-carousel { display: grid; grid-template-columns: 38px 1fr 38px; align-items: center;
     width: 100%; margin-top: 1rem; }
   .mu-piano-carousel-arrow { appearance: none; display: grid; place-items: center; width: 38px; height: 38px; padding: 0;
