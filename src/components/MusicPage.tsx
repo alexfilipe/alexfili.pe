@@ -291,6 +291,7 @@ function Reveal({ children, className = "", as = "div" }: RevealProps) {
 const conductingMovement = musicMovements.find((movement) => movement.id === "conducting")!;
 const pianoMovement = musicMovements.find((movement) => movement.id === "piano")!;
 const violinMovement = musicMovements.find((movement) => movement.id === "violin")!;
+const pianoExcerptYoutubeId = "qlbnMvq_dIY";
 
 function SectionNav({ active, visible }: { active: string; visible: boolean }) {
   return (
@@ -460,11 +461,17 @@ export default function MusicPage() {
               ))}
             </Reveal>
           </div>
-          <div className="mu-piano-keys" aria-hidden="true">
-            {Array.from({ length: 24 }).map((_, n) => (
-              <span key={n} style={{ animationDelay: `${n * 0.11}s` }} />
-            ))}
-          </div>
+          <Reveal className="mu-piano-video">
+            <div className="mu-piano-video-frame">
+              <iframe
+                loading="lazy"
+                src={`https://www.youtube-nocookie.com/embed/${pianoExcerptYoutubeId}`}
+                title="Piano excerpt performed by Álex Filipe Santos"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </Reveal>
         </div>
         <div className="mu-marquee" aria-hidden="true">
           <div className="mu-marquee-track">

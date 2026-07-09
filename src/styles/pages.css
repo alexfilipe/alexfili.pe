@@ -129,12 +129,10 @@
   .mu-stats span { display: flex; flex-direction: column; }
   .mu-stats b { font-family: var(--display); font-size: clamp(2.4rem, 5vw, 3.4rem); font-weight: 600; line-height: 1; color: var(--gold); }
   .mu-stats small { color: var(--text-muted); font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; margin-top: .5rem; }
-  .mu-piano-keys { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; height: 320px;
-    align-items: end; padding: 1.5rem; border: 1px solid var(--line); background: var(--card-wash); }
-  .mu-piano-keys span { display: block; height: 30%; background: linear-gradient(var(--gold-soft), rgba(240,237,230,.16));
-    transform-origin: bottom; animation: mu-key 2.8s var(--ease) infinite; }
-  @keyframes mu-key { 0%, 100% { transform: scaleY(.3); opacity: .35; } 45% { transform: scaleY(1); opacity: .9; } }
-  @media (prefers-reduced-motion: reduce) { .mu-piano-keys span { animation: none; transform: scaleY(.6); } }
+  .mu-piano-video { justify-self: start; width: min(100%, 24.5rem); margin-left: clamp(.75rem, 1.8vw, 1.5rem); }
+  .mu-piano-video-frame { position: relative; aspect-ratio: 9 / 16; border: 1px solid var(--line-strong);
+    background: #000; overflow: hidden; box-shadow: 0 24px 70px rgba(0,0,0,.55); }
+  .mu-piano-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
   .mu-recs { list-style: none; margin: clamp(2.5rem, 5vw, 3.5rem) 0 0; padding: 0;
     position: relative; z-index: 2; max-width: 1120px; margin-inline: auto; }
@@ -211,7 +209,7 @@
     .mu-sec-grid { grid-template-columns: 1fr; }
     .mu-sec-title { font-size: clamp(3.35rem, 10vw, 5rem); }
     .mu-video { margin-top: 0; }
-    .mu-piano-keys { height: 200px; order: -1; }
+    .mu-piano-video { order: -1; justify-self: center; width: min(100%, 18rem); margin-left: 0; }
     .mu-recs a { grid-template-columns: 2.2rem 1fr; }
     .mu-rec-date { grid-column: 2; padding-left: 0; }
     .mu-marquee-track span { font-size: clamp(1.05rem, 4.8vw, 1.42rem); }
@@ -530,7 +528,7 @@
    behind the navbar to meet the list (echoes the music heroes' radial washes). */
 .wk-page { position: relative; display: flex; flex: 1; flex-direction: column; min-height: 100%; overflow-x: clip; }
 
-.wk-wrap { --wk-gutter: clamp(1.25rem, 4vw, 3rem); display: flex; flex: 1; flex-direction: column; width: 100%; max-width: 1040px; margin: 0 auto; padding: 6.5rem var(--wk-gutter) 0; }
+.wk-wrap { --wk-gutter: clamp(1.25rem, 4vw, 3rem); --wk-list-bleed: clamp(1.5rem, 5vw, 5rem); display: flex; flex: 1; flex-direction: column; width: 100%; max-width: 1040px; margin: 0 auto; padding: 6.5rem var(--wk-gutter) 0; }
 
   .wk-head { position: relative; isolation: isolate; margin-bottom: 0;
     padding-bottom: clamp(1.75rem, 3vw, 2.5rem); }
@@ -547,7 +545,7 @@
     font-size: clamp(1.05rem, 2vw, 1.3rem); line-height: 1.55; }
 
   /* List — hairline-separated rows, like the site's work-list */
-  .wk-list { display: grid; gap: 1px; margin-bottom: 3rem; background: var(--line); }
+  .wk-list { display: grid; gap: 1px; width: calc(100% + var(--wk-list-bleed)); margin-bottom: 3rem; margin-left: calc(var(--wk-list-bleed) / -2); background: var(--line); }
   .wk-item { position: relative; display: grid; grid-template-columns: 128px minmax(0, 1fr);
     align-items: start; gap: .55rem clamp(1.5rem, 3vw, 2.4rem);
     padding: clamp(1.5rem, 3vw, 2.2rem) 1.5rem;
