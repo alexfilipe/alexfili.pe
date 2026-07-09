@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { Fragment, useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import {
@@ -355,9 +355,11 @@ function RenderRichText({ value }: { value: RichText }) {
 }
 
 function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
+  const carouselId = useId();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<number | null>(null);
   const [loadedPhotoIds, setLoadedPhotoIds] = useState<Set<string>>(() => new Set());
+  const [activeLabelPhotoId, setActiveLabelPhotoId] = useState<string | null>(null);
   const [scrollState, setScrollState] = useState<CarouselScrollState>({
     canScrollLeft: false,
     canScrollRight: false
@@ -371,6 +373,10 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
       nextIds.add(photoId);
       return nextIds;
     });
+  }, []);
+
+  const togglePhotoLabel = useCallback((photoId: string) => {
+    setActiveLabelPhotoId((currentPhotoId) => (currentPhotoId === photoId ? null : photoId));
   }, []);
 
   const updateScrollState = useCallback(() => {
@@ -398,6 +404,7 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
     const handleScroll = () => updateScrollState();
     const dropTarget = () => {
       targetRef.current = null;
+      setActiveLabelPhotoId(null);
     };
     scroller.addEventListener("scroll", handleScroll, { passive: true });
     scroller.addEventListener("pointerdown", dropTarget, { passive: true });
@@ -452,20 +459,44 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
       data-can-scroll-right={scrollState.canScrollRight ? "true" : "false"}
     >
       <div ref={scrollerRef} className="mu-violin-carousel" role="list" aria-label="Violin photo archive">
-        {photos.map((photo) => (
-          <div className="mu-violin-photo" role="listitem" key={photo.id}>
-            <img
-              className={"mu-violin-photo-img" + (loadedPhotoIds.has(photo.id) ? " is-loaded" : "")}
-              src={photo.src}
-              alt={photo.alt}
-              width={photo.width}
-              height={photo.height}
-              loading="lazy"
-              decoding="async"
-              onLoad={() => markPhotoLoaded(photo.id)}
-            />
-          </div>
-        ))}
+        {photos.map((photo) => {
+          const labelId = `${carouselId}-${photo.id}-label`;
+          const isLabelActive = activeLabelPhotoId === photo.id;
+
+          return (
+            <div
+              className={"mu-violin-photo" + (isLabelActive ? " is-label-active" : "")}
+              role="listitem"
+              key={photo.id}
+              data-photo-id={photo.id}
+            >
+              <button
+                type="button"
+                className="mu-violin-photo-trigger"
+                aria-label={photo.alt}
+                aria-describedby={labelId}
+                aria-expanded={isLabelActive}
+                onClick={() => togglePhotoLabel(photo.id)}
+              >
+                <span className="mu-violin-photo-media" aria-hidden="true">
+                  <img
+                    className={"mu-violin-photo-img" + (loadedPhotoIds.has(photo.id) ? " is-loaded" : "")}
+                    src={photo.src}
+                    alt=""
+                    width={photo.width}
+                    height={photo.height}
+                    loading="lazy"
+                    decoding="async"
+                    onLoad={() => markPhotoLoaded(photo.id)}
+                  />
+                </span>
+              </button>
+              <span className="mu-violin-photo-label" id={labelId}>
+                {photo.label}
+              </span>
+            </div>
+          );
+        })}
       </div>
       <button
         type="button"

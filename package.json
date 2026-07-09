@@ -8,8 +8,11 @@
     "start": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "build": "node scripts/build-placeholder.mjs",
     "build:site": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "build:production": "PUBLIC_SITE_URL=https://alexfili.pe npm run build:site",
     "build:placeholder": "node scripts/build-placeholder.mjs",
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "deploy:production": "npm run build:production && npx wrangler deploy --config wrangler.production.jsonc",
+    "deploy:production:dry-run": "npm run build:production && npx wrangler deploy --config wrangler.production.jsonc --dry-run",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
   },
   "dependencies": {

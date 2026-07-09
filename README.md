@@ -9,7 +9,7 @@ Personal website for Álex Filipe Santos: a static Astro site with a cinematic e
 - MDX content collections for essays and recordings
 - Three.js for the intelligence geometry and piano separator
 - Self-hosted fonts through Fontsource: Fraunces and Instrument Sans
-- Static output for Cloudflare Pages
+- Static output for Cloudflare Pages and Cloudflare Workers Static Assets
 
 ## Local Development
 
@@ -24,7 +24,9 @@ Useful commands:
 
 ```bash
 npm run check
-npm run build
+npm run build:site
+npm run build:production
+npm run build # placeholder fallback build
 npm run preview
 ```
 
@@ -75,7 +77,7 @@ The production home page ports the Figma Make composition into maintainable Astr
 ## Deployment
 
 There are two independent deploy targets. Pushing to `main` only updates the
-alpha site; the production placeholder is deployed manually.
+alpha site; production is promoted manually.
 
 ### Alpha site — `alpha.alexfili.pe` (automatic)
 
@@ -89,21 +91,70 @@ Every push to `main` triggers a Pages build automatically — no manual step is
 required. To force a rebuild without code changes, push an empty commit
 (`git commit --allow-empty -m "Trigger alpha Pages deployment"`).
 
-### Production placeholder — `alexfili.pe` and `www.alexfili.pe` (manual)
+### Production site — `alexfili.pe` and `www.alexfili.pe` (manual)
 
-The apex domain is served by the `alexfilipe-placeholder` Cloudflare Worker
-(`scripts/placeholder-worker.js`), *not* by Pages. The worker proxies
-`launch-placeholder.html` plus the icon/preview assets in `public/` from a
-**pinned GitHub commit** (`RAW_BASE`) and redirects `www` → apex.
+The full Astro site is promoted to the apex domain by the manual GitHub Actions
+workflow `.github/workflows/deploy-production.yml`.
 
-Because the worker reads from a pinned commit, editing the placeholder is not
-enough — you must repin and redeploy the worker:
+The workflow builds the site with `PUBLIC_SITE_URL=https://alexfili.pe`, then
+deploys `dist/` as Cloudflare Workers Static Assets through
+`wrangler.production.jsonc`. It intentionally reuses the existing
+`alexfilipe-placeholder` Worker name so the `alexfili.pe` / `www.alexfili.pe`
+routes already configured in the Cloudflare dashboard remain attached.
+
+Required GitHub secrets, preferably on the `production` environment:
+
+- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_API_TOKEN`
+
+Create the API token in Cloudflare with permission to edit the production
+Worker. Do not commit Cloudflare credentials to the repo.
+
+To deploy production:
+
+1. Push the commit you want to deploy.
+2. In GitHub, open **Actions** → **Deploy alexfili.pe production**.
+3. Click **Run workflow**, choose the branch/ref, and type `alexfili.pe` in the
+   confirmation field.
+4. Wait for the `production` environment deployment to finish.
+
+Local production checks:
+
+```bash
+npm run build:production
+npm run deploy:production:dry-run
+```
+
+The dry run compiles the Worker and assets without publishing. It requires
+Wrangler credentials locally if Wrangler asks for them.
+
+After deploy, verify:
+
+```bash
+curl -sI https://alexfili.pe/
+curl -sI https://www.alexfili.pe/
+curl -s https://alexfili.pe/robots.txt
+```
+
+`www` should redirect to the apex host, and `robots.txt` / `sitemap.xml` should
+reference `https://alexfili.pe`.
+
+### Production placeholder fallback — manual only
+
+The old launch placeholder still exists as an intentional fallback path:
+`scripts/placeholder-worker.js` proxies `launch-placeholder.html` plus selected
+assets in `public/` from a pinned GitHub commit (`RAW_BASE`).
+
+Deploying the placeholder Worker will replace the full production site with the
+placeholder. Only use this when you intentionally want the apex domain to return
+to the launch page.
+
+To update and deploy the placeholder:
 
 1. Edit `launch-placeholder.html` / `public/` assets, then commit and push to
    `main` so the new content is available on GitHub raw.
 2. In `scripts/placeholder-worker.js`, set `RAW_BASE` to the new commit SHA and
-   bump `SOURCE_VERSION` (this busts the Cloudflare edge cache so the new HTML
-   actually serves). Commit and push.
+   bump `SOURCE_VERSION` to bust the Cloudflare edge cache. Commit and push.
 3. Authenticate once: `npx wrangler login`.
 4. Deploy:
 
@@ -119,13 +170,12 @@ enough — you must repin and redeploy the worker:
 Notes:
 
 - The worker is service-worker format, so `--compatibility-date` is required.
-- There is no `wrangler.toml`; without one, each deploy re-enables the
-  `workers.dev` subdomain and Preview URLs by default. Add a minimal
-  `wrangler.toml` (`name`, `compatibility_date`, `workers_dev = false`) if you
-  want reproducible deploys.
+- The full-site production deploy uses `wrangler.production.jsonc`; the
+  placeholder fallback keeps using the explicit CLI flags above.
 - The `alexfili.pe` / `www.alexfili.pe` custom-domain routes live in the
-  Cloudflare dashboard. `wrangler deploy --name` only updates worker code and
-  leaves those routes untouched.
+  Cloudflare dashboard. The production Wrangler config deliberately omits
+  `route` / `routes` so deploys update Worker code/assets without taking route
+  ownership away from the dashboard.
 
 ### SEO metadata and IndexNow
 
@@ -143,7 +193,7 @@ IndexNow should only be pinged for the production apex URL after the key file is
 live at `https://alexfili.pe/<key>.txt`. Do **not** ping
 `alpha.alexfili.pe`.
 
-Current placeholder flow:
+Current production full-site flow:
 
 1. Generate a fresh 32-character hex key:
 
@@ -153,42 +203,26 @@ Current placeholder flow:
 
 2. Save it as `public/<key>.txt` containing exactly the key. Avoid a trailing
    newline; `wc -c public/<key>.txt` should report `32`.
-3. In `scripts/placeholder-worker.js`, add `"/<key>.txt"` to `STATIC_ASSETS`
-   with the source path `public/<key>.txt` and content type
-   `text/plain; charset=UTF-8`. Remove any old IndexNow key mapping/file unless
-   there is a reason to keep it active.
+3. Remove any old IndexNow key file unless there is a reason to keep it active.
 4. Run lightweight checks:
 
    ```bash
-   node --check scripts/placeholder-worker.js
    npm run check
-   npm run build
+   npm run build:production
    ```
 
 5. Commit the source changes and push them to `main`.
-6. Update `RAW_BASE` in `scripts/placeholder-worker.js` to the source commit
-   SHA that contains `public/<key>.txt`, bump `SOURCE_VERSION`, then commit and
-   push that repin.
-7. Deploy the placeholder worker:
-
-   ```bash
-   npx wrangler deploy scripts/placeholder-worker.js \
-     --name alexfilipe-placeholder \
-     --compatibility-date <today>
-   ```
-
-8. Verify production before pinging IndexNow:
+6. Run the **Deploy alexfili.pe production** workflow for that commit.
+7. Verify production before pinging IndexNow:
 
    ```bash
    curl -i https://alexfili.pe/<key>.txt
    curl -i https://alexfili.pe/robots.txt
-   curl -I https://alexfili.pe/some-missing-path
    ```
 
-   The key file and `robots.txt` should return `200` as bare text files. A
-   missing placeholder path should still redirect to `https://alexfili.pe/`.
+   The key file and `robots.txt` should return `200` as bare text files.
 
-9. After the key file is verified live, send the one-time IndexNow signal:
+8. After the key file is verified live, send the one-time IndexNow signal:
 
    ```bash
    curl -i "https://api.indexnow.org/indexnow?url=https://alexfili.pe/&key=<key>"
@@ -196,26 +230,18 @@ Current placeholder flow:
 
    A successful submission usually returns `202`.
 
-When the full Astro site is promoted to production, keep the same IndexNow
-rules: serve `public/<key>.txt` at the apex root, verify it at
-`https://alexfili.pe/<key>.txt`, and ping only
-`https://api.indexnow.org/indexnow?url=https://alexfili.pe/&key=<key>` after the
-production apex deploy is live.
-
-### Restoring the full site to production
-
-- `npm run build` currently publishes only `launch-placeholder.html` as
-  `dist/index.html`; `npm run build:site` builds the full Astro site.
-- To promote the full site, point the production domain at the Pages project
-  (or change `build` in `package.json` back to `build:site`) and retire the
-  placeholder worker.
+For the placeholder fallback, also add the active `/<key>.txt` root path to
+`STATIC_ASSETS` in `scripts/placeholder-worker.js`, repin `RAW_BASE`, bump
+`SOURCE_VERSION`, deploy the placeholder Worker, and verify an unknown
+placeholder path still redirects to `https://alexfili.pe/`.
 
 ## QA Notes
 
-Verified locally:
+Verified locally for the full Astro site:
 
 - `npm run check`
-- `npm run build`
+- `npm run build:site`
+- `npm run build:production`
 - Static route generation for `/`, `/music/`, `/essays/`, writing detail pages, and `/404.html`
 - Sitemap generation
 - Draft writing exclusion from `dist`

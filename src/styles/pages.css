@@ -65,7 +65,7 @@
   .mu-nav-item:hover, .mu-nav-item.is-on { color: var(--gold); }
   .mu-nav-item:hover .mu-nav-label, .mu-nav-item.is-on .mu-nav-label { opacity: 1; transform: none; }
   .mu-nav-item.is-on .mu-nav-line { width: 40px; }
-  @media (max-width: 900px) { .mu-nav { display: none; } }
+  @media (max-width: 1160px) { .mu-nav { display: none; } }
 
   /* Hero */
   .mu-hero { position: relative; min-height: 100vh; display: flex; flex-direction: column;
@@ -148,6 +148,16 @@
       bottom: auto;
       width: clamp(35rem, 62vw, 44rem);
       transform: translateY(-12%) rotate(-5deg);
+    }
+  }
+  @media (min-width: 821px) and (max-width: 1080px) {
+    .mu-piano .mu-sec-grid {
+      grid-template-columns: minmax(0, 1.06fr) minmax(0, .94fr);
+      column-gap: .5rem;
+    }
+    .mu-piano-video {
+      width: min(100%, 22.75rem);
+      margin-left: clamp(-6.5rem, -7vw, -4.5rem);
     }
   }
   @media (min-width: 1181px) {
@@ -273,11 +283,30 @@
   .mu-timeline-text { display: block; }
   .mu-timeline-detail::before { content: " — "; }
   .mu-violin-gallery {
+    --violin-gallery-x: -50%;
     position: relative;
+    left: 50%;
     z-index: 2;
-    width: 100%;
-    max-width: 1120px;
-    margin: clamp(2.1rem, 4.5vw, 3.4rem) auto 0;
+    width: 100dvw;
+    max-width: none;
+    margin: clamp(2.1rem, 4.5vw, 3.4rem) 0 0;
+    transform: translateX(var(--violin-gallery-x));
+  }
+  .mu-violin-gallery.reveal {
+    transform: translateX(var(--violin-gallery-x)) translateY(26px);
+  }
+  .mu-violin-gallery.reveal.is-in {
+    transform: translateX(var(--violin-gallery-x));
+  }
+  @supports not (width: 100dvw) {
+    .mu-violin-gallery {
+      width: 100vw;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mu-violin-gallery.reveal {
+      transform: translateX(var(--violin-gallery-x));
+    }
   }
   .mu-violin-gallery--mobile {
     display: none;
@@ -285,7 +314,7 @@
   .mu-violin-carousel-shell {
     --violin-carousel-rail: clamp(2.75rem, 5vw, 3.35rem);
     --violin-carousel-line: rgba(240, 237, 230, .055);
-    --violin-carousel-gold-line: rgba(200, 169, 110, .34);
+    --violin-carousel-divider: var(--bg);
     position: relative;
   }
   .mu-violin-carousel {
@@ -294,6 +323,7 @@
     overflow-x: auto;
     overflow-y: hidden;
     background: rgba(240, 237, 230, .03);
+    padding-bottom: clamp(3.4rem, 4.8vw, 4.35rem);
     scrollbar-color: rgba(200, 169, 110, 0.45) transparent;
     scroll-padding-inline: 0;
     scroll-snap-type: x proximity;
@@ -306,15 +336,41 @@
     display: grid;
     aspect-ratio: 4 / 3;
     place-items: center;
-    overflow: hidden;
+    overflow: visible;
     flex: 0 0 29%;
     min-width: 0;
     margin: 0;
     color: inherit;
+    background: transparent;
+    scroll-snap-align: start;
+  }
+  .mu-violin-photo-trigger {
+    appearance: none;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+  .mu-violin-photo-trigger:focus-visible {
+    outline: 2px solid rgba(211, 178, 112, .48);
+    outline-offset: 3px;
+  }
+  .mu-violin-photo-media {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: hidden;
     background:
       radial-gradient(90% 80% at 50% 35%, rgba(211,178,112,.09), transparent 72%),
       #060605;
-    scroll-snap-align: start;
   }
   .mu-violin-photo::after {
     content: "";
@@ -324,7 +380,7 @@
     pointer-events: none;
   }
   .mu-violin-photo + .mu-violin-photo::after {
-    border-left: 1px solid var(--violin-carousel-gold-line);
+    border-left: 3px solid var(--violin-carousel-divider);
   }
   .mu-violin-photo::before {
     content: "";
@@ -334,6 +390,29 @@
     background: linear-gradient(180deg, rgba(8,8,7,0) 62%, rgba(8,8,7,.16));
     pointer-events: none;
   }
+  .mu-violin-photo-label {
+    position: absolute;
+    top: calc(100% + .65rem);
+    left: clamp(.55rem, 1vw, .85rem);
+    right: clamp(.55rem, 1vw, .85rem);
+    z-index: 4;
+    color: var(--text);
+    font-size: clamp(.84rem, 1.35vw, .96rem);
+    font-weight: 480;
+    line-height: 1.25;
+    letter-spacing: .02em;
+    text-align: left;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-.25rem);
+    transition: opacity .2s var(--ease), transform .2s var(--ease);
+  }
+  .mu-violin-photo:hover .mu-violin-photo-label,
+  .mu-violin-photo:focus-within .mu-violin-photo-label,
+  .mu-violin-photo.is-label-active .mu-violin-photo-label {
+    opacity: 1;
+    transform: translateY(0);
+  }
   .mu-violin-photo-img {
     display: block;
     width: 100%;
@@ -341,6 +420,10 @@
     object-fit: cover;
     opacity: 0;
     transition: opacity .7s var(--ease);
+  }
+  .mu-violin-photo[data-photo-id="recital-hall-goettingen"] .mu-violin-photo-img {
+    height: calc(100% + 2px);
+    transform: translateY(-1px);
   }
   .mu-violin-photo-img.is-loaded {
     opacity: .9;
@@ -353,11 +436,13 @@
   .mu-violin-carousel-control {
     position: absolute;
     top: 0;
-    bottom: 0;
+    bottom: auto;
     z-index: 3;
     display: grid;
+    height: calc(100% - clamp(3.4rem, 4.8vw, 4.35rem));
     width: var(--violin-carousel-rail);
     place-items: center;
+    box-sizing: border-box;
     border: 0;
     border-radius: 0;
     background: rgba(240, 237, 230, .28);
@@ -383,9 +468,11 @@
   }
   .mu-violin-carousel-control--left {
     left: 0;
+    padding-left: clamp(.2rem, .7vw, .5rem);
   }
   .mu-violin-carousel-control--right {
     right: 0;
+    padding-right: clamp(.2rem, .7vw, .5rem);
   }
   .mu-violin-carousel-shell[data-can-scroll-left="true"] .mu-violin-carousel-control--left,
   .mu-violin-carousel-shell[data-can-scroll-right="true"] .mu-violin-carousel-control--right {
@@ -413,15 +500,6 @@
       font-size: .92rem;
     }
     .mu-timeline-detail::before { content: none; }
-  }
-
-  @media (max-width: 1120px) {
-    .mu-violin-gallery {
-      width: 100vw;
-      max-width: none;
-      margin-right: calc(50% - 50vw);
-      margin-left: calc(50% - 50vw);
-    }
   }
 
   @media (max-width: 820px) {
@@ -496,8 +574,9 @@
       display: none;
     }
     .mu-violin-gallery--mobile {
+      --violin-gallery-x: calc(-50% + clamp(1.5rem, 6vw, 3rem));
       display: block;
-      margin: clamp(2.35rem, 10vw, 3.6rem) calc(50% - 50vw) clamp(2.1rem, 8vw, 3rem);
+      margin: clamp(3.525rem, 15vw, 5.4rem) 0 clamp(2.1rem, 8vw, 3rem);
     }
     .mu-violin-photo {
       flex-basis: 58.5%;
