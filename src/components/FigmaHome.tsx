@@ -592,8 +592,8 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
 }
 
 const socialLinks = [
-  { href: profile.github, Icon: GitHubIcon, label: "GitHub" },
   { href: profile.linkedin, Icon: LinkedInIcon, label: "LinkedIn" },
+  { href: profile.github, Icon: GitHubIcon, label: "GitHub" },
   { href: `mailto:${profile.email}`, Icon: Mail, label: "Email" }
 ];
 
@@ -606,8 +606,8 @@ type CarouselScrollState = {
 
 function IntroContactRow() {
   const links = [
-    { href: profile.github, label: "GitHub" },
     { href: profile.linkedin, label: "LinkedIn" },
+    { href: profile.github, label: "GitHub" },
     { href: `mailto:${profile.email}`, label: "Email" }
   ];
 

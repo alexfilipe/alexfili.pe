@@ -121,9 +121,7 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
               <span>{project.link.label}</span>
               <ArrowUpRight size={15} strokeWidth={2.4} />
             </a>
-          ) : (
-            <p className="pp-nolink">No public page — archived work.</p>
-          )}
+          ) : null}
         </aside>
       </div>
     </article>
@@ -233,8 +231,8 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
               <span>San Francisco, CA</span>
             </div>
             <nav className="page-foot-links" aria-label="Social links">
-              <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
               <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
               <a href={`mailto:${profile.email}`}>Email</a>
             </nav>
           </footer>

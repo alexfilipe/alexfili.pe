@@ -71,8 +71,8 @@ export default function WorkIndex() {
             <span>San Francisco, CA</span>
           </div>
           <nav className="page-foot-links" aria-label="Social links">
-            <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
             <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
             <a href={`mailto:${profile.email}`}>Email</a>
           </nav>
         </footer>

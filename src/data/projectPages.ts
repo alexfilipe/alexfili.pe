@@ -36,7 +36,7 @@ export type ProjectPage = {
   tags: string[];
   sections?: ProjectSection[];
   meta?: ProjectMeta;
-  link: ProjectLink | null;
+  link?: ProjectLink | null;
 };
 
 export const projectPages: ProjectPage[] = [
@@ -75,17 +75,17 @@ export const projectPages: ProjectPage[] = [
     meta: {
       Role: "Co-founder & sole engineer",
       Timeline: "2015 — 2018",
-      Stack: ["PHP", "JavaScript", "MySQL"],
+      Stack: ["PHP", "JavaScript", "jQuery", "MySQL"],
       Scale: "20,000+ students reached",
       Status: ["Archived", "Handed off"]
     },
-    link: { label: "Visit inspirasonho.com.br", href: "https://www.inspirasonho.com.br/" },
-    tags: ["Django", "PostgreSQL", "Search", "Email pipelines", "Independent"]
+    // link: { label: "Visit inspirasonho.com.br", href: "https://www.inspirasonho.com.br/" },
+    tags: ["Full-Stack", "Databases", "SEO"]
   },
   {
     id: "home-assistant",
     name: "Home Assistant Extensions",
-    focus: ["Open source", "Systems"],
+    focus: ["Systems", "Automation"],
     period: "2025 — Present",
     tagline: "Automation you can actually read.",
     lede: "A set of open-source Home Assistant extensions for legible, local-first, human-in-the-loop automation — built and maintained solo, in the open.",
@@ -108,9 +108,9 @@ export const projectPages: ProjectPage[] = [
       Timeline: "2025 — Present",
       Stack: ["Python", "Home Assistant"],
       Focus: ["Local-first", "Auditable"],
-      Status: ["Active", "Open-source planned"]
+      Status: ["Active", "Open-source (planned)"]
     },
-    link: { label: "View on GitHub", href: "https://github.com/alexfilipe" },
+    // link: { label: "View on GitHub", href: "https://github.com/alexfilipe" },
     tags: ["Python", "Home Assistant", "MQTT", "Local-first", "AI-first development"]
   },
   {
@@ -135,9 +135,9 @@ export const projectPages: ProjectPage[] = [
       }
     ],
     meta: {
-      Role: "Co-creator & engineer",
+      Role: "Co-creator & sole engineer",
       Timeline: "2014 — 2015",
-      Stack: ["Java", "Web", "SQL", "Statistical ML"],
+      Stack: ["Java", "Web", "MySQL", "ML models"],
       Surfaces: "Desktop + web clients",
       Status: "Archived"
     },

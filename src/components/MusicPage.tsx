@@ -1,13 +1,16 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { Play } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import {
+  musicMovements,
+  musicPageContent,
   musicHeroStats,
   pianoStats,
   pianoRecordings,
   repertoireComposers,
   violinTimeline,
-  conductingPremiere
+  conductingPremiere,
+  type RichText
 } from "@/data/musicContent";
 import { profile } from "@/data/profile";
 
@@ -28,7 +31,8 @@ type SoundFieldProps = {
 function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const pluck = useRef({ y: -1, t: 0 });
+  const pluck = useRef({ x: -1, y: -1, t: 8, force: 0, dragging: false });
+  const stringInfluence = useRef<number[]>([]);
 
   useEffect(() => {
     const wrap = wrapRef.current;
@@ -59,48 +63,97 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
     window.addEventListener("resize", resize);
 
     const lines = variant === "strings" ? 9 : 6;
+    if (variant === "strings") {
+      stringInfluence.current = Array.from({ length: lines }, (_, index) => stringInfluence.current[index] ?? 0);
+    }
     const draw = () => {
       ctx.clearRect(0, 0, W, H);
       for (let k = 0; k < lines; k++) {
         const base = H * (0.5 + (k - lines / 2) * (variant === "strings" ? 0.085 : 0.11));
+        let stringGlow = 0;
+        if (variant === "strings") {
+          const pl = pluck.current;
+          const immediateY = pl.y > 0 ? Math.exp(-Math.pow((base - pl.y) / 44, 2)) : 0;
+          const lingerY = Math.max(immediateY, (stringInfluence.current[k] ?? 0) * 0.96);
+          stringInfluence.current[k] = lingerY;
+          stringGlow = lingerY * Math.exp(-pl.t * 0.85);
+        }
         ctx.beginPath();
         for (let x = 0; x <= W; x += 8) {
           const px = x / W;
           let y: number;
           if (variant === "strings") {
             const pl = pluck.current;
-            const near = pl.y > 0 ? Math.exp(-Math.pow((base - pl.y) / 26, 2)) : 0;
-            const decay = Math.exp(-pl.t * 2.2);
-            const amp = 3 + near * 26 * decay;
-            y = base + Math.sin(px * 9 + t * 3 + k) * amp * Math.sin(px * Math.PI);
+            const nearY = stringInfluence.current[k] ?? 0;
+            const nearX = pl.x > 0 ? Math.exp(-Math.pow((x - pl.x) / 210, 2)) : 0.35;
+            const decay = Math.exp(-pl.t * 1.35);
+            const force = pl.dragging ? Math.max(pl.force, 0.65) : pl.force;
+            const amp = 2.5 + nearY * (12 + force * 12) * decay * (0.25 + nearX);
+            const pull = nearY * nearX * force * 6 * decay;
+            y = base + Math.sin(px * 10 + t * 4.2 + k) * amp * Math.sin(px * Math.PI) + pull;
           } else {
-            const amp = 26 + k * 10;
+            const amp = 12 + k * 4;
             y = base + Math.sin(px * 3.4 + t * 0.9 + k * 0.7) * amp + Math.sin(px * 7 - t * 0.6 + k) * (amp * 0.35);
           }
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
-        const a = variant === "strings" ? 0.16 + k * 0.02 : 0.06 + k * 0.02;
+        const a = variant === "strings" ? 0.08 + k * 0.012 + stringGlow * 0.18 : 0.11 + k * 0.035;
         ctx.strokeStyle = C(a);
-        ctx.lineWidth = variant === "strings" ? 0.8 : 1;
+        ctx.lineWidth = variant === "strings" ? 1 : 1;
         ctx.stroke();
       }
       t += reduce ? 0 : 0.016;
       pluck.current.t += reduce ? 1 : 0.016;
+      if (variant === "strings") pluck.current.force *= 0.94;
       if (!reduce) id = requestAnimationFrame(draw);
     };
     draw();
 
+    let lastX = -1;
+    let lastY = -1;
     const onMove = (e: PointerEvent) => {
       if (variant !== "strings") return;
       const r = canvas.getBoundingClientRect();
-      pluck.current = { y: e.clientY - r.top, t: 0 };
+      const x = e.clientX - r.left;
+      const y = e.clientY - r.top;
+      const distance = lastX > -1 ? Math.hypot(x - lastX, y - lastY) : 0;
+      lastX = x;
+      lastY = y;
+      pluck.current = {
+        x,
+        y,
+        t: 0,
+        force: Math.min(1.2, Math.max(pluck.current.force, 0.3 + distance / 75)),
+        dragging: pluck.current.dragging
+      };
     };
-    if (variant === "strings") canvas.addEventListener("pointermove", onMove);
+    const onDown = (e: PointerEvent) => {
+      if (variant !== "strings") return;
+      pluck.current.dragging = true;
+      pluck.current.force = 1;
+      onMove(e);
+    };
+    const onUp = () => {
+      if (variant !== "strings") return;
+      pluck.current.dragging = false;
+    };
+    const target = variant === "strings" ? wrap.parentElement ?? canvas : canvas;
+    if (variant === "strings") {
+      target.addEventListener("pointermove", onMove);
+      target.addEventListener("pointerdown", onDown);
+      window.addEventListener("pointerup", onUp);
+      target.addEventListener("pointerleave", onUp);
+    }
 
     return () => {
       window.removeEventListener("resize", resize);
-      if (variant === "strings") canvas.removeEventListener("pointermove", onMove);
+      if (variant === "strings") {
+        target.removeEventListener("pointermove", onMove);
+        target.removeEventListener("pointerdown", onDown);
+        window.removeEventListener("pointerup", onUp);
+        target.removeEventListener("pointerleave", onUp);
+      }
       cancelAnimationFrame(id);
     };
   }, [variant, color]);
@@ -149,16 +202,18 @@ function Reveal({ children, className = "", as = "div" }: RevealProps) {
   );
 }
 
-const SECTIONS = [
-  { id: "conducting", label: "Conducting" },
-  { id: "piano", label: "Piano" },
-  { id: "violin", label: "Violin" }
-];
+const conductingMovement = musicMovements.find((movement) => movement.id === "conducting")!;
+const pianoMovement = musicMovements.find((movement) => movement.id === "piano")!;
+const violinMovement = musicMovements.find((movement) => movement.id === "violin")!;
 
-function SectionNav({ active }: { active: string }) {
+function SectionNav({ active, visible }: { active: string; visible: boolean }) {
   return (
-    <nav className="mu-nav" aria-label="Movements">
-      {SECTIONS.map((s) => (
+    <nav
+      className={"mu-nav" + (visible ? " is-visible" : "")}
+      aria-label={musicPageContent.sectionNavLabel}
+      aria-hidden={!visible}
+    >
+      {musicMovements.map((s) => (
         <a key={s.id} href={`#${s.id}`} className={"mu-nav-item" + (active === s.id ? " is-on" : "")}>
           <span className="mu-nav-line" />
           <span className="mu-nav-label">{s.label}</span>
@@ -168,8 +223,29 @@ function SectionNav({ active }: { active: string }) {
   );
 }
 
+function RenderRichText({ value }: { value: RichText }) {
+  if (typeof value === "string") return <>{value}</>;
+
+  return (
+    <>
+      {value.map((part, index) =>
+        typeof part === "string" ? (
+          part
+        ) : "bold" in part ? (
+          <b key={`${part.bold}-${index}`}>{part.bold}</b>
+        ) : "emphasis" in part ? (
+          <em key={`${part.emphasis}-${index}`}>{part.emphasis}</em>
+        ) : (
+          <sup key={`${part.sup}-${index}`}>{part.sup}</sup>
+        )
+      )}
+    </>
+  );
+}
+
 export default function MusicPage() {
   const [active, setActive] = useState("conducting");
+  const [showSectionNav, setShowSectionNav] = useState(false);
 
   useEffect(() => {
     const secs = Array.from(document.querySelectorAll<HTMLElement>(".mu-sec"));
@@ -181,27 +257,41 @@ export default function MusicPage() {
     return () => io.disconnect();
   }, []);
 
+  useEffect(() => {
+    const updateSectionNav = () => setShowSectionNav(window.scrollY > 24);
+    updateSectionNav();
+    window.addEventListener("scroll", updateSectionNav, { passive: true });
+    return () => window.removeEventListener("scroll", updateSectionNav);
+  }, []);
+
   return (
     <div className="mu">
       <SiteNav
         links={[
-          { label: "Work", href: "/projects" },
-          { label: "Music", href: "/music", current: true }
+          { label: musicPageContent.nav.work, href: "/projects" },
+          { label: musicPageContent.nav.music, href: "/music", current: true }
         ]}
       />
-      <SectionNav active={active} />
+      <SectionNav active={active} visible={showSectionNav} />
 
       {/* Hero */}
       <header className="mu-hero">
         <SoundField variant="flow" />
         <div className="mu-hero-inner">
-          <span className="mu-eyebrow">Violin · Piano · Conducting</span>
-          <h1 className="mu-hero-title">Music</h1>
-          <p className="mu-hero-lede">
-            The discipline that taught me how to listen. Three instruments, one lifelong question —{" "}
-            <em>what makes structure feel meaningful</em> — worked out in sound before I ever worked it out in
-            systems.
-          </p>
+          <span className="mu-eyebrow mu-eyebrow-list">
+            {musicPageContent.hero.eyebrow.map((item, index) => (
+              <Fragment key={item}>
+                {index > 0 ? <span aria-hidden="true">·</span> : null}
+                <span>{item}</span>
+              </Fragment>
+            ))}
+          </span>
+          <h1 className="mu-hero-title">{musicPageContent.hero.title}</h1>
+          {musicPageContent.hero.lede.map((paragraph, index) => (
+            <p className="mu-hero-lede" key={index}>
+              <RenderRichText value={paragraph} />
+            </p>
+          ))}
           <div className="mu-hero-stats">
             {musicHeroStats.map((s) => (
               <span key={s.label}>
@@ -211,7 +301,7 @@ export default function MusicPage() {
           </div>
         </div>
         <a className="mu-scroll-cue" href="#conducting">
-          <span>Begin</span>
+          <span>{musicPageContent.hero.scrollCue}</span>
           <span className="mu-scroll-dot" />
         </a>
       </header>
@@ -219,36 +309,31 @@ export default function MusicPage() {
       {/* Conducting */}
       <section id="conducting" className="mu-sec mu-conducting">
         <div className="mu-sec-mark" aria-hidden="true">
-          I
+          {conductingMovement.numeral}
         </div>
         <div className="mu-sec-grid">
           <div className="mu-sec-copy">
             <Reveal as="span" className="mu-kicker">
-              Movement I
+              {conductingMovement.kicker}
             </Reveal>
             <Reveal as="h2" className="mu-sec-title">
-              Conducting
+              {conductingMovement.title}
             </Reveal>
             <Reveal as="p" className="mu-lede">
-              In 2018 I set out after one of the oldest dreams I had — to stand in front of a full orchestra and
-              shape many voices into one.
+              <RenderRichText value={conductingMovement.lede} />
             </Reveal>
-            <Reveal as="p" className="mu-body">
-              That dream became my <b>conducting première</b> with the Amherst Symphony Orchestra in spring 2020 —
-              the Schumann Piano Concerto in A minor, Op. 54, with soloist Faith Wen. It closed my senior year the
-              way I most wanted it to.
-            </Reveal>
-            <Reveal as="p" className="mu-body">
-              Under the mentoring of Mark Swanson, the orchestra's director, I learned the one lesson that keeps me
-              coming back: you never stop learning how music works.
-            </Reveal>
+            {conductingMovement.body.map((paragraph, index) => (
+              <Reveal as="p" className="mu-body" key={index}>
+                <RenderRichText value={paragraph} />
+              </Reveal>
+            ))}
           </div>
           <Reveal className="mu-video">
             <div className="mu-video-frame">
               <iframe
                 loading="lazy"
                 src={`https://www.youtube-nocookie.com/embed/${conductingPremiere.youtubeId}`}
-                title="Conducting première — Schumann Piano Concerto in A minor"
+                title={conductingPremiere.title}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
@@ -261,24 +346,24 @@ export default function MusicPage() {
       {/* Piano */}
       <section id="piano" className="mu-sec mu-piano">
         <div className="mu-sec-mark" aria-hidden="true">
-          II
+          {pianoMovement.numeral}
         </div>
         <div className="mu-sec-grid">
           <div className="mu-sec-copy">
             <Reveal as="span" className="mu-kicker">
-              Movement II
+              {pianoMovement.kicker}
             </Reveal>
             <Reveal as="h2" className="mu-sec-title">
-              Piano
+              {pianoMovement.title}
             </Reveal>
             <Reveal as="p" className="mu-lede">
-              In 2015, with almost no experience, I decided to learn the piano — and gave it the kind of hours most
-              people reserve for a first language.
+              <RenderRichText value={pianoMovement.lede} />
             </Reveal>
-            <Reveal as="p" className="mu-body">
-              Under Chonghyo Shin I built a technique in four years I never thought I'd reach, and performed my{" "}
-              <b>Senior Recital</b> in March 2020. The recordings below are from those years.
-            </Reveal>
+            {pianoMovement.body.map((paragraph, index) => (
+              <Reveal as="p" className="mu-body" key={index}>
+                <RenderRichText value={paragraph} />
+              </Reveal>
+            ))}
             <Reveal className="mu-stats">
               {pianoStats.map((s) => (
                 <span key={s.label}>
@@ -325,47 +410,51 @@ export default function MusicPage() {
       <section id="violin" className="mu-sec mu-violin">
         <SoundField variant="strings" color={[201, 156, 96]} />
         <div className="mu-sec-mark" aria-hidden="true">
-          III
+          {violinMovement.numeral}
         </div>
         <div className="mu-sec-grid">
           <div className="mu-sec-copy">
             <Reveal as="span" className="mu-kicker">
-              Movement III
+              {violinMovement.kicker}
             </Reveal>
             <Reveal as="h2" className="mu-sec-title">
-              Violin
+              {violinMovement.title}
             </Reveal>
             <Reveal as="p" className="mu-lede">
-              My first musical language. I picked up the violin at three and have never really put it down.
+              <RenderRichText value={violinMovement.lede} />
             </Reveal>
-            <Reveal as="p" className="mu-body">
-              It carried me from a church philharmonic in Natal at ten, to music school at the Federal University of
-              Rio Grande do Norte in 2011, to the Amherst Symphony Orchestra — where I've played since 2015, a few
-              chamber programs a season among them.
-            </Reveal>
+            {violinMovement.body.map((paragraph, index) => (
+              <Reveal as="p" className="mu-body" key={index}>
+                <RenderRichText value={paragraph} />
+              </Reveal>
+            ))}
           </div>
           <Reveal as="ol" className="mu-timeline">
             {violinTimeline.map((e) => (
               <li key={e.when}>
                 <b>{e.when}</b>
-                <span>{e.what}</span>
+                <span className="mu-timeline-text">
+                  <span className="mu-timeline-main"><RenderRichText value={e.what.main} /></span>
+                  {e.what.detail ? (
+                    <span className="mu-timeline-detail"><RenderRichText value={e.what.detail} /></span>
+                  ) : null}
+                </span>
               </li>
             ))}
           </Reveal>
         </div>
-        <p className="mu-strings-hint">Move across the strings</p>
       </section>
 
       <footer className="mu-foot">
         <div className="page-foot-copy">
-          <span>© 2026 Álex Filipe Santos</span>
+          <span>{musicPageContent.footer.copyright}</span>
           <span className="page-foot-sep">·</span>
-          <span>San Francisco, CA</span>
+          <span>{musicPageContent.footer.location}</span>
         </div>
-        <nav className="page-foot-links" aria-label="Social links">
-          <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a href={`mailto:${profile.email}`}>Email</a>
+        <nav className="page-foot-links" aria-label={musicPageContent.footer.socialLinksLabel}>
+          <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">{musicPageContent.footer.linkedin}</a>
+          <a href={profile.github} target="_blank" rel="noopener noreferrer">{musicPageContent.footer.github}</a>
+          <a href={`mailto:${profile.email}`}>{musicPageContent.footer.email}</a>
         </nav>
       </footer>
     </div>

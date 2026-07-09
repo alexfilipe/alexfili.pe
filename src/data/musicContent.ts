@@ -14,10 +14,101 @@ export type Recording = {
   youtubeId: string;
 };
 
+export type RichTextPart = string | { bold: string } | { emphasis: string } | { sup: string };
+export type RichText = string | readonly RichTextPart[];
+
 export type TimelineEntry = {
   when: string;
-  what: string;
+  what: {
+    main: RichText;
+    detail?: RichText;
+  };
 };
+
+export type MusicMovement = {
+  id: "conducting" | "piano" | "violin";
+  label: string;
+  numeral: string;
+  kicker: string;
+  title: string;
+  lede: RichText;
+  body: RichText[];
+};
+
+export const musicPageContent = {
+  nav: {
+    work: "Work",
+    music: "Music"
+  },
+  sectionNavLabel: "Movements",
+  hero: {
+    eyebrow: ["Violin", "Piano", "Conducting"],
+    title: "Music",
+    lede: [
+      "The discipline that taught me how listen deeply, perform with intention, and turn structure into expression.",
+      [
+        "Three instruments, one lifelong question — ",
+        { emphasis: "what makes structure feel meaningful" },
+        " — worked out in sound and interpretation before I ever worked it out in systems."
+      ]
+    ],
+    scrollCue: "Prélude"
+  },
+  footer: {
+    copyright: "© 2026 Álex Filipe Santos",
+    socialLinksLabel: "Social links",
+    location: "San Francisco, CA",
+    github: "GitHub",
+    linkedin: "LinkedIn",
+    email: "Email"
+  }
+} as const;
+
+export const musicMovements: MusicMovement[] = [
+  {
+    id: "conducting",
+    label: "Conducting",
+    numeral: "I",
+    kicker: "Movement I",
+    title: "Conducting",
+    lede: "In 2018, I began following one of the oldest dreams I had as a musician: to stand in front of a full orchestra and shape many voices into a cohesive whole.",
+    body: [
+      [
+        "That dream became real in spring 2020, when I made my ",
+        { bold: "conducting première" },
+        " with the Amherst Symphony Orchestra, leading Schumann’s Piano Concerto in A minor, Op. 54, with Faith Wen as soloist. To close my senior year by conducting the orchestra I had been part of for four years felt deeply personal — stepping into the music from the other side."
+      ],
+      "With the mentorship of Mark Swanson, the orchestra’s director, I learned not only to study a score and lead through gestures, but to rehearse a full group of musicians — to listen across sections, make decisions in real time, and guide a collective interpretation. It remains one of the most complex musical achievements I have pursued, and one of the clearest reminders that you never stop learning how music works."
+    ]
+  },
+  {
+    id: "piano",
+    label: "Piano",
+    numeral: "II",
+    kicker: "Movement II",
+    title: "Piano",
+    lede: "In 2015, with almost no experience, I decided to learn the piano — and gave it the kind of hours most people reserve for a first language.",
+    body: [
+      [
+        "Under Chonghyo Shin I built a technique in four years I never thought I'd reach, and performed my ",
+        { bold: "Senior Recital" },
+        " in March 2020. The recordings below are from those years."
+      ]
+    ]
+  },
+  {
+    id: "violin",
+    label: "Violin",
+    numeral: "III",
+    kicker: "Movement III",
+    title: "Violin",
+    lede: "My first musical language. I picked up the violin at three and have never really put it down.",
+    body: [
+      "It carried me from a church philharmonic in Natal at ten, to the conservatory at the Federal University of Rio Grande do Norte in 2011, to the Amherst Symphony Orchestra, where I played throughout my college years and led the second violin section, alongside a few chamber programs each season.",
+      "In San Francisco, it continues through string quartets, music groups, and recitals — keeping chamber music present in my life in a more intimate, living way."
+    ]
+  }
+];
 
 export const musicHeroStats: HeroStat[] = [
   { value: "25", label: "years, violin" },
@@ -26,9 +117,9 @@ export const musicHeroStats: HeroStat[] = [
 ];
 
 export const pianoStats: HeroStat[] = [
-  { value: "10", label: "composers" },
-  { value: "20+", label: "pieces" },
-  { value: "5", label: "recitals" }
+  { value: "16+", label: "composers" },
+  { value: "30+", label: "pieces" },
+  { value: "9", label: "recitals" }
 ];
 
 export const pianoRecordings: Recording[] = [
@@ -41,25 +132,35 @@ export const pianoRecordings: Recording[] = [
 ];
 
 export const repertoireComposers: string[] = [
+  "Mozart",
+  "Chopin",
   "Bach",
   "Beethoven",
-  "Chopin",
   "Debussy",
-  "Mendelssohn",
-  "Mozart",
   "Schumann",
-  "Shostakovich"
+  "Brahms",
+  "Haydn",
+  "Mendelssohn",
+  "Schubert",
+  "Scarlatti",
+  "Shostakovich",
+  "Glass",
+  "Nyman",
+  "Satie",
+  "Sibelius"
 ];
 
 export const violinTimeline: TimelineEntry[] = [
-  { when: "Age 3", what: "First lessons — Natal, Brazil" },
-  { when: "Age 10", what: "Genesis Evangelical Philharmonic" },
-  { when: "2011", what: "Music school, UFRN — Prof. Ronedilk Dantas" },
-  { when: "2015 →", what: "Amherst Symphony Orchestra" }
+  { when: "Age 3", what: { main: "First lessons", detail: "Natal, Brazil" } },
+  { when: "Age 10", what: { main: "Genesis Philharmonic Orchestra", detail: "Natal, Brazil" } },
+  { when: "2011", what: { main: "Conservatory lessons", detail: "Prof. Ronedilk Dantas" } },
+  { when: "2015", what: { main: "Amherst Symphony Orchestra", detail: ["Principal 2", { sup: "nd" }, " Violinist"] } },
+  { when: "2026—", what: { main: "String Quartets & Recitals", detail: "San Francisco" } }
 ];
 
 // The conducting première embed on the Conducting movement.
 export const conductingPremiere = {
   youtubeId: "XrIh9qe9_MI",
-  caption: "Première · Amherst Symphony Orchestra · Spring 2020"
+  caption: "Première · Amherst Symphony Orchestra · Spring 2020",
+  title: "Conducting première — Schumann Piano Concerto in A minor"
 };
