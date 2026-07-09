@@ -973,6 +973,19 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
   line-height: 1.5;
 }
 
+/* The home page loads global.css but not pages.css, so re-declare the shared
+   copyright spacing here to keep the "·" separator from collapsing. */
+.figma-home-copyright .page-foot-copy {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+}
+
+.figma-home-copyright .page-foot-sep {
+  opacity: 0.7;
+}
+
 .skip-link {
   position: fixed;
   top: 1rem;
