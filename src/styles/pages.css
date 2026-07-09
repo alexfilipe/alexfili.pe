@@ -30,6 +30,7 @@
 
   --glass-bg: rgba(8, 8, 7, 0.6);
   --glass-blur: blur(18px) saturate(140%);
+  --mu-marquee-gap: 3rem;
 
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --dur-fast: 180ms;
@@ -150,19 +151,32 @@
 
   /* Repertoire marquee */
   .mu-marquee { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-    margin: clamp(.8rem, 1.5vw, 1.2rem) 0 0; padding: clamp(.85rem, 1.8vw, 1.25rem) 0; background: var(--card-wash); }
+    width: 100vw; margin: var(--mu-marquee-gap) calc(50% - 50vw); padding: clamp(.85rem, 1.8vw, 1.25rem) 0; background: var(--card-wash); }
   .mu-marquee-track { display: inline-flex; align-items: center; white-space: nowrap;
     animation: mu-marquee 34s linear infinite; }
   .mu-marquee-track span { display: inline-flex; align-items: center; font-family: var(--display);
-    font-size: clamp(1.25rem, 2.3vw, 1.75rem); font-weight: 500; color: rgba(240,237,230,.5); }
-  .mu-marquee-track i { color: var(--gold); font-style: normal; margin: 0 clamp(1.2rem, 3vw, 2.4rem); font-size: .7em; opacity: .8; }
+    font-size: clamp(1.25rem, 2.3vw, 1.75rem); font-weight: 400; color: rgba(240,237,230,.36); }
+  .mu-marquee-track i { color: var(--gold); font-style: normal; margin: 0 clamp(.85rem, 2.2vw, 1.65rem); font-size: .7em; opacity: .48; }
   @keyframes mu-marquee { to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .mu-marquee-track { animation: none; } }
+  @media (min-width: 821px) {
+    .mu-marquee {
+      margin-top: 4.5rem;
+    }
+    .mu-marquee-track span {
+      font-size: clamp(1.1rem, 1.9vw, 1.55rem);
+    }
+    .mu-marquee-track i {
+      font-size: .42em;
+    }
+  }
+  .mu-section-separator { height: 1px; margin-top: clamp(4rem, 8vw, 7rem); background: var(--line); }
+  .mu-section-separator + .mu-sec { border-top: 0; }
 
   /* Violin timeline */
   .mu-violin { padding-top: clamp(4.5rem, 9vw, 7rem); }
   .mu-timeline { list-style: none; margin: 0; padding: 0; }
-  .mu-timeline li { position: relative; padding: 0 0 2.5rem 2.2rem; border-left: 1px solid var(--line); }
+  .mu-timeline li { position: relative; padding: 0 0 2.5rem 1.5rem; border-left: 1px solid var(--line); }
   .mu-timeline li:last-child { padding-bottom: 0; }
   .mu-timeline li::before { content: ""; position: absolute; left: -4.5px; top: calc(1.6rem * 1.1 / 2); transform: translateY(-50%);
     width: 8px; height: 8px; border-radius: 999px; background: var(--gold); }
@@ -187,7 +201,7 @@
     .mu-hero {
       min-height: 100svh;
       justify-content: center;
-      padding-top: 5.5rem;
+      padding-top: 4.6875rem;
       padding-bottom: 7rem;
     }
     @supports (height: 100dvh) {
@@ -195,11 +209,16 @@
     }
 
     .mu-sec-grid { grid-template-columns: 1fr; }
+    .mu-sec-title { font-size: clamp(3.35rem, 10vw, 5rem); }
     .mu-video { margin-top: 0; }
     .mu-piano-keys { height: 200px; order: -1; }
     .mu-recs a { grid-template-columns: 2.2rem 1fr; }
     .mu-rec-date { grid-column: 2; padding-left: 0; }
-    .mu-marquee-track span { font-size: 1.7rem; }
+    .mu-marquee-track span { font-size: clamp(1.05rem, 4.8vw, 1.42rem); }
+    .mu-marquee-track i {
+      margin: 0 clamp(.6rem, 3vw, 1rem);
+      font-size: .45em;
+    }
     .mu-scroll-cue {
       position: absolute;
       left: 50%;
@@ -222,9 +241,19 @@
     }
   }
 
-  @media (max-width: 580px) and (max-height: 700px) {
+  @media (max-height: 720px) {
     .mu-hero {
-      padding-bottom: 9rem;
+      padding-top: 5.4375rem;
+      padding-bottom: 7.75rem;
+    }
+    .mu-hero-inner {
+      transform: none;
+    }
+    .mu-scroll-cue {
+      bottom: 1rem;
+    }
+    .mu-scroll-dot {
+      height: 22px;
     }
   }
 

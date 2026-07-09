@@ -874,6 +874,8 @@ export default function FigmaHome() {
   const [isLoading, setIsLoading] = useState(true);
   const [showLoader, setShowLoader] = useState(true);
   const [showNav, setShowNav] = useState(false);
+  const heroTitleRef = useRef<HTMLHeadingElement>(null);
+  const artifactWrapRef = useRef<HTMLDivElement>(null);
   const pianoWrapRef = useRef<HTMLDivElement>(null);
 
   const handleArtifactReady = useCallback(() => {
@@ -884,9 +886,14 @@ export default function FigmaHome() {
     let lastY = window.scrollY;
     const onScroll = () => {
       const y = window.scrollY;
+      const isMobile = window.innerWidth <= 767;
+      const heroTitleRect = heroTitleRef.current?.getBoundingClientRect();
+      const artifactRect = artifactWrapRef.current?.getBoundingClientRect();
+      const revealRect = isMobile ? artifactRect : heroTitleRect;
+      const hasPassedRevealTarget = revealRect ? revealRect.bottom <= 0 : y > 260;
       const pianoRect = pianoWrapRef.current?.getBoundingClientRect();
       const pianoIsVisible = pianoRect ? pianoRect.top < window.innerHeight && pianoRect.bottom > 0 : false;
-      if (y <= 260) {
+      if (!hasPassedRevealTarget) {
         setShowNav(false);
       } else if (y > lastY + 2) {
         setShowNav(true);
@@ -936,7 +943,7 @@ export default function FigmaHome() {
       <div className="figma-home-main" id="top">
         <section className="figma-hero" aria-labelledby="hero-title">
           <div className="figma-hero-copy">
-            <h1 id="hero-title" className="figma-hero-title">
+            <h1 id="hero-title" ref={heroTitleRef} className="figma-hero-title">
               Álex
               <br />
               Filipe
@@ -954,7 +961,7 @@ export default function FigmaHome() {
             </p>
           </div>
 
-          <div className="figma-artifact-wrap" aria-label="Interactive intelligence geometry">
+          <div ref={artifactWrapRef} className="figma-artifact-wrap" aria-label="Interactive intelligence geometry">
             <div className="figma-artifact-scale">
               <div className="figma-artifact-inner-scale">
                 <GeometricArtifact onReady={handleArtifactReady} />

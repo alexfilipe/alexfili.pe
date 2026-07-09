@@ -42,13 +42,17 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
     if (!ctx) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const finePointer = window.matchMedia("(pointer: fine)").matches;
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    const mobileViewport = window.matchMedia("(max-width: 820px)").matches;
+    const hoverReactive = finePointer && !mobileViewport;
+    const scrollReactive = variant === "strings" && !hoverReactive;
     let W = 0;
     let H = 0;
     const dpr = window.devicePixelRatio || 1;
     let id = 0;
     let t = 0;
     const C = (a: number) => `rgba(${color[0]},${color[1]},${color[2]},${a})`;
+    const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
     const resize = () => {
       const r = wrap.getBoundingClientRect();
@@ -67,17 +71,70 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
     if (variant === "strings") {
       stringInfluence.current = Array.from({ length: lines }, (_, index) => stringInfluence.current[index] ?? 0);
     }
+    let lastX = -1;
+    let lastY = -1;
+    let lastScrollY = window.scrollY;
+    let lastScrollAt = performance.now();
+    let lastGesture = { x: -1, y: -1, at: 0 };
+    const rememberGesture = (clientX: number, clientY: number) => {
+      lastGesture = { x: clientX, y: clientY, at: performance.now() };
+    };
+    const updateScrollPluck = () => {
+      if (!scrollReactive || reduce || W <= 0 || H <= 0) return;
+      const section = wrap.parentElement ?? wrap;
+      const sectionRect = section.getBoundingClientRect();
+      const canvasRect = canvas.getBoundingClientRect();
+      const viewportH = window.innerHeight || document.documentElement.clientHeight;
+      const scrollY = window.scrollY;
+      const now = performance.now();
+
+      if (sectionRect.bottom < 0 || sectionRect.top > viewportH) {
+        lastScrollY = scrollY;
+        lastScrollAt = now;
+        return;
+      }
+
+      const elapsed = Math.max(16, now - lastScrollAt);
+      const scrollDelta = Math.abs(scrollY - lastScrollY);
+      if (scrollDelta < 0.5) return;
+
+      const progress = clamp((viewportH - sectionRect.top) / (viewportH + sectionRect.height), 0, 1);
+      const hasFreshGesture = now - lastGesture.at < 600 && lastGesture.x >= 0 && lastGesture.y >= 0;
+      const y = clamp((hasFreshGesture ? lastGesture.y : viewportH * 0.5) - canvasRect.top, H * 0.08, H * 0.92);
+      const x = hasFreshGesture ? clamp(lastGesture.x - canvasRect.left, W * 0.08, W * 0.92) : W * (0.14 + progress * 0.72);
+      const force = clamp(0.7 + (scrollDelta / elapsed) * 7, 0.7, 1.7);
+
+      lastScrollY = scrollY;
+      lastScrollAt = now;
+      lastX = x;
+      lastY = y;
+      pluck.current = { x, y, t: 0, force: Math.max(pluck.current.force, force), dragging: false };
+    };
     const draw = () => {
+      updateScrollPluck();
       ctx.clearRect(0, 0, W, H);
-      for (let k = 0; k < lines; k++) {
-        const base = H * (0.5 + (k - lines / 2) * (variant === "strings" ? 0.085 : 0.11));
+      const drawLines = variant === "strings" && !hoverReactive ? Math.max(12, Math.ceil(H / 90) + 2) : lines;
+      if (variant === "strings" && stringInfluence.current.length !== drawLines) {
+        stringInfluence.current = Array.from({ length: drawLines }, (_, index) => stringInfluence.current[index] ?? 0);
+      }
+      const timelineEnd = !hoverReactive
+        ? (wrap.parentElement ?? wrap).querySelector(".mu-timeline li:last-child")
+        : null;
+      const timelineEndRect = timelineEnd?.getBoundingClientRect();
+      const canvasRect = canvas.getBoundingClientRect();
+      const mobileStringEnd = timelineEndRect
+        ? clamp((timelineEndRect.bottom - canvasRect.top - 6) / H, 0.72, 0.92)
+        : 0.92;
+      for (let k = 0; k < drawLines; k++) {
+        const mobileStringBase = drawLines > 1 ? 0.02 + (k / (drawLines - 1)) * (mobileStringEnd - 0.02) : 0.5;
+        const base = H * (variant === "strings" && !hoverReactive ? mobileStringBase : 0.5 + (k - lines / 2) * (variant === "strings" ? 0.085 : 0.11));
         let stringGlow = 0;
         if (variant === "strings") {
           const pl = pluck.current;
-          const hoverRadius = finePointer ? 76 : 44;
+          const hoverRadius = hoverReactive ? 76 : 44;
           const immediateY = pl.y > 0 ? Math.exp(-Math.pow((base - pl.y) / hoverRadius, 2)) : 0;
           const previousY = stringInfluence.current[k] ?? 0;
-          const easedY = finePointer ? immediateY : previousY + (immediateY - previousY) * 0.12;
+          const easedY = hoverReactive ? immediateY : previousY + (immediateY - previousY) * 0.12;
           const lingerY = Math.max(easedY, previousY * 0.96);
           stringInfluence.current[k] = lingerY;
           stringGlow = lingerY * Math.exp(-pl.t * 0.75);
@@ -92,10 +149,10 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
             const nearX = pl.x > 0 ? Math.exp(-Math.pow((x - pl.x) / 210, 2)) : 0.35;
             const decay = Math.exp(-pl.t * 1.35);
             const force = pl.dragging ? Math.max(pl.force, 0.65) : pl.force;
-            const response = finePointer ? 1.35 : 0.32;
+            const response = hoverReactive ? 1.35 : 1.65;
             const amp = 2.5 + nearY * (12 + force * 12) * response * decay * (0.25 + nearX);
             const pull = nearY * nearX * force * 6 * response * decay;
-            const oscillation = finePointer ? px * 10 + t * 4.2 + k : px * 3.2 + t * 0.85 + k * 0.35;
+            const oscillation = hoverReactive ? px * 10 + t * 4.2 + k : px * 3.2 + t * 0.85 + k * 0.35;
             y = base + Math.sin(oscillation) * amp * Math.sin(px * Math.PI) + pull;
           } else {
             const amp = 12 + k * 4;
@@ -104,7 +161,8 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
-        const a = variant === "strings" ? 0.08 + k * 0.012 + stringGlow * (finePointer ? 0.22 : 0.15) : 0.11 + k * 0.035;
+        const mobileAlpha = 0.08 + (k / Math.max(1, drawLines - 1)) * 0.08 + stringGlow * 0.24;
+        const a = variant === "strings" ? (hoverReactive ? 0.08 + k * 0.012 + stringGlow * 0.22 : mobileAlpha) : 0.11 + k * 0.035;
         ctx.strokeStyle = C(a);
         ctx.lineWidth = variant === "strings" ? 1 : 1;
         ctx.stroke();
@@ -116,8 +174,6 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
     };
     draw();
 
-    let lastX = -1;
-    let lastY = -1;
     const onMove = (e: PointerEvent) => {
       if (variant !== "strings") return;
       const r = canvas.getBoundingClientRect();
@@ -144,21 +200,45 @@ function SoundField({ variant, color = [200, 169, 110] }: SoundFieldProps) {
       if (variant !== "strings") return;
       pluck.current.dragging = false;
     };
+    const onScrollPointer = (e: PointerEvent) => {
+      if (!scrollReactive) return;
+      rememberGesture(e.clientX, e.clientY);
+    };
+    const onTouchGesture = (e: TouchEvent) => {
+      if (!scrollReactive || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      rememberGesture(touch.clientX, touch.clientY);
+    };
     const target = variant === "strings" ? wrap.parentElement ?? canvas : canvas;
     if (variant === "strings") {
-      target.addEventListener("pointermove", onMove);
-      target.addEventListener("pointerdown", onDown);
-      window.addEventListener("pointerup", onUp);
-      target.addEventListener("pointerleave", onUp);
+      if (hoverReactive) {
+        target.addEventListener("pointermove", onMove);
+        target.addEventListener("pointerdown", onDown);
+        window.addEventListener("pointerup", onUp);
+        target.addEventListener("pointerleave", onUp);
+      } else {
+        target.addEventListener("pointerdown", onScrollPointer);
+        target.addEventListener("pointermove", onScrollPointer);
+        target.addEventListener("touchstart", onTouchGesture, { passive: true });
+        target.addEventListener("touchmove", onTouchGesture, { passive: true });
+        updateScrollPluck();
+      }
     }
 
     return () => {
       window.removeEventListener("resize", resize);
       if (variant === "strings") {
-        target.removeEventListener("pointermove", onMove);
-        target.removeEventListener("pointerdown", onDown);
-        window.removeEventListener("pointerup", onUp);
-        target.removeEventListener("pointerleave", onUp);
+        if (hoverReactive) {
+          target.removeEventListener("pointermove", onMove);
+          target.removeEventListener("pointerdown", onDown);
+          window.removeEventListener("pointerup", onUp);
+          target.removeEventListener("pointerleave", onUp);
+        } else {
+          target.removeEventListener("pointerdown", onScrollPointer);
+          target.removeEventListener("pointermove", onScrollPointer);
+          target.removeEventListener("touchstart", onTouchGesture);
+          target.removeEventListener("touchmove", onTouchGesture);
+        }
       }
       cancelAnimationFrame(id);
     };
@@ -386,6 +466,16 @@ export default function MusicPage() {
             ))}
           </div>
         </div>
+        <div className="mu-marquee" aria-hidden="true">
+          <div className="mu-marquee-track">
+            {[...repertoireComposers, ...repertoireComposers].map((c, n) => (
+              <span key={n}>
+                {c}
+                <i>✦</i>
+              </span>
+            ))}
+          </div>
+        </div>
         <Reveal as="ul" className="mu-recs">
           {pianoRecordings.map((r) => (
             <li key={r.youtubeId}>
@@ -401,17 +491,7 @@ export default function MusicPage() {
         </Reveal>
       </section>
 
-      {/* Repertoire marquee */}
-      <div className="mu-marquee" aria-hidden="true">
-        <div className="mu-marquee-track">
-          {[...repertoireComposers, ...repertoireComposers].map((c, n) => (
-            <span key={n}>
-              {c}
-              <i>✦</i>
-            </span>
-          ))}
-        </div>
-      </div>
+      <div className="mu-section-separator" aria-hidden="true" />
 
       {/* Violin */}
       <section id="violin" className="mu-sec mu-violin">
