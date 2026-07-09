@@ -9,7 +9,7 @@ import { essayEntries } from "@/data/essaysContent";
  */
 export default function EssaysIndex() {
   return (
-    <div>
+    <div className="el-page">
       <SiteNav
         links={[
           { label: "Work", href: "/projects" },

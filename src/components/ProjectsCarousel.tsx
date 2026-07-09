@@ -48,9 +48,13 @@ function SpacedMetadata({ value }: { value: ProjectMetaValue }) {
 }
 
 function ProjectDetail({ project }: { project: ProjectPage }) {
+  const pageClassName = ["pp-page", !project.link && "pp-page--no-cta", project.stub && "pp-page-stub"]
+    .filter(Boolean)
+    .join(" ");
+
   if (project.stub) {
     return (
-      <article className="pp-page pp-page-stub" key={project.id}>
+      <article className={pageClassName} key={project.id}>
         <header className="pp-hero">
           <div className="pp-hero-copy">
             <span className="item-kicker">
@@ -81,7 +85,7 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
   }
 
   return (
-    <article className="pp-page" key={project.id}>
+    <article className={pageClassName} key={project.id}>
       <header className="pp-hero">
         <div className="pp-hero-copy">
           <span className="item-kicker">

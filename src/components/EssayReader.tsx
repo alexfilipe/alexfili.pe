@@ -51,7 +51,7 @@ export default function EssayReader() {
   const essay = essayEntries[i];
 
   return (
-    <div>
+    <div className="es-page">
       <SiteNav
         links={[
           { label: "Work", href: "/projects" },
