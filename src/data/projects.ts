@@ -45,8 +45,8 @@ export const projects: Project[] = [
   },
   {
     title: "InspiraSonho",
-    description: "A social-impact platform that helped 20,000+ Brazilian students discover opportunities beyond the classroom.",
-    focus: "Product design",
+    description: "A social-impact platform that connected 20,000+ Brazilian students to opportunities beyond the classroom.",
+    focus: "Social impact",
     year: "In progress",
     period: {
       start: "2015",
@@ -67,7 +67,7 @@ export const projects: Project[] = [
   },
   {
     title: "Home Intelligence",
-    description: "Orchestration plugins in development for adaptive lighting, energy insights, and agentic smart-speaker coordination in Home Assistant.",
+    description: "Orchestration plugins for adaptive ambience, energy insights, and agentic smart-speaker coordination in Home Assistant.",
     focus: "Open source",
     year: "Selected",
     period: {
@@ -89,8 +89,8 @@ export const projects: Project[] = [
   },
   {
     title: "LabStocker",
-    description: "One of my first major software projects: a cloud inventory system for chemistry labs, with dashboards and early predictive models.",
-    focus: "Open source",
+    description: "A cloud inventory platform for chemistry labs, published at national conferences and recognized among Brazil’s top student projects.",
+    focus: "Lab systems",
     year: "Selected",
     period: {
       start: "2014",

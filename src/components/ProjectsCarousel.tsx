@@ -47,6 +47,22 @@ function SpacedMetadata({ value }: { value: ProjectMetaValue }) {
   );
 }
 
+function RenderInlineText({ text }: { text: string }) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+
+  return (
+    <>
+      {parts.map((part, index) => {
+        if (part.startsWith("**") && part.endsWith("**")) {
+          return <strong key={`${part}-${index}`}>{part.slice(2, -2)}</strong>;
+        }
+
+        return <Fragment key={`${part}-${index}`}>{part}</Fragment>;
+      })}
+    </>
+  );
+}
+
 function ProjectVisual({ project }: { project: ProjectPage }) {
   const logoStyle = {
     "--pp-project-logo-accent": project.logo.accent,
@@ -141,7 +157,11 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
           {project.sections?.map((s) => (
             <section className="pp-section" key={s.heading}>
               <h2 className="pp-section-h">{s.heading}</h2>
-              <p className="pp-section-p">{s.body}</p>
+              {(Array.isArray(s.body) ? s.body : [s.body]).map((paragraph, index) => (
+                <p className="pp-section-p" key={`${s.heading}-${index}`}>
+                  <RenderInlineText text={paragraph} />
+                </p>
+              ))}
             </section>
           ))}
         </div>
