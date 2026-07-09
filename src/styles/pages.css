@@ -94,7 +94,7 @@
   .mu-sec { position: relative; padding: clamp(5rem, 12vw, 10rem) clamp(1.5rem, 6vw, 6rem); overflow: hidden;
     border-top: 1px solid var(--line); }
   .mu-sec::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .8; }
-  .mu-conducting { isolation: isolate; }
+  .mu-conducting { --conducting-baton-opacity: .18; isolation: isolate; }
   .mu-conducting::before { background: radial-gradient(80% 60% at 78% 30%, rgba(200,169,110,.08), transparent 60%); }
   .mu-conducting::after {
     content: "";
@@ -110,10 +110,15 @@
       url("/orchestra-conductor-baton-white-lines.webp") type("image/webp"),
       url("/orchestra-conductor-baton-white-lines.png") type("image/png")
     );
-    opacity: .18;
+    opacity: 0;
     pointer-events: none;
     transform: rotate(-5deg);
     transform-origin: 62% 72%;
+    transition: opacity .8s var(--ease);
+  }
+  .mu-conducting:has(.mu-conducting-body .reveal.is-in)::after { opacity: var(--conducting-baton-opacity); }
+  @media (prefers-reduced-motion: reduce) {
+    .mu-conducting::after { opacity: var(--conducting-baton-opacity); }
   }
   .mu-piano::before { background: radial-gradient(80% 60% at 20% 30%, rgba(240,237,230,.06), transparent 60%); }
   .mu-piano { padding-bottom: clamp(1rem, 2.4vw, 1.6rem); }
@@ -272,8 +277,9 @@
       right: -4.75rem;
       bottom: auto;
       width: min(96vw, 28rem);
-      opacity: .18;
+      --conducting-baton-opacity: .18;
     }
+    .mu-conducting:has(.mu-conducting-body .reveal.is-in)::after { opacity: var(--conducting-baton-opacity); }
     .mu-piano-video { order: -1; justify-self: center; width: min(100%, 18rem); margin-left: 0; margin-bottom: clamp(.2rem, 1.2vw, .45rem); }
     .mu-piano-carousel { grid-template-columns: 1fr; margin-top: 1.5rem; }
     .mu-piano-carousel-arrow { display: none; }
