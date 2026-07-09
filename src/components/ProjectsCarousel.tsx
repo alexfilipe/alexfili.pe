@@ -2,7 +2,6 @@ import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
-import { projectGlyphs } from "@/components/ProjectGlyphs";
 import { projectPages, type ProjectMetaValue, type ProjectPage } from "@/data/projectPages";
 import PageFooter from "@/components/PageFooter";
 
@@ -55,9 +54,11 @@ function ProjectVisual({ project }: { project: ProjectPage }) {
   } as CSSProperties;
 
   return (
-    <div className="pp-visual" aria-hidden="true">
-      <span className="pp-visual-frame" />
-      <span className="pp-visual-glyph">{projectGlyphs[project.id]}</span>
+    <div className="pp-visual pp-visual--image" aria-hidden="true">
+      <picture className="pp-visual-picture">
+        <source srcSet={project.preview.webpSrc} type="image/webp" />
+        <img src={project.preview.pngSrc} alt="" width="960" height="720" loading="lazy" decoding="async" />
+      </picture>
       <span
         className={`pp-project-logo${project.logo.webpSrc || project.logo.pngSrc ? " pp-project-logo--image" : ""}`}
         style={logoStyle}

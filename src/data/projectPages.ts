@@ -32,6 +32,11 @@ export type ProjectLogo = {
   scale?: number;
 };
 
+export type ProjectPreview = {
+  webpSrc: string;
+  pngSrc: string;
+};
+
 export type ProjectPage = {
   id: string;
   name: string;
@@ -42,6 +47,7 @@ export type ProjectPage = {
   /** A "stub" project has its own external home — render just the hero + CTA. */
   stub?: boolean;
   tags: string[];
+  preview: ProjectPreview;
   logo: ProjectLogo;
   sections?: ProjectSection[];
   meta?: ProjectMeta;
@@ -58,6 +64,10 @@ export const projectPages: ProjectPage[] = [
     stub: true,
     lede: "An AI-first native macOS app for safe, local-first sync across iCloud Drive, Google Drive, OneDrive, and NAS-backed storage — built from a belief that your files should stay private, under your control, and never trapped inside a single cloud.",
     link: { label: "Visit aetherloom.app", href: "https://aetherloom.app/" },
+    preview: {
+      webpSrc: "/images/project-previews/aetherloom.webp",
+      pngSrc: "/images/project-previews/aetherloom.png"
+    },
     logo: {
       initials: "Ae",
       accent: "#9fc7bd",
@@ -95,6 +105,10 @@ export const projectPages: ProjectPage[] = [
       Status: ["Archived", "Handed off"]
     },
     // link: { label: "Visit inspirasonho.com.br", href: "https://www.inspirasonho.com.br/" },
+    preview: {
+      webpSrc: "/images/project-previews/inspirasonho.webp",
+      pngSrc: "/images/project-previews/inspirasonho.png"
+    },
     logo: {
       initials: "IS",
       accent: "#d8a85f",
@@ -133,6 +147,10 @@ export const projectPages: ProjectPage[] = [
       Status: ["Active", "Open-source (planned)"]
     },
     // link: { label: "View on GitHub", href: "https://github.com/alexfilipe" },
+    preview: {
+      webpSrc: "/images/project-previews/home-intelligence.webp",
+      pngSrc: "/images/project-previews/home-intelligence.png"
+    },
     logo: {
       initials: "HI",
       accent: "#8fb2df",
@@ -171,6 +189,10 @@ export const projectPages: ProjectPage[] = [
       Status: "Archived"
     },
     link: null,
+    preview: {
+      webpSrc: "/images/project-previews/labstocker.webp",
+      pngSrc: "/images/project-previews/labstocker.png"
+    },
     logo: {
       initials: "LS",
       accent: "#cda0b4",

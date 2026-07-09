@@ -8,6 +8,10 @@ export type Project = {
     end: string;
   };
   href?: string;
+  preview: {
+    webpSrc: string;
+    pngSrc: string;
+  };
   logo: {
     initials: string;
     accent: string;
@@ -28,6 +32,10 @@ export const projects: Project[] = [
       end: "Present"
     },
     href: "/projects/aetherloom",
+    preview: {
+      webpSrc: "/images/project-previews/aetherloom.webp",
+      pngSrc: "/images/project-previews/aetherloom.png"
+    },
     logo: {
       initials: "Ae",
       accent: "#9fc7bd",
@@ -45,6 +53,10 @@ export const projects: Project[] = [
       end: "2018"
     },
     href: "/projects/inspirasonho",
+    preview: {
+      webpSrc: "/images/project-previews/inspirasonho.webp",
+      pngSrc: "/images/project-previews/inspirasonho.png"
+    },
     logo: {
       initials: "IS",
       accent: "#d8a85f",
@@ -55,7 +67,7 @@ export const projects: Project[] = [
   },
   {
     title: "Home Intelligence",
-    description: "Open-source Home Assistant tools for readable, local-first, agentic smart-home automation.",
+    description: "Orchestration plugins in development for adaptive lighting, energy insights, and agentic smart-speaker coordination in Home Assistant.",
     focus: "Open source",
     year: "Selected",
     period: {
@@ -63,6 +75,10 @@ export const projects: Project[] = [
       end: "Present"
     },
     href: "/projects/home-intelligence",
+    preview: {
+      webpSrc: "/images/project-previews/home-intelligence.webp",
+      pngSrc: "/images/project-previews/home-intelligence.png"
+    },
     logo: {
       initials: "HI",
       accent: "#8fb2df",
@@ -81,6 +97,10 @@ export const projects: Project[] = [
       end: "2015"
     },
     href: "/projects/labstocker",
+    preview: {
+      webpSrc: "/images/project-previews/labstocker.webp",
+      pngSrc: "/images/project-previews/labstocker.png"
+    },
     logo: {
       initials: "LS",
       accent: "#cda0b4",

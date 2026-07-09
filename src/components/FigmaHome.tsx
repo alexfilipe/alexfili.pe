@@ -759,8 +759,9 @@ function SectionHeader({ id, title, href }: { id: string; title: string; href?: 
 }
 
 type ProjectLogoPlaceholder = Project["logo"];
+type ProjectPreview = Project["preview"];
 
-function ArtworkFrame({ children, logo }: { children: ReactNode; logo?: ProjectLogoPlaceholder }) {
+function ArtworkFrame({ children, logo, preview }: { children: ReactNode; logo?: ProjectLogoPlaceholder; preview?: ProjectPreview }) {
   const logoStyle = logo
     ? ({
         "--figma-project-logo-accent": logo.accent,
@@ -769,8 +770,15 @@ function ArtworkFrame({ children, logo }: { children: ReactNode; logo?: ProjectL
     : undefined;
 
   return (
-    <span className="figma-carousel-media" aria-hidden="true">
-      <span className="figma-carousel-art">{children}</span>
+    <span className={`figma-carousel-media${preview ? " figma-carousel-media--image" : ""}`} aria-hidden="true">
+      {preview ? (
+        <picture className="figma-carousel-preview-picture">
+          <source srcSet={preview.webpSrc} type="image/webp" />
+          <img className="figma-carousel-image" src={preview.pngSrc} alt="" width="960" height="720" loading="lazy" decoding="async" />
+        </picture>
+      ) : (
+        <span className="figma-carousel-art">{children}</span>
+      )}
       {logo ? (
         <span
           className={`figma-project-logo${logo.webpSrc || logo.pngSrc ? " figma-project-logo--image" : ""}`}
@@ -797,9 +805,9 @@ function ArtworkFrame({ children, logo }: { children: ReactNode; logo?: ProjectL
   );
 }
 
-function ProjectArtwork({ logo }: { logo: ProjectLogoPlaceholder }) {
+function ProjectArtwork({ logo, preview }: { logo: ProjectLogoPlaceholder; preview: ProjectPreview }) {
   return (
-    <ArtworkFrame logo={logo}>
+    <ArtworkFrame logo={logo} preview={preview}>
       <svg viewBox="0 0 44 44" focusable="false">
         <rect x="11" y="11" width="22" height="22" rx="1" transform="rotate(45 22 22)" />
         <circle cx="22" cy="22" r="7.5" />
@@ -871,7 +879,7 @@ function FeaturedWorkSection() {
             role="listitem"
             {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           >
-            <ProjectArtwork logo={project.logo} />
+            <ProjectArtwork logo={project.logo} preview={project.preview} />
             <span className="figma-carousel-copy">
               <span className="figma-carousel-meta">
                 {project.period.start}&mdash;{project.period.end}
@@ -1028,6 +1036,8 @@ export default function FigmaHome() {
 
         <FeaturedWorkSection />
         <MusicSection />
+
+        <div className="figma-section-divider figma-music-social-divider" aria-hidden="true" />
 
         <nav className="figma-socials" aria-label="Social links">
           {socialLinks.map(({ href, Icon, label }) => (
