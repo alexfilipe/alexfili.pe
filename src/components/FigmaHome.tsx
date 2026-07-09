@@ -852,7 +852,7 @@ function FeaturedWorkSection() {
 function MusicSection() {
   return (
     <section id="music" className="figma-section figma-music" aria-labelledby="music-title">
-      <SectionHeader id="music-title" title="Music" href="/music" />
+      <SectionHeader id="music-title" title="My Music" href="/music" />
 
       <CarouselControls label="Music" controlLabel="music">
         {musicDisciplines.map((discipline) => (

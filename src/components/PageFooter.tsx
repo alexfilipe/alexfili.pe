@@ -27,7 +27,7 @@ export default function PageFooter({
     <footer className={["page-foot", className].filter(Boolean).join(" ")}>
       <div className="page-foot-copy">
         <span>{copyright}</span>
-        <span className="page-foot-sep">·</span>
+        <span className="page-foot-sep">•</span>
         <span>{location}</span>
       </div>
       {showSocials ? (
