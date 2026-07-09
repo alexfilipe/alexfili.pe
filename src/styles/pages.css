@@ -473,15 +473,24 @@
 /* --------------------------------------------------------------------------
    Featured Work index (.wk-*)
    -------------------------------------------------------------------------- */
-.wk-wrap { max-width: 1040px; margin: 0 auto; padding: 6.5rem clamp(1.25rem, 4vw, 3rem) 3rem; }
+/* Atmospheric gold wash spanning the full width of the hero, flowing down from
+   behind the navbar to meet the list (echoes the music heroes' radial washes). */
+.wk-page { position: relative; overflow-x: clip; }
 
-  .wk-head { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
-  @media (min-width: 861px) {
-    .wk-head { margin-bottom: clamp(1.8rem, 3.5vw, 2.75rem); }
-  }
+.wk-wrap { --wk-gutter: clamp(1.25rem, 4vw, 3rem); max-width: 1040px; margin: 0 auto; padding: 6.5rem var(--wk-gutter) 3rem; }
+
+  .wk-head { position: relative; isolation: isolate; margin-bottom: 0;
+    padding-bottom: clamp(1.75rem, 3vw, 2.5rem); }
+  .wk-head::before { content: ""; position: absolute; z-index: -1; pointer-events: none;
+    left: 50%; width: 100vw; margin-left: -50vw; top: -7rem; bottom: 0;
+    background: radial-gradient(85% 96% at 76% 30%, rgba(201,156,96,.11) 0%, rgba(201,156,96,.03) 46%, transparent 74%); }
+
+  .wk-eyebrow { display: block; color: var(--gold); font-size: .74rem; font-weight: 700;
+    letter-spacing: .22em; text-transform: uppercase; }
   .wk-title { margin: .9rem 0 0; font-family: var(--display); font-size: clamp(2.75rem, 6vw, 4.6rem);
     font-weight: 720; line-height: .84; letter-spacing: 0; }
-  .wk-intro { max-width: 40rem; margin: 1.6rem 0 0; color: var(--text-soft);
+  .wk-intro { max-width: 40rem; margin: 1.6rem 0 0; border-left: 1.5px solid var(--gold-soft);
+    padding-left: clamp(.85rem, 1.6vw, 1.1rem); color: var(--text-soft);
     font-size: clamp(1.05rem, 2vw, 1.3rem); line-height: 1.55; }
 
   /* List — hairline-separated rows, like the site's work-list */
@@ -586,9 +595,9 @@
       justify-content: flex-start;
     }
 
-    .wk-item { grid-template-columns: 96px minmax(0, 1fr); gap: .5rem 1.2rem;
+    .wk-item { grid-template-columns: 112px minmax(0, 1fr); gap: .5rem 1.2rem;
       padding: clamp(1.4rem, 5vw, 1.9rem) 2.5rem clamp(1.4rem, 5vw, 1.9rem) 1rem; }
-    .wk-glyph { width: 96px; }
+    .wk-glyph { width: 112px; }
     .wk-arrow { right: .25rem; }
   }
 
@@ -605,4 +614,14 @@
     .page-foot-links {
       justify-content: center;
     }
+
+    /* Full-bleed list on phones — the item background/dividers reach the screen
+       edges. The glyph sits flush with the header content edge (title/paragraph);
+       the arrow keeps its inset. */
+    .wk-list { width: 100vw; margin-left: calc(50% - 50vw); }
+    .wk-item {
+      padding-left: var(--wk-gutter);
+      padding-right: calc(var(--wk-gutter) + 2.5rem);
+    }
+    .wk-arrow { right: calc(var(--wk-gutter) + .25rem); }
   }

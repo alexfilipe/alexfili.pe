@@ -26,8 +26,13 @@ function SpacedMetadata({ value, className }: { value: ProjectMetaValue; classNa
  * /projects/<id>. Ported from the design-system work.html recreation.
  */
 export default function WorkIndex() {
+  const startYears = projectPages
+    .map((p) => parseInt(p.period, 10))
+    .filter((year) => !Number.isNaN(year));
+  const sinceYear = Math.min(...startYears);
+
   return (
-    <div>
+    <div className="wk-page">
       <SiteNav
         links={[
           { label: "Work", href: "/projects", current: true },
@@ -36,6 +41,7 @@ export default function WorkIndex() {
       />
       <div className="wk-wrap">
         <header className="wk-head">
+          <span className="wk-eyebrow">{`${sinceYear} — Present`}</span>
           <h1 className="wk-title">Featured Work</h1>
           <p className="wk-intro">
             Independent engineering across AI systems, social-impact products, open source, and the early builds
