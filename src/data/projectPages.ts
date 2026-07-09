@@ -137,7 +137,7 @@ export const projectPages: ProjectPage[] = [
     meta: {
       Role: "Co-founder & CTO",
       Timeline: "2015 — 2018",
-      Stack: ["PHP", "JavaScript", "jQuery", "MySQL", "System architecture", "Production hosting"],
+      Stack: ["JavaScript", "jQuery", "PHP", "MySQL", "System architecture", "Production hosting"],
       Focus: ["Access to opportunity", "Student empowerment", "Educational equity"],
       Impact: "20,000+ students reached",
       Status: ["Archived", "Handed off"]

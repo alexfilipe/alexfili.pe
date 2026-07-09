@@ -582,15 +582,12 @@
     .mu-violin::after {
       display: none;
     }
-    .mu-violin .mu-timeline {
-      overflow: hidden;
-    }
     .mu-violin .mu-timeline::before {
       content: "";
       position: absolute;
       inset: clamp(-1rem, -2.5vw, -.25rem) clamp(-6rem, -18vw, -3.5rem);
       z-index: 0;
-      background: url("/violin-white-lines.png") 40% 44% / auto 92% no-repeat;
+      background: url("/violin-white-lines.png") 40% 0 / auto 92% no-repeat;
       background-image: image-set(
         url("/violin-white-lines.avif") type("image/avif"),
         url("/violin-white-lines.webp") type("image/webp"),
