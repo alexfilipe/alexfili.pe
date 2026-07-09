@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import { projectGlyphs } from "@/components/ProjectGlyphs";
 import { projectPages, type ProjectMetaValue, type ProjectPage } from "@/data/projectPages";
-import { profile } from "@/data/profile";
+import PageFooter from "@/components/PageFooter";
 
 /**
  * ProjectsCarousel — an interactive carousel of full project detail pages you
@@ -224,18 +224,7 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
             <ArrowRight size={22} />
           </button>
 
-          <footer className="pp-foot">
-            <div className="page-foot-copy">
-              <span>© 2026 Álex Filipe Santos</span>
-              <span className="page-foot-sep">·</span>
-              <span>San Francisco, CA</span>
-            </div>
-            <nav className="page-foot-links" aria-label="Social links">
-              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-              <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-              <a href={`mailto:${profile.email}`}>Email</a>
-            </nav>
-          </footer>
+          <PageFooter className="pp-foot" />
         </div>
       </div>
     </div>

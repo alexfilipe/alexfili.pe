@@ -12,7 +12,7 @@ import {
   conductingPremiere,
   type RichText
 } from "@/data/musicContent";
-import { profile } from "@/data/profile";
+import PageFooter from "@/components/PageFooter";
 
 /**
  * MusicPage — an artistic single page with three movements: Conducting, Piano,
@@ -451,18 +451,12 @@ export default function MusicPage() {
         </div>
       </section>
 
-      <footer className="mu-foot">
-        <div className="page-foot-copy">
-          <span>{musicPageContent.footer.copyright}</span>
-          <span className="page-foot-sep">·</span>
-          <span>{musicPageContent.footer.location}</span>
-        </div>
-        <nav className="page-foot-links" aria-label={musicPageContent.footer.socialLinksLabel}>
-          <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">{musicPageContent.footer.linkedin}</a>
-          <a href={profile.github} target="_blank" rel="noopener noreferrer">{musicPageContent.footer.github}</a>
-          <a href={`mailto:${profile.email}`}>{musicPageContent.footer.email}</a>
-        </nav>
-      </footer>
+      <PageFooter
+        className="mu-foot"
+        copyright={musicPageContent.footer.copyright}
+        location={musicPageContent.footer.location}
+        socialLinksLabel={musicPageContent.footer.socialLinksLabel}
+      />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { ReactNode, SVGProps } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Mail } from "lucide-react";
 import PianoSeparator from "@/components/PianoSeparator";
+import PageFooter from "@/components/PageFooter";
 import { musicDisciplines } from "@/data/music";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
@@ -992,7 +993,7 @@ export default function FigmaHome() {
           ))}
         </nav>
 
-        <p className="figma-home-copyright">© {new Date().getFullYear()} Álex Filipe Santos<span className="figma-copyright-sep" aria-hidden="true">·</span>San Francisco, CA</p>
+        <PageFooter className="figma-home-copyright" showSocials={false} />
       </div>
     </div>
   );
