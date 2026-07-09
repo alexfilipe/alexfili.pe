@@ -355,12 +355,23 @@ function RenderRichText({ value }: { value: RichText }) {
 }
 
 function RenderBreakableLabel({ value }: { value: string }) {
+  const [lead, tail] = value.split(" — ");
+  if (tail) {
+    return (
+      <>
+        <span className="mu-violin-photo-label-lead">{lead} — </span>
+        <wbr />
+        <span className="mu-violin-photo-label-tail">{tail}</span>
+      </>
+    );
+  }
+
   return (
     <>
-      {value.split(/( — |, )/).map((part, index) => (
+      {value.split(/(, )/).map((part, index) => (
         <Fragment key={`${part}-${index}`}>
           {part}
-          {part === " — " || part === ", " ? <wbr /> : null}
+          {part === ", " ? <wbr /> : null}
         </Fragment>
       ))}
     </>
@@ -584,8 +595,20 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
   );
 }
 
+function shuffleItems<T>(items: readonly T[]) {
+  const shuffled = [...items];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}
+
 export default function MusicPage() {
   const [active, setActive] = useState("conducting");
+  const [shuffledRepertoireComposers, setShuffledRepertoireComposers] = useState(repertoireComposers);
   const [showSectionNav, setShowSectionNav] = useState(false);
   const [activePianoVideoIndex, setActivePianoVideoIndex] = useState(0);
   const [pianoVideoReelPosition, setPianoVideoReelPosition] = useState(1);
@@ -677,6 +700,10 @@ export default function MusicPage() {
       releasePianoVideoTransition();
     }
   };
+
+  useEffect(() => {
+    setShuffledRepertoireComposers(shuffleItems(repertoireComposers));
+  }, []);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 820px)");
@@ -964,7 +991,7 @@ export default function MusicPage() {
         </div>
         <div className="mu-marquee" aria-hidden="true">
           <div className="mu-marquee-track">
-            {[...repertoireComposers, ...repertoireComposers].map((c, n) => (
+            {[...shuffledRepertoireComposers, ...shuffledRepertoireComposers].map((c, n) => (
               <span key={n}>
                 {c}
                 <i>✦</i>

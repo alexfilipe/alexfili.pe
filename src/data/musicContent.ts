@@ -198,7 +198,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "recital-hall-goettingen",
     src: "/images/music/violin/recital-hall-goettingen.webp",
     alt: "Álex performing violin in a recital hall at the University of Göttingen.",
-    label: "Recital Hall performance — Göttingen, 2017",
+    label: "University Recital Hall performance — Göttingen, 2017",
     width: 434,
     height: 326
   },

@@ -313,14 +313,11 @@
   .mu-timeline-text { display: block; }
   .mu-timeline-detail::before { content: " — "; }
   .mu-violin-gallery {
-    /* Full-bleed to the section edges by cancelling the section's horizontal
-       padding with negative inline margins. Avoids viewport units so the
-       scrollbar is never counted (which previously over-extended the block and
-       let the ancestor overflow clip the right rail). */
     position: relative;
     z-index: 2;
+    width: min(100%, 1120px);
     margin-block: clamp(2.1rem, 4.5vw, 3.4rem) 0;
-    margin-inline: calc(-1 * clamp(1.5rem, 6vw, 6rem));
+    margin-inline: auto;
   }
   .mu-violin-gallery--mobile {
     display: none;
@@ -337,7 +334,7 @@
     overflow-x: auto;
     overflow-y: hidden;
     background: rgba(240, 237, 230, .03);
-    padding-bottom: clamp(3.4rem, 4.8vw, 4.35rem);
+    padding-bottom: clamp(3.65rem, 5.05vw, 4.625rem);
     scrollbar-color: rgba(200, 169, 110, 0.45) transparent;
     scroll-padding-inline: 0;
     scroll-snap-type: x proximity;
@@ -410,7 +407,7 @@
     left: clamp(.55rem, 1vw, .85rem);
     right: clamp(.55rem, 1vw, .85rem);
     z-index: 4;
-    color: var(--text);
+    color: var(--text-soft);
     font-size: clamp(.84rem, 1.35vw, .96rem);
     font-weight: 480;
     line-height: 1.25;
@@ -426,6 +423,10 @@
   .mu-violin-photo.is-label-active .mu-violin-photo-label {
     opacity: 1;
     transform: translateY(0);
+  }
+  .mu-violin-photo-label-lead,
+  .mu-violin-photo-label-tail {
+    white-space: nowrap;
   }
   .mu-violin-photo-img {
     display: block;
@@ -453,20 +454,18 @@
     bottom: auto;
     z-index: 3;
     display: grid;
-    height: calc(100% - clamp(3.4rem, 4.8vw, 4.35rem));
+    height: calc(100% - clamp(3.65rem, 5.05vw, 4.625rem) + 2px);
     width: var(--violin-carousel-rail);
     place-items: center;
     box-sizing: border-box;
     border: 0;
     border-radius: 0;
-    background: rgba(240, 237, 230, .28);
-    color: rgba(8, 8, 7, .88);
+    background: rgba(8, 8, 7, .82);
+    color: rgba(240, 237, 230, .82);
     cursor: pointer;
     -webkit-backdrop-filter: blur(14px) saturate(1.15);
     backdrop-filter: blur(14px) saturate(1.15);
-    box-shadow:
-      inset 0 0 0 1px rgba(240, 237, 230, .24),
-      0 16px 36px rgba(0, 0, 0, .34);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, .34);
     opacity: 0;
     pointer-events: none;
     will-change: opacity;
@@ -478,7 +477,7 @@
   .mu-violin-carousel-control svg {
     width: 1.35rem;
     height: 1.35rem;
-    filter: drop-shadow(0 1px 2px rgba(240, 237, 230, .2));
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .45));
   }
   .mu-violin-carousel-control--left {
     left: 0;
@@ -495,8 +494,8 @@
   }
   .mu-violin-carousel-control:hover,
   .mu-violin-carousel-control:focus-visible {
-    background: rgba(240, 237, 230, .42);
-    color: rgba(8, 8, 7, .96);
+    background: rgba(8, 8, 7, .94);
+    color: rgba(240, 237, 230, .94);
   }
   .mu-violin-carousel-control:focus-visible {
     outline: 2px solid rgba(211,178,112,.38);
@@ -615,7 +614,9 @@
     }
     .mu-violin-gallery--mobile {
       display: block;
-      margin-block: clamp(3.525rem, 15vw, 5.4rem) clamp(2.1rem, 8vw, 3rem);
+      margin-block: clamp(4.40625rem, 18.75vw, 6.75rem) clamp(2.1rem, 8vw, 3rem);
+      margin-inline: calc(-1 * clamp(1.5rem, 6vw, 6rem));
+      width: auto;
     }
     .mu-violin-photo {
       flex-basis: 58.5%;
