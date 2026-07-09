@@ -182,7 +182,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "portrait-study",
     src: "/images/music/violin/portrait-study.webp",
     alt: "Álex holding a violin in side light.",
-    label: "Portrait in São Paulo (2018)",
+    label: "Portrait in São Paulo — 2018",
     width: 1139,
     height: 854
   },
@@ -190,7 +190,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "principal-second-violin",
     src: "/images/music/violin/principal-second-violin.webp",
     alt: "Álex leading the second violin section of the Amherst Symphony Orchestra.",
-    label: "Amherst Symphony Orchestra (2019)",
+    label: "Amherst Symphony Orchestra — 2019",
     width: 263,
     height: 197
   },
@@ -198,7 +198,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "recital-hall-goettingen",
     src: "/images/music/violin/recital-hall-goettingen.webp",
     alt: "Álex performing violin in a recital hall at the University of Göttingen.",
-    label: "Recital Hall performance at the University of Göttingen (2017)",
+    label: "Recital Hall performance — Göttingen, 2017",
     width: 434,
     height: 326
   },
@@ -206,7 +206,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "high-school-duo",
     src: "/images/music/violin/high-school-duo.webp",
     alt: "Álex playing violin in high school while seated beside a guitarist.",
-    label: "Violin-Guitar duo in high school (2013)",
+    label: "Violin-Guitar duo in high school — Natal, 2013",
     width: 1200,
     height: 900
   },
@@ -214,7 +214,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "student-band",
     src: "/images/music/violin/student-band.webp",
     alt: "Álex playing violin with a student band on stage.",
-    label: "International student band at Göttingen (2017)",
+    label: "International student band — Göttingen, 2017",
     width: 571,
     height: 428
   },
@@ -222,7 +222,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "us-embassy-performance",
     src: "/images/music/violin/us-embassy-performance.webp",
     alt: "Álex playing violin at an event at the U.S. Embassy in Brasília.",
-    label: "Performance at U.S. Embassy in Brasília (2013)",
+    label: "Performance at U.S. Embassy — Brasília, 2013",
     width: 1200,
     height: 900
   },
@@ -230,7 +230,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "amherst-symphony",
     src: "/images/music/violin/amherst-symphony.webp",
     alt: "Álex playing violin with the Amherst Symphony Orchestra.",
-    label: "Practicing before orchestra concert (2020)",
+    label: "Before orchestra concert — 2020",
     width: 1200,
     height: 900
   }

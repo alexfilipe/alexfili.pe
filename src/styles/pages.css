@@ -283,30 +283,14 @@
   .mu-timeline-text { display: block; }
   .mu-timeline-detail::before { content: " — "; }
   .mu-violin-gallery {
-    --violin-gallery-x: -50%;
+    /* Full-bleed to the section edges by cancelling the section's horizontal
+       padding with negative inline margins. Avoids viewport units so the
+       scrollbar is never counted (which previously over-extended the block and
+       let the ancestor overflow clip the right rail). */
     position: relative;
-    left: 50%;
     z-index: 2;
-    width: 100dvw;
-    max-width: none;
-    margin: clamp(2.1rem, 4.5vw, 3.4rem) 0 0;
-    transform: translateX(var(--violin-gallery-x));
-  }
-  .mu-violin-gallery.reveal {
-    transform: translateX(var(--violin-gallery-x)) translateY(26px);
-  }
-  .mu-violin-gallery.reveal.is-in {
-    transform: translateX(var(--violin-gallery-x));
-  }
-  @supports not (width: 100dvw) {
-    .mu-violin-gallery {
-      width: 100vw;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .mu-violin-gallery.reveal {
-      transform: translateX(var(--violin-gallery-x));
-    }
+    margin-block: clamp(2.1rem, 4.5vw, 3.4rem) 0;
+    margin-inline: calc(-1 * clamp(1.5rem, 6vw, 6rem));
   }
   .mu-violin-gallery--mobile {
     display: none;
@@ -574,9 +558,8 @@
       display: none;
     }
     .mu-violin-gallery--mobile {
-      --violin-gallery-x: calc(-50% + clamp(1.5rem, 6vw, 3rem));
       display: block;
-      margin: clamp(3.525rem, 15vw, 5.4rem) 0 clamp(2.1rem, 8vw, 3rem);
+      margin-block: clamp(3.525rem, 15vw, 5.4rem) clamp(2.1rem, 8vw, 3rem);
     }
     .mu-violin-photo {
       flex-basis: 58.5%;
