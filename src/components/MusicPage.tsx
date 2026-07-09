@@ -1,12 +1,11 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
-import { Play } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import {
   musicMovements,
   musicPageContent,
   musicHeroStats,
   pianoStats,
-  pianoRecordings,
   repertoireComposers,
   violinTimeline,
   conductingPremiere,
@@ -291,7 +290,19 @@ function Reveal({ children, className = "", as = "div" }: RevealProps) {
 const conductingMovement = musicMovements.find((movement) => movement.id === "conducting")!;
 const pianoMovement = musicMovements.find((movement) => movement.id === "piano")!;
 const violinMovement = musicMovements.find((movement) => movement.id === "violin")!;
-const pianoExcerptYoutubeId = "qlbnMvq_dIY";
+const quietYoutubeParams = "modestbranding=1&rel=0&iv_load_policy=3";
+const pianoYoutubeParams = `${quietYoutubeParams}&enablejsapi=1&playsinline=1`;
+const pianoVideos = [
+  {
+    youtubeId: "qlbnMvq_dIY",
+    title: "Piano excerpt I performed by Álex Filipe Santos"
+  },
+  {
+    youtubeId: "ba5H690i2Cw",
+    title: "Piano excerpt II performed by Álex Filipe Santos"
+  }
+];
+const pianoVideoReel = [pianoVideos[pianoVideos.length - 1], ...pianoVideos, pianoVideos[0]];
 
 function SectionNav({ active, visible }: { active: string; visible: boolean }) {
   return (
@@ -333,6 +344,54 @@ function RenderRichText({ value }: { value: RichText }) {
 export default function MusicPage() {
   const [active, setActive] = useState("conducting");
   const [showSectionNav, setShowSectionNav] = useState(false);
+  const [activePianoVideoIndex, setActivePianoVideoIndex] = useState(0);
+  const [pianoVideoReelPosition, setPianoVideoReelPosition] = useState(1);
+  const [isPianoVideoTrackSnapping, setIsPianoVideoTrackSnapping] = useState(false);
+  const [isPianoVideoHovered, setIsPianoVideoHovered] = useState(false);
+  const [isPianoVideoPlaying, setIsPianoVideoPlaying] = useState(false);
+  const pianoVideoFrameRef = useRef<HTMLDivElement>(null);
+  const isPianoVideoTransitioningRef = useRef(false);
+  const registerPianoVideoListeners = () => {
+    const iframes = pianoVideoFrameRef.current?.querySelectorAll<HTMLIFrameElement>("iframe");
+    iframes?.forEach((iframe) => {
+      iframe.contentWindow?.postMessage(JSON.stringify({ event: "listening", id: iframe.id }), "https://www.youtube-nocookie.com");
+      iframe.contentWindow?.postMessage(
+        JSON.stringify({ event: "command", func: "addEventListener", args: ["onStateChange"] }),
+        "https://www.youtube-nocookie.com"
+      );
+    });
+  };
+  const releasePianoVideoTransition = () => {
+    isPianoVideoTransitioningRef.current = false;
+  };
+  const movePianoVideo = (direction: -1 | 1) => {
+    if (isPianoVideoTransitioningRef.current) return false;
+
+    isPianoVideoTransitioningRef.current = true;
+    setIsPianoVideoTrackSnapping(false);
+    setPianoVideoReelPosition((position) => position + direction);
+    setActivePianoVideoIndex((index) => (index + direction + pianoVideos.length) % pianoVideos.length);
+    return true;
+  };
+  const showPreviousPianoVideo = () => movePianoVideo(-1);
+  const showNextPianoVideo = () => movePianoVideo(1);
+  const showPianoVideo = (index: number) => {
+    if (index === activePianoVideoIndex) return;
+
+    if (!movePianoVideo(index > activePianoVideoIndex ? 1 : -1)) return;
+    setActivePianoVideoIndex(index);
+  };
+  const snapPianoVideoReel = () => {
+    if (pianoVideoReelPosition === 0) {
+      setIsPianoVideoTrackSnapping(true);
+      setPianoVideoReelPosition(pianoVideos.length);
+    } else if (pianoVideoReelPosition === pianoVideos.length + 1) {
+      setIsPianoVideoTrackSnapping(true);
+      setPianoVideoReelPosition(1);
+    } else {
+      releasePianoVideoTransition();
+    }
+  };
 
   useEffect(() => {
     const secs = Array.from(document.querySelectorAll<HTMLElement>(".mu-sec"));
@@ -350,6 +409,81 @@ export default function MusicPage() {
     window.addEventListener("scroll", updateSectionNav, { passive: true });
     return () => window.removeEventListener("scroll", updateSectionNav);
   }, []);
+
+  useEffect(() => {
+    const iframes = pianoVideoFrameRef.current?.querySelectorAll<HTMLIFrameElement>("iframe");
+    setIsPianoVideoPlaying(false);
+    iframes?.forEach((iframe, index) => {
+      if (index !== pianoVideoReelPosition) {
+        iframe.contentWindow?.postMessage(
+          JSON.stringify({ event: "command", func: "pauseVideo", args: [] }),
+          "https://www.youtube-nocookie.com"
+        );
+      }
+    });
+  }, [pianoVideoReelPosition]);
+
+  useEffect(() => {
+    if (!isPianoVideoTrackSnapping) return;
+
+    const frameId = window.requestAnimationFrame(() => {
+      setIsPianoVideoTrackSnapping(false);
+      releasePianoVideoTransition();
+    });
+    return () => window.cancelAnimationFrame(frameId);
+  }, [isPianoVideoTrackSnapping]);
+
+  useEffect(() => {
+    const fallbackId = window.setTimeout(() => {
+      if (pianoVideoReelPosition === 0 || pianoVideoReelPosition === pianoVideos.length + 1) {
+        snapPianoVideoReel();
+      } else {
+        releasePianoVideoTransition();
+      }
+    }, 700);
+    return () => window.clearTimeout(fallbackId);
+  }, [pianoVideoReelPosition]);
+
+  useEffect(() => {
+    registerPianoVideoListeners();
+    const retryId = window.setTimeout(registerPianoVideoListeners, 1200);
+
+    const onMessage = (event: MessageEvent) => {
+      if (event.origin !== "https://www.youtube-nocookie.com" && event.origin !== "https://www.youtube.com") return;
+
+      let data: unknown = event.data;
+      if (typeof data === "string") {
+        try {
+          data = JSON.parse(data);
+        } catch {
+          return;
+        }
+      }
+      if (!data || typeof data !== "object") return;
+
+      const message = data as { event?: string; info?: number | { playerState?: number } };
+      const playerState = typeof message.info === "number" ? message.info : message.info?.playerState;
+      if ((message.event === "onStateChange" || message.event === "infoDelivery") && typeof playerState === "number") {
+        setIsPianoVideoPlaying(playerState === 1 || playerState === 3);
+      }
+    };
+
+    window.addEventListener("message", onMessage);
+    return () => {
+      window.clearTimeout(retryId);
+      window.removeEventListener("message", onMessage);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isPianoVideoHovered || isPianoVideoPlaying || pianoVideos.length < 2) return;
+
+    const cycleId = window.setInterval(() => {
+      movePianoVideo(1);
+    }, 10000);
+
+    return () => window.clearInterval(cycleId);
+  }, [isPianoVideoHovered, isPianoVideoPlaying]);
 
   return (
     <div className="mu">
@@ -422,7 +556,7 @@ export default function MusicPage() {
             <div className="mu-video-frame">
               <iframe
                 loading="lazy"
-                src={`https://www.youtube-nocookie.com/embed/${conductingPremiere.youtubeId}`}
+                src={`https://www.youtube-nocookie.com/embed/${conductingPremiere.youtubeId}?${quietYoutubeParams}`}
                 title={conductingPremiere.title}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -464,14 +598,58 @@ export default function MusicPage() {
             </Reveal>
           </div>
           <Reveal className="mu-piano-video">
-            <div className="mu-piano-video-frame">
-              <iframe
-                loading="lazy"
-                src={`https://www.youtube-nocookie.com/embed/${pianoExcerptYoutubeId}`}
-                title="Piano excerpt performed by Álex Filipe Santos"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
+            <div
+              className="mu-piano-video-inner"
+              onPointerEnter={() => setIsPianoVideoHovered(true)}
+              onPointerLeave={() => setIsPianoVideoHovered(false)}
+              onFocus={() => setIsPianoVideoHovered(true)}
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) setIsPianoVideoHovered(false);
+              }}
+            >
+              <div className="mu-piano-video-frame" ref={pianoVideoFrameRef}>
+                <div
+                  className={"mu-piano-video-track" + (isPianoVideoTrackSnapping ? " is-snapping" : "")}
+                  style={{ transform: `translateX(-${pianoVideoReelPosition * 100}%)` }}
+                  onTransitionEnd={snapPianoVideoReel}
+                >
+                  {pianoVideoReel.map((video, index) => (
+                    <div className="mu-piano-video-slide" key={`${video.youtubeId}-${index}`}>
+                      <iframe
+                        id={`piano-video-${index}`}
+                        loading="eager"
+                        src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?${pianoYoutubeParams}`}
+                        title={video.title}
+                        tabIndex={index === pianoVideoReelPosition ? 0 : -1}
+                        aria-hidden={index !== pianoVideoReelPosition}
+                        onLoad={registerPianoVideoListeners}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="mu-piano-carousel" aria-label="Piano video excerpts">
+                <button type="button" className="mu-piano-carousel-arrow" onClick={showPreviousPianoVideo} aria-label="Show previous piano video">
+                  <ArrowLeft size={17} strokeWidth={2.8} aria-hidden="true" />
+                </button>
+                <div className="mu-piano-carousel-pages" aria-label="Piano videos">
+                  {pianoVideos.map((video, index) => (
+                    <button
+                      key={video.youtubeId}
+                      type="button"
+                      className={"mu-piano-carousel-page" + (index === activePianoVideoIndex ? " is-active" : "")}
+                      onClick={() => showPianoVideo(index)}
+                      aria-pressed={index === activePianoVideoIndex}
+                      aria-label={`Show piano video ${index + 1}`}
+                    />
+                  ))}
+                </div>
+                <button type="button" className="mu-piano-carousel-arrow" onClick={showNextPianoVideo} aria-label="Show next piano video">
+                  <ArrowRight size={17} strokeWidth={2.8} aria-hidden="true" />
+                </button>
+              </div>
             </div>
           </Reveal>
         </div>
@@ -485,6 +663,7 @@ export default function MusicPage() {
             ))}
           </div>
         </div>
+        {/* Restore the Play import and pianoRecordings import when re-enabling this list.
         <Reveal as="ul" className="mu-recs">
           {pianoRecordings.map((r) => (
             <li key={r.youtubeId}>
@@ -498,9 +677,8 @@ export default function MusicPage() {
             </li>
           ))}
         </Reveal>
+        */}
       </section>
-
-      <div className="mu-section-separator" aria-hidden="true" />
 
       {/* Violin */}
       <section id="violin" className="mu-sec mu-violin">

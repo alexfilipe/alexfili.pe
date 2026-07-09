@@ -133,10 +133,35 @@
   .mu-stats span { display: flex; flex-direction: column; }
   .mu-stats b { font-family: var(--display); font-size: clamp(2.4rem, 5vw, 3.4rem); font-weight: 600; line-height: 1; color: var(--gold); }
   .mu-stats small { color: var(--text-muted); font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; margin-top: .5rem; }
-  .mu-piano-video { justify-self: start; width: min(100%, 24.5rem); margin-left: clamp(.75rem, 1.8vw, 1.5rem); }
+  .mu-piano-video { display: flex; flex-direction: column; justify-self: start; width: min(100%, 24.5rem); margin-left: clamp(1.25rem, 3vw, 2.5rem); }
+  .mu-piano-video-inner { display: flex; flex-direction: column; width: 100%; }
   .mu-piano-video-frame { position: relative; aspect-ratio: 9 / 16; border: 1px solid var(--line-strong);
     background: #000; overflow: hidden; box-shadow: 0 24px 70px rgba(0,0,0,.55); }
-  .mu-piano-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .mu-piano-video-track { position: absolute; inset: 0; display: flex; height: 100%;
+    transition: transform .63s cubic-bezier(.22, .8, .28, 1); will-change: transform; }
+  .mu-piano-video-track.is-snapping { transition: none; }
+  .mu-piano-video-slide { position: relative; flex: 0 0 100%; min-width: 100%; height: 100%; background: #000; }
+  .mu-piano-video-slide iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .mu-piano-carousel { display: grid; grid-template-columns: 38px 1fr 38px; align-items: center;
+    width: 100%; margin-top: 1rem; }
+  .mu-piano-carousel-arrow { appearance: none; display: grid; place-items: center; width: 38px; height: 38px; padding: 0;
+    border: 0; background: transparent; color: var(--text-muted);
+    cursor: pointer; transition: border-color .18s var(--ease), color .18s var(--ease), background .18s var(--ease); }
+  .mu-piano-carousel-arrow:last-child { justify-self: end; }
+  .mu-piano-carousel-arrow:hover,
+  .mu-piano-carousel-arrow:focus-visible { color: var(--gold); background: transparent; }
+  .mu-piano-carousel-arrow:focus-visible,
+  .mu-piano-carousel-page:focus-visible { outline: 2px solid rgba(211,178,112,.38); outline-offset: 3px; }
+  .mu-piano-carousel-arrow svg { width: 16px; height: 16px; }
+  .mu-piano-carousel-pages { display: flex; align-items: center; justify-content: center; gap: .5rem; }
+  .mu-piano-carousel-page { appearance: none; width: 9px; height: 9px; padding: 0; border: 0; border-radius: 999px;
+    background: rgba(240,237,230,.18); cursor: pointer; transition: background .3s var(--ease), width .3s var(--ease); }
+  .mu-piano-carousel-page:hover,
+  .mu-piano-carousel-page:focus-visible { background: rgba(211,178,112,.72); }
+  .mu-piano-carousel-page.is-active { width: 22px; background: var(--gold); }
+  @media (prefers-reduced-motion: reduce) {
+    .mu-piano-video-track { transition: none; }
+  }
 
   .mu-recs { list-style: none; margin: clamp(2.5rem, 5vw, 3.5rem) 0 0; padding: 0;
     position: relative; z-index: 2; max-width: 1120px; margin-inline: auto; }
@@ -172,11 +197,8 @@
       font-size: .42em;
     }
   }
-  .mu-section-separator { height: 1px; margin-top: clamp(4rem, 8vw, 7rem); background: var(--line); }
-  .mu-section-separator + .mu-sec { border-top: 0; }
-
   /* Violin timeline */
-  .mu-violin { padding-top: clamp(4.5rem, 9vw, 7rem); }
+  .mu-violin { margin-top: calc(var(--mu-marquee-gap) * .5); padding-top: 0; border-top: 0; }
   .mu-timeline { list-style: none; margin: 0; padding: 0; }
   .mu-timeline li { position: relative; padding: 0 0 2.5rem 1.5rem; border-left: 1px solid var(--line); }
   .mu-timeline li:last-child { padding-bottom: 0; }
@@ -216,7 +238,9 @@
     .mu-video { margin-top: 0; }
     .mu-conducting .mu-video { margin-top: clamp(1.5rem, 5vw, 2rem); }
     .mu-conducting-body .mu-lede { margin-top: clamp(.5rem, 2vw, 1rem); }
-    .mu-piano-video { order: -1; justify-self: center; width: min(100%, 18rem); margin-left: 0; margin-bottom: clamp(.75rem, 3vw, 1.25rem); }
+    .mu-piano-video { order: -1; justify-self: center; width: min(100%, 18rem); margin-left: 0; margin-bottom: clamp(.2rem, 1.2vw, .45rem); }
+    .mu-piano-carousel { grid-template-columns: 1fr; margin-top: 1rem; }
+    .mu-piano-carousel-arrow { display: none; }
     .mu-recs a { grid-template-columns: 2.2rem 1fr; }
     .mu-rec-date { grid-column: 2; padding-left: 0; }
     .mu-marquee-track span { font-size: clamp(1.05rem, 4.8vw, 1.42rem); }
