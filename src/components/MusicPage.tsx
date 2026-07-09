@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import {
@@ -8,8 +8,10 @@ import {
   pianoStats,
   repertoireComposers,
   violinTimeline,
+  violinPhotos,
   conductingPremiere,
-  type RichText
+  type RichText,
+  type ViolinPhoto
 } from "@/data/musicContent";
 import PageFooter from "@/components/PageFooter";
 
@@ -303,6 +305,12 @@ const pianoVideos = [
   }
 ];
 const pianoVideoReel = [pianoVideos[pianoVideos.length - 1], ...pianoVideos, pianoVideos[0]];
+const SCROLL_EDGE_EPSILON = 2;
+
+type CarouselScrollState = {
+  canScrollLeft: boolean;
+  canScrollRight: boolean;
+};
 
 function SectionNav({ active, visible }: { active: string; visible: boolean }) {
   return (
@@ -338,6 +346,129 @@ function RenderRichText({ value }: { value: RichText }) {
         )
       )}
     </>
+  );
+}
+
+function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<number | null>(null);
+  const [scrollState, setScrollState] = useState<CarouselScrollState>({
+    canScrollLeft: false,
+    canScrollRight: false
+  });
+
+  const updateScrollState = useCallback(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const maxScrollLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+    const nextState = {
+      canScrollLeft: scroller.scrollLeft > SCROLL_EDGE_EPSILON,
+      canScrollRight: scroller.scrollLeft < maxScrollLeft - SCROLL_EDGE_EPSILON
+    };
+
+    setScrollState((currentState) =>
+      currentState.canScrollLeft === nextState.canScrollLeft && currentState.canScrollRight === nextState.canScrollRight
+        ? currentState
+        : nextState
+    );
+  }, []);
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    updateScrollState();
+    const handleScroll = () => updateScrollState();
+    const dropTarget = () => {
+      targetRef.current = null;
+    };
+    scroller.addEventListener("scroll", handleScroll, { passive: true });
+    scroller.addEventListener("pointerdown", dropTarget, { passive: true });
+    scroller.addEventListener("wheel", dropTarget, { passive: true });
+    window.addEventListener("resize", updateScrollState);
+
+    let resizeObserver: ResizeObserver | undefined;
+    if ("ResizeObserver" in window) {
+      resizeObserver = new ResizeObserver(updateScrollState);
+      resizeObserver.observe(scroller);
+      Array.from(scroller.children).forEach((child) => resizeObserver?.observe(child));
+    }
+
+    return () => {
+      scroller.removeEventListener("scroll", handleScroll);
+      scroller.removeEventListener("pointerdown", dropTarget);
+      scroller.removeEventListener("wheel", dropTarget);
+      window.removeEventListener("resize", updateScrollState);
+      resizeObserver?.disconnect();
+    };
+  }, [updateScrollState]);
+
+  const scrollByDirection = useCallback(
+    (direction: -1 | 1) => {
+      const scroller = scrollerRef.current;
+      if (!scroller) return;
+
+      const firstCard = scroller.querySelector<HTMLElement>(".mu-violin-photo");
+      const columnGap = Number.parseFloat(window.getComputedStyle(scroller).columnGap || "0") || 0;
+      const scrollAmount = firstCard ? firstCard.offsetWidth + columnGap : scroller.clientWidth * 0.82;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const maxScrollLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+      const base = targetRef.current ?? scroller.scrollLeft;
+      const target = Math.max(0, Math.min(base + direction * scrollAmount, maxScrollLeft));
+      targetRef.current = target;
+
+      scroller.scrollTo({
+        left: target,
+        behavior: reduceMotion ? "auto" : "smooth"
+      });
+
+      window.setTimeout(updateScrollState, reduceMotion ? 0 : 260);
+    },
+    [updateScrollState]
+  );
+
+  return (
+    <div
+      className="mu-violin-carousel-shell"
+      data-can-scroll-left={scrollState.canScrollLeft ? "true" : "false"}
+      data-can-scroll-right={scrollState.canScrollRight ? "true" : "false"}
+    >
+      <div ref={scrollerRef} className="mu-violin-carousel" role="list" aria-label="Violin photo archive">
+        {photos.map((photo) => (
+          <div className="mu-violin-photo" role="listitem" key={photo.id}>
+            <img
+              className="mu-violin-photo-img"
+              src={photo.src}
+              alt={photo.alt}
+              width={photo.width}
+              height={photo.height}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        ))}
+      </div>
+      <button
+        type="button"
+        className="mu-violin-carousel-control mu-violin-carousel-control--left"
+        aria-label="Scroll violin photos left"
+        disabled={!scrollState.canScrollLeft}
+        onClick={() => scrollByDirection(-1)}
+      >
+        <ArrowLeft size={18} strokeWidth={2.8} aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        className="mu-violin-carousel-control mu-violin-carousel-control--right"
+        aria-label="Scroll violin photos right"
+        disabled={!scrollState.canScrollRight}
+        onClick={() => scrollByDirection(1)}
+      >
+        <ArrowRight size={18} strokeWidth={2.8} aria-hidden="true" />
+      </button>
+    </div>
   );
 }
 
@@ -746,6 +877,9 @@ export default function MusicPage() {
             <Reveal as="h2" className="mu-sec-title">
               {violinMovement.title}
             </Reveal>
+            <Reveal className="mu-violin-gallery mu-violin-gallery--mobile">
+              <ViolinPhotoCarousel photos={violinPhotos} />
+            </Reveal>
             <Reveal as="p" className="mu-lede">
               <RenderRichText value={violinMovement.lede} />
             </Reveal>
@@ -769,6 +903,9 @@ export default function MusicPage() {
             ))}
           </Reveal>
         </div>
+        <Reveal className="mu-violin-gallery mu-violin-gallery--desktop">
+          <ViolinPhotoCarousel photos={violinPhotos} />
+        </Reveal>
       </section>
 
       <PageFooter className="mu-foot" />

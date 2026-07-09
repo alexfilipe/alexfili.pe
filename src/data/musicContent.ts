@@ -25,6 +25,14 @@ export type TimelineEntry = {
   };
 };
 
+export type ViolinPhoto = {
+  id: string;
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
 export type MusicMovement = {
   id: "conducting" | "piano" | "violin";
   label: string;
@@ -158,6 +166,66 @@ export const violinTimeline: TimelineEntry[] = [
   { when: "2015", what: { main: "Amherst Symphony Orchestra", detail: ["Principal 2", { sup: "nd" }, " Violin"] } },
   { when: "2017", what: { main: "Pop violin & keyboard", detail: "International student band, Germany" } },
   { when: "2025—", what: { main: "String quartets & recitals", detail: "San Francisco" } }
+];
+
+export const violinPhotos: ViolinPhoto[] = [
+  {
+    id: "early-lessons",
+    src: "/images/music/violin/early-lessons.webp",
+    alt: "A young Álex playing violin at a microphone.",
+    width: 779,
+    height: 584
+  },
+  {
+    id: "portrait-study",
+    src: "/images/music/violin/portrait-study.webp",
+    alt: "Álex holding a violin in side light.",
+    width: 1139,
+    height: 854
+  },
+  {
+    id: "principal-second-violin",
+    src: "/images/music/violin/principal-second-violin.webp",
+    alt: "Álex leading the second violin section of the Amherst Symphony Orchestra.",
+    width: 263,
+    height: 197
+  },
+  {
+    id: "recital-hall-goettingen",
+    src: "/images/music/violin/recital-hall-goettingen.webp",
+    alt: "Álex performing violin in a recital hall at the University of Göttingen.",
+    width: 434,
+    height: 326
+  },
+  {
+    id: "high-school-duo",
+    src: "/images/music/violin/high-school-duo.webp",
+    alt: "Álex playing violin in high school while seated beside a guitarist.",
+    width: 1200,
+    height: 900
+  },
+  {
+    id: "student-band",
+    src: "/images/music/violin/student-band.webp",
+    alt: "Álex playing violin with a student band on stage.",
+    width: 571,
+    height: 428
+  },
+  {
+    id: "us-embassy-performance",
+    src: "/images/music/violin/us-embassy-performance.webp",
+    alt: "Álex playing violin at an event at the U.S. Embassy in Brasília.",
+    width: 1200,
+    height: 900
+  },
+  {
+    id: "amherst-symphony",
+    src: "/images/music/violin/amherst-symphony.webp",
+    alt: "Álex playing violin with the Amherst Symphony Orchestra.",
+    width: 1200,
+    height: 900
+  }
+
 ];
 
 // The conducting première embed on the Conducting movement.
