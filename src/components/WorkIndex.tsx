@@ -1,8 +1,24 @@
+import { Fragment } from "react";
 import { ArrowUpRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import { projectGlyphs } from "@/components/ProjectGlyphs";
-import { projectPages } from "@/data/projectPages";
+import { projectPages, type ProjectMetaValue } from "@/data/projectPages";
 import { profile } from "@/data/profile";
+
+function SpacedMetadata({ value, className }: { value: ProjectMetaValue; className?: string }) {
+  const parts = Array.isArray(value) ? value : [value];
+
+  return (
+    <span className={["spaced-meta", className].filter(Boolean).join(" ")}>
+      {parts.map((part, index) => (
+        <Fragment key={`${part}-${index}`}>
+          {index > 0 ? <span className="spaced-meta-sep" aria-hidden="true">•</span> : null}
+          <span className="spaced-meta-part">{part}</span>
+        </Fragment>
+      ))}
+    </span>
+  );
+}
 
 /**
  * WorkIndex — the "Featured Work" index: hairline-separated rows, sans-serif
@@ -35,7 +51,7 @@ export default function WorkIndex() {
               </span>
               <span className="wk-when">
                 <span className="wk-year">{p.period}</span>
-                <span className="wk-focus">{p.focus}</span>
+                <SpacedMetadata value={p.focus} className="wk-focus" />
               </span>
               <span className="wk-main">
                 <h2 className="wk-name">{p.name}</h2>

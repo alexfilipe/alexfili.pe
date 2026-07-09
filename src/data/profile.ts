@@ -18,6 +18,5 @@ export const profile = {
   bio: [
     "Brazilian by birth and San Franciscan by heart, I build intelligent systems where thoughtful design matters as much as technical execution.",
     "Classical music has shaped the way I listen. Through piano, violin, and conducting, I keep returning to the same question that draws me to systems built with care: what makes structure feel meaningful."
-  ],
-  availability: "Open to thoughtful engineering, AI, and music collaborations."
+  ]
 };

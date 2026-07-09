@@ -11,7 +11,8 @@
 // NOTE: narrative copy is Álex's own where known and illustrative elsewhere;
 // review before shipping.
 
-export type ProjectMeta = Record<string, string>;
+export type ProjectMetaValue = string | string[];
+export type ProjectMeta = Record<string, ProjectMetaValue>;
 
 export type ProjectSection = {
   heading: string;
@@ -26,7 +27,7 @@ export type ProjectLink = {
 export type ProjectPage = {
   id: string;
   name: string;
-  focus: string;
+  focus: string[];
   period: string;
   tagline: string;
   lede: string;
@@ -42,18 +43,18 @@ export const projectPages: ProjectPage[] = [
   {
     id: "aetherloom",
     name: "Aetherloom",
-    focus: "AI systems · macOS",
+    focus: ["macOS", "AI systems"],
     period: "2026 — Present",
     tagline: "Your files, safely interwoven.",
     stub: true,
-    lede: "An AI-first native macOS app for safe, local-first sync across iCloud Drive, Google Drive, OneDrive, and NAS-backed storage. Aetherloom has its own home — this page is just a pointer to it.",
+    lede: "An AI-first native macOS app for safe, local-first sync across iCloud Drive, Google Drive, OneDrive, and NAS-backed storage.",
     link: { label: "Visit aetherloom.app", href: "https://aetherloom.app/" },
-    tags: ["macOS", "Swift", "Local-first", "Multi-cloud", "AI"]
+    tags: ["macOS", "Swift", "Local-first", "Multi-cloud", "AI-first development", "Open source"]
   },
   {
     id: "inspirasonho",
     name: "InspiraSonho",
-    focus: "Product · Social impact",
+    focus: ["Product", "Social impact"],
     period: "2015 — 2018",
     tagline: "Opportunity, made findable.",
     lede: "A platform that helped 20,000+ Brazilian public-school students discover scholarships, competitions, and paths beyond the classroom — founded, designed, engineered, and operated on my own.",
@@ -72,11 +73,11 @@ export const projectPages: ProjectPage[] = [
       }
     ],
     meta: {
-      Role: "Founder & sole engineer",
+      Role: "Co-founder & sole engineer",
       Timeline: "2015 — 2018",
-      Stack: "Python · Django · PostgreSQL · Redis",
+      Stack: ["PHP", "JavaScript", "MySQL"],
       Scale: "20,000+ students reached",
-      Status: "Archived · handed off"
+      Status: ["Archived", "Handed off"]
     },
     link: { label: "Visit inspirasonho.com.br", href: "https://www.inspirasonho.com.br/" },
     tags: ["Django", "PostgreSQL", "Search", "Email pipelines", "Independent"]
@@ -84,7 +85,7 @@ export const projectPages: ProjectPage[] = [
   {
     id: "home-assistant",
     name: "Home Assistant Extensions",
-    focus: "Open source · Systems",
+    focus: ["Open source", "Systems"],
     period: "2025 — Present",
     tagline: "Automation you can actually read.",
     lede: "A set of open-source Home Assistant extensions for legible, local-first, human-in-the-loop automation — built and maintained solo, in the open.",
@@ -105,17 +106,17 @@ export const projectPages: ProjectPage[] = [
     meta: {
       Role: "Author & maintainer",
       Timeline: "2025 — Present",
-      Stack: "Python · Home Assistant · MQTT · Jinja",
-      Focus: "Local-first · auditable",
-      Status: "Active · open source"
+      Stack: ["Python", "Home Assistant"],
+      Focus: ["Local-first", "Auditable"],
+      Status: ["Active", "Open-source planned"]
     },
     link: { label: "View on GitHub", href: "https://github.com/alexfilipe" },
-    tags: ["Python", "Home Assistant", "MQTT", "Local-first", "Open source"]
+    tags: ["Python", "Home Assistant", "MQTT", "Local-first", "AI-first development"]
   },
   {
     id: "labstocker",
     name: "LabStocker",
-    focus: "Full-stack · Early work",
+    focus: ["Full-stack", "Early work"],
     period: "2014 — 2015",
     tagline: "The project that taught me systems.",
     lede: "A cloud inventory system for chemistry labs — reagent tracking, dashboards, and early predictive reorder models. One of my first major builds, and where I learned to design a system end to end.",
@@ -136,7 +137,7 @@ export const projectPages: ProjectPage[] = [
     meta: {
       Role: "Co-creator & engineer",
       Timeline: "2014 — 2015",
-      Stack: "Java · Web · SQL · early ML",
+      Stack: ["Java", "Web", "SQL", "Statistical ML"],
       Surfaces: "Desktop + web clients",
       Status: "Archived"
     },

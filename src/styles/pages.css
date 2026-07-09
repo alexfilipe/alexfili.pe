@@ -310,7 +310,7 @@
   /* Hero */
   .pp-hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
     align-items: center; gap: clamp(2rem, 5vw, 4rem); }
-  .pp-title { margin: .9rem 0 0; font-family: var(--title-font, var(--display)); font-size: clamp(2rem, 3.6vw, 3rem);
+  .pp-title { margin: .9rem 0 0; font-family: var(--display); font-size: clamp(2rem, 3.6vw, 3rem);
     font-weight: 600; line-height: 1; letter-spacing: 0; }
   .pp-tagline { margin: 1rem 0 0; font-family: var(--display); color: var(--gold);
     font-size: clamp(1.12rem, 2.1vw, 1.48rem); font-weight: 500; letter-spacing: 0; line-height: 1.28; }
@@ -325,21 +325,6 @@
   .pp-cta:hover { background: rgba(211,178,112,.14); border-color: var(--gold); }
   .pp-cta span { white-space: nowrap; }
 
-  /* Tweaks panel */
-  .pp-tweaks { position: fixed; right: clamp(.75rem, 2vw, 1.5rem); bottom: clamp(.75rem, 2vw, 1.5rem); z-index: 950;
-    display: flex; flex-direction: column; gap: .7rem; padding: .85rem .95rem;
-    border: 1px solid var(--line); border-radius: 10px; background: rgba(8,8,7,.72);
-    -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%);
-    box-shadow: 0 12px 40px rgba(0,0,0,.5); }
-  .pp-tweaks-title { color: var(--text-muted); font-size: .6rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
-  .pp-tweaks-row { display: flex; align-items: center; gap: .8rem; }
-  .pp-tweaks-label { color: var(--text-soft); font-size: .8rem; font-weight: 500; white-space: nowrap; }
-  .pp-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; }
-  .pp-seg-btn { border: 0; background: transparent; color: var(--text-muted); cursor: pointer;
-    padding: .32rem .7rem; border-radius: 999px; font-family: var(--sans); font-size: .72rem; font-weight: 700;
-    letter-spacing: .04em; text-transform: uppercase; transition: color .18s var(--ease), background .18s var(--ease); }
-  .pp-seg-btn.is-on { background: rgba(211,178,112,.15); color: var(--gold); }
-  .pp-seg-btn:hover:not(.is-on) { color: var(--text); }
   .pp-cta svg { width: 15px; height: 15px; }
 
   .pp-visual { position: relative; display: grid; place-items: center; aspect-ratio: 1 / 1;
@@ -375,19 +360,20 @@
   .pp-nolink { margin: 1.4rem 0 0; color: var(--text-muted); font-size: .86rem; }
 
   /* Next-project bar */
-  .pp-next { display: flex; align-items: center; justify-content: space-between; width: 100%;
-    margin-top: clamp(3rem, 6vw, 4.5rem); padding: clamp(1.5rem, 3vw, 2.2rem) 0 clamp(1.4rem, 3vw, 2rem);
+  .pp-next { display: flex; align-items: center; justify-content: flex-end; gap: clamp(1.6rem, 4vw, 3rem); width: 100%;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem); padding: clamp(1rem, 2vw, 1.35rem) 0;
     border: 0; border-top: 1px solid var(--line); background: transparent; color: inherit; cursor: pointer;
     text-align: left; transition: opacity .2s var(--ease); }
+  .pp-next-inner { text-align: left; }
   .pp-next svg { color: var(--gold); width: 22px; height: 22px; transition: transform .3s var(--ease); }
   .pp-next:hover svg { transform: translateX(.3rem); }
   .pp-next-label { display: block; color: var(--text-muted); font-size: .7rem; font-weight: 700;
     letter-spacing: .16em; text-transform: uppercase; margin-bottom: .5rem; }
-  .pp-next-name { display: block; font-family: var(--display); font-size: clamp(1.8rem, 4vw, 2.8rem);
+  .pp-next-name { display: block; font-family: var(--display); font-size: clamp(1.25rem, 2.6vw, 1.85rem);
     font-weight: 600; line-height: .95; transition: color .3s var(--ease); }
   .pp-next:hover .pp-next-name { color: var(--gold); }
 
-  .pp-foot { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; margin-top: 2.5rem; padding-top: 1.1rem;
+  .pp-foot { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; margin-top: 1.2rem; padding-top: 1.1rem;
     border-top: 1px solid var(--line-soft); color: var(--text-faint); font-size: .82rem; }
 
   /* Edge carousel arrows — only on wide viewports where they clear the content */
@@ -452,7 +438,24 @@
   .wk-when { grid-column: 2; grid-row: 2; display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .9rem; margin-top: .55rem; }
   .wk-year { color: var(--gold); font-size: .74rem; font-weight: 700; letter-spacing: .12em;
     text-transform: uppercase; white-space: nowrap; }
-  .wk-focus { color: var(--text-muted); font-size: .74rem; letter-spacing: .02em; white-space: nowrap; }
+  .wk-focus { color: var(--text-muted); font-size: .74rem; letter-spacing: .02em; }
+
+  .spaced-meta {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    column-gap: 0.48rem;
+    row-gap: 0.16rem;
+  }
+
+  .spaced-meta-sep {
+    color: currentColor;
+    opacity: 0.78;
+  }
+
+  .spaced-meta-part {
+    min-width: 0;
+  }
 
   .wk-main { grid-column: 2; grid-row: 1; min-width: 0; }
   .wk-name { margin: 0; font-family: var(--sans); font-size: clamp(1.45rem, 3vw, 2.15rem);

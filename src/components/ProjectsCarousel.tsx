@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import { projectGlyphs } from "@/components/ProjectGlyphs";
-import { projectPages, type ProjectPage } from "@/data/projectPages";
+import { projectPages, type ProjectMetaValue, type ProjectPage } from "@/data/projectPages";
 import { profile } from "@/data/profile";
 
 /**
@@ -26,6 +26,21 @@ function projectIndexFromId(projectId?: string) {
 
 function projectPath(projectId: string) {
   return `/projects/${projectId}`;
+}
+
+function SpacedMetadata({ value }: { value: ProjectMetaValue }) {
+  const parts = Array.isArray(value) ? value : [value];
+
+  return (
+    <span className="spaced-meta">
+      {parts.map((part, index) => (
+        <Fragment key={`${part}-${index}`}>
+          {index > 0 ? <span className="spaced-meta-sep" aria-hidden="true">·</span> : null}
+          <span className="spaced-meta-part">{part}</span>
+        </Fragment>
+      ))}
+    </span>
+  );
 }
 
 function ProjectDetail({ project }: { project: ProjectPage }) {
@@ -97,7 +112,7 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
             {Object.entries(project.meta ?? {}).map(([k, v]) => (
               <div className="pp-meta-row" key={k}>
                 <dt>{k}</dt>
-                <dd>{v}</dd>
+                <dd><SpacedMetadata value={v} /></dd>
               </div>
             ))}
           </dl>
@@ -115,12 +130,9 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
   );
 }
 
-type TitleFont = "serif" | "sans";
-
 export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselProps) {
   const [i, setI] = useState(() => projectIndexFromId(initialProjectId));
   const [dir, setDir] = useState<1 | -1>(1);
-  const [titleFont, setTitleFont] = useState<TitleFont>("serif");
 
   // Preserve old hash deep-links, but normalize them into project path URLs.
   useEffect(() => {
@@ -130,25 +142,6 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
     setI(n);
     history.replaceState(null, "", projectPath(projectPages[n].id));
   }, []);
-
-  // Restore persisted title-font tweak on mount (client only).
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("afs-proj-title-font");
-      if (saved === "serif" || saved === "sans") setTitleFont(saved);
-    } catch {
-      /* ignore */
-    }
-  }, []);
-
-  const pickFont = (f: TitleFont) => {
-    setTitleFont(f);
-    try {
-      localStorage.setItem("afs-proj-title-font", f);
-    } catch {
-      /* ignore */
-    }
-  };
 
   const go = useCallback(
     (next: number) => {
@@ -174,31 +167,7 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
   const nextProject = projectPages[(i + 1) % projectPages.length];
 
   return (
-    <div
-      className="pp-root"
-      style={{ ["--title-font" as string]: titleFont === "sans" ? "var(--sans)" : "var(--display)" }}
-    >
-      <aside className="pp-tweaks" aria-label="Tweaks">
-        <span className="pp-tweaks-title">Tweaks</span>
-        <div className="pp-tweaks-row">
-          <span className="pp-tweaks-label">Title font</span>
-          <div className="pp-seg" role="group" aria-label="Title font">
-            <button
-              className={"pp-seg-btn" + (titleFont === "serif" ? " is-on" : "")}
-              onClick={() => pickFont("serif")}
-            >
-              Serif
-            </button>
-            <button
-              className={"pp-seg-btn" + (titleFont === "sans" ? " is-on" : "")}
-              onClick={() => pickFont("sans")}
-            >
-              Sans
-            </button>
-          </div>
-        </div>
-      </aside>
-
+    <div className="pp-root">
       <SiteNav
         links={[
           { label: "Work", href: "/projects", current: true },
