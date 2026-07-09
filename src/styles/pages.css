@@ -247,7 +247,37 @@
     }
   }
   /* Violin timeline */
-  .mu-violin { margin-top: calc(var(--mu-marquee-gap) * .5); padding-top: 0; padding-bottom: clamp(2.5rem, 5vw, 4rem); border-top: 0; }
+  .mu-violin {
+    --violin-line-opacity: .11;
+    margin-top: calc(var(--mu-marquee-gap) * .5);
+    padding-top: 0;
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+    border-top: 0;
+    isolation: isolate;
+  }
+  .mu-violin::after {
+    content: "";
+    position: absolute;
+    left: 55%;
+    top: 44%;
+    z-index: 0;
+    width: min(100%, 1120px);
+    aspect-ratio: 1872 / 847;
+    background: url("/violin-white-lines.png") center / contain no-repeat;
+    background-image: image-set(
+      url("/violin-white-lines.avif") type("image/avif"),
+      url("/violin-white-lines.webp") type("image/webp"),
+      url("/violin-white-lines.png") type("image/png")
+    );
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: opacity .8s var(--ease);
+  }
+  .mu-violin:has(.mu-violin-copy .reveal.is-in)::after { opacity: var(--violin-line-opacity); }
+  @media (prefers-reduced-motion: reduce) {
+    .mu-violin::after { opacity: var(--violin-line-opacity); }
+  }
   .mu-violin .mu-sec-grid { column-gap: clamp(3.5rem, 7.5vw, 6.5rem); }
   .mu-violin-copy {
     position: relative;
@@ -540,8 +570,37 @@
       margin-top: 0;
       padding-left: 1.35rem;
     }
+    .mu-timeline li {
+      z-index: 1;
+    }
     .mu-violin {
+      --violin-line-opacity: .1;
       padding-bottom: clamp(4.6875rem, 16.25vw, 6.5625rem);
+    }
+    .mu-violin::after {
+      display: none;
+    }
+    .mu-violin .mu-timeline {
+      overflow: hidden;
+    }
+    .mu-violin .mu-timeline::before {
+      content: "";
+      position: absolute;
+      inset: clamp(-1rem, -2.5vw, -.25rem) clamp(-6rem, -18vw, -3.5rem);
+      z-index: 0;
+      background: url("/violin-white-lines.png") 40% 44% / auto 92% no-repeat;
+      background-image: image-set(
+        url("/violin-white-lines.avif") type("image/avif"),
+        url("/violin-white-lines.webp") type("image/webp"),
+        url("/violin-white-lines.png") type("image/png")
+      );
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .8s var(--ease);
+    }
+    .mu-violin .mu-timeline.is-in::before { opacity: var(--violin-line-opacity); }
+    @media (prefers-reduced-motion: reduce) {
+      .mu-violin .mu-timeline::before { opacity: var(--violin-line-opacity); }
     }
     .mu-violin .mu-sec-grid {
       column-gap: clamp(2.5rem, 6vw, 5rem);
