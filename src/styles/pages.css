@@ -326,7 +326,7 @@
     margin: 0;
     color: inherit;
     background: transparent;
-    scroll-snap-align: start;
+    scroll-snap-align: center;
   }
   .mu-violin-photo-trigger {
     appearance: none;
@@ -341,7 +341,7 @@
     border-radius: 0;
     background: transparent;
     color: inherit;
-    cursor: pointer;
+    cursor: default;
   }
   .mu-violin-photo-trigger:focus-visible {
     outline: 2px solid rgba(211, 178, 112, .48);
@@ -391,8 +391,6 @@
     transform: translateY(-.25rem);
     transition: opacity .2s var(--ease), transform .2s var(--ease);
   }
-  .mu-violin-photo:hover .mu-violin-photo-label,
-  .mu-violin-photo:focus-within .mu-violin-photo-label,
   .mu-violin-photo.is-label-active .mu-violin-photo-label {
     opacity: 1;
     transform: translateY(0);
@@ -566,6 +564,13 @@
     }
     .mu-violin-carousel {
       scroll-snap-type: x mandatory;
+    }
+    .mu-violin-carousel-shell {
+      --violin-carousel-rail: 2rem;
+    }
+    .mu-violin-carousel-control svg {
+      width: .675rem;
+      height: .675rem;
     }
   }
 

@@ -359,6 +359,8 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<number | null>(null);
   const [loadedPhotoIds, setLoadedPhotoIds] = useState<Set<string>>(() => new Set());
+  // Single source of truth for the one caption that may be visible at a time.
+  // Starts empty so nothing shows until the visitor scrolls, steps, or taps.
   const [activeLabelPhotoId, setActiveLabelPhotoId] = useState<string | null>(null);
   const [scrollState, setScrollState] = useState<CarouselScrollState>({
     canScrollLeft: false,
@@ -396,15 +398,41 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
     );
   }, []);
 
+  // Which photo is closest to the horizontal center of the scrollport. Pure
+  // read — the caller decides whether to surface its caption.
+  const getCenteredPhotoId = useCallback(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return null;
+
+    const viewportCenter = scroller.scrollLeft + scroller.clientWidth / 2;
+    let nearestId: string | null = null;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+    scroller.querySelectorAll<HTMLElement>(".mu-violin-photo").forEach((card) => {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      const distance = Math.abs(cardCenter - viewportCenter);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestId = card.dataset.photoId ?? null;
+      }
+    });
+
+    return nearestId;
+  }, []);
+
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
 
+    // Arrow visibility is refreshed on init and every layout/scroll change, but
+    // the caption is only ever surfaced by a real interaction — never on mount.
     updateScrollState();
-    const handleScroll = () => updateScrollState();
+
+    const handleScroll = () => {
+      updateScrollState();
+      setActiveLabelPhotoId(getCenteredPhotoId());
+    };
     const dropTarget = () => {
       targetRef.current = null;
-      setActiveLabelPhotoId(null);
     };
     scroller.addEventListener("scroll", handleScroll, { passive: true });
     scroller.addEventListener("pointerdown", dropTarget, { passive: true });
@@ -425,23 +453,41 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
       window.removeEventListener("resize", updateScrollState);
       resizeObserver?.disconnect();
     };
-  }, [updateScrollState]);
+  }, [updateScrollState, getCenteredPhotoId]);
 
   const scrollByDirection = useCallback(
     (direction: -1 | 1) => {
       const scroller = scrollerRef.current;
       if (!scroller) return;
 
-      const firstCard = scroller.querySelector<HTMLElement>(".mu-violin-photo");
-      const columnGap = Number.parseFloat(window.getComputedStyle(scroller).columnGap || "0") || 0;
-      const scrollAmount = firstCard ? firstCard.offsetWidth + columnGap : scroller.clientWidth * 0.82;
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const cards = Array.from(scroller.querySelectorAll<HTMLElement>(".mu-violin-photo"));
+      if (cards.length === 0) return;
 
       const maxScrollLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
       const base = targetRef.current ?? scroller.scrollLeft;
-      const target = Math.max(0, Math.min(base + direction * scrollAmount, maxScrollLeft));
-      targetRef.current = target;
+      const baseCenter = base + scroller.clientWidth / 2;
 
+      // Step relative to whichever photo is currently nearest the center.
+      let currentIndex = 0;
+      let nearestDistance = Number.POSITIVE_INFINITY;
+      cards.forEach((card, index) => {
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        const distance = Math.abs(cardCenter - baseCenter);
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          currentIndex = index;
+        }
+      });
+
+      const nextCard = cards[Math.max(0, Math.min(currentIndex + direction, cards.length - 1))];
+      const target = Math.max(
+        0,
+        Math.min(nextCard.offsetLeft + nextCard.offsetWidth / 2 - scroller.clientWidth / 2, maxScrollLeft)
+      );
+      targetRef.current = target;
+      setActiveLabelPhotoId(nextCard.dataset.photoId ?? null);
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       scroller.scrollTo({
         left: target,
         behavior: reduceMotion ? "auto" : "smooth"
@@ -469,6 +515,11 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
               role="listitem"
               key={photo.id}
               data-photo-id={photo.id}
+              onPointerEnter={(event) => {
+                // Mouse hover reveals a caption; touch is left to tap/scroll so
+                // it doesn't fight the tap handler. Either way, one label wins.
+                if (event.pointerType === "mouse") setActiveLabelPhotoId(photo.id);
+              }}
             >
               <button
                 type="button"
