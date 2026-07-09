@@ -150,7 +150,7 @@
   .mu-stats span { display: flex; flex-direction: column; }
   .mu-stats b { font-family: var(--display); font-size: clamp(2.4rem, 5vw, 3.4rem); font-weight: 600; line-height: 1; color: var(--gold); }
   .mu-stats small { color: var(--text-muted); font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; margin-top: .5rem; }
-  .mu-piano-video { display: flex; flex-direction: column; justify-self: start; width: min(100%, 24.5rem); margin-left: clamp(1.25rem, 3vw, 2.5rem); }
+  .mu-piano-video { display: flex; flex-direction: column; justify-self: start; width: min(100%, 24.5rem); margin-left: clamp(3rem, 6vw, 5.5rem); }
   .mu-piano-video-inner { display: flex; flex-direction: column; width: 100%; }
   .mu-piano-video-frame { position: relative; aspect-ratio: 9 / 16; border: 1px solid var(--line-strong);
     background: #000; overflow: hidden; box-shadow: 0 24px 70px rgba(0,0,0,.55); }
@@ -214,6 +214,11 @@
     }
     .mu-marquee-track i {
       font-size: .42em;
+    }
+  }
+  @media (min-width: 1400px) {
+    .mu-conducting::after {
+      right: max(2rem, calc((100vw - 1120px) / 2 - 10rem));
     }
   }
   /* Violin timeline */
