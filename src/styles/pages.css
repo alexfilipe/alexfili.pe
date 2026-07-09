@@ -248,7 +248,7 @@
   }
   /* Violin timeline */
   .mu-violin {
-    --violin-line-opacity: .11;
+    --violin-line-opacity: .065;
     margin-top: calc(var(--mu-marquee-gap) * .5);
     padding-top: 0;
     padding-bottom: clamp(2.5rem, 5vw, 4rem);
@@ -416,6 +416,8 @@
     line-height: 1.25;
     letter-spacing: .02em;
     text-align: left;
+    max-width: min(100% - clamp(1.1rem, 2vw, 1.7rem), 24rem);
+    white-space: normal;
     opacity: 0;
     pointer-events: none;
     transform: translateY(-.25rem);
@@ -574,7 +576,7 @@
       z-index: 1;
     }
     .mu-violin {
-      --violin-line-opacity: .1;
+      --violin-line-opacity: .055;
       padding-bottom: clamp(4.6875rem, 16.25vw, 6.5625rem);
     }
     .mu-violin::after {

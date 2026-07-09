@@ -354,6 +354,19 @@ function RenderRichText({ value }: { value: RichText }) {
   );
 }
 
+function RenderBreakableLabel({ value }: { value: string }) {
+  return (
+    <>
+      {value.split(/( — |, )/).map((part, index) => (
+        <Fragment key={`${part}-${index}`}>
+          {part}
+          {part === " — " || part === ", " ? <wbr /> : null}
+        </Fragment>
+      ))}
+    </>
+  );
+}
+
 function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
   const carouselId = useId();
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -543,7 +556,7 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
                 </span>
               </button>
               <span className="mu-violin-photo-label" id={labelId}>
-                {photo.label}
+                <RenderBreakableLabel value={photo.label} />
               </span>
             </div>
           );
