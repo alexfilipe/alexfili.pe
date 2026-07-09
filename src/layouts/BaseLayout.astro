@@ -77,6 +77,44 @@ const navItems: { href: string; label: string }[] = [];
     <meta name="twitter:description" content={socialDescription} />
     <meta name="twitter:image" content={ogImageUrl} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
+    <script is:inline>
+      document.documentElement.classList.add("image-fade-ready");
+
+      const markImageLoaded = (image) => {
+        image.dataset.imageLoaded = "true";
+      };
+
+      const prepareImage = (image) => {
+        if (image.dataset.imageFadePrepared) return;
+        image.dataset.imageFadePrepared = "true";
+
+        if (image.complete) {
+          markImageLoaded(image);
+          return;
+        }
+
+        image.addEventListener("load", () => markImageLoaded(image), { once: true });
+        image.addEventListener("error", () => markImageLoaded(image), { once: true });
+      };
+
+      const prepareImages = (root = document) => {
+        root.querySelectorAll("img").forEach(prepareImage);
+      };
+
+      prepareImages();
+
+      window.addEventListener("astro:page-load", () => prepareImages());
+
+      new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          mutation.addedNodes.forEach((node) => {
+            if (!(node instanceof Element)) return;
+            if (node.matches("img")) prepareImage(node);
+            prepareImages(node);
+          });
+        });
+      }).observe(document.documentElement, { childList: true, subtree: true });
+    </script>
     <title>{pageTitle}</title>
     <ClientRouter />
   </head>

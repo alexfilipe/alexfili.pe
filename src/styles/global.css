@@ -67,6 +67,21 @@ video {
   max-width: 100%;
 }
 
+html.image-fade-ready img {
+  opacity: 0;
+  transition: opacity 360ms ease;
+}
+
+html.image-fade-ready img[data-image-loaded="true"] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.image-fade-ready img {
+    transition: none;
+  }
+}
+
 button,
 input,
 textarea,
