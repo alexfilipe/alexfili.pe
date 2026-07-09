@@ -9,6 +9,7 @@ import {
   violinTimeline,
   conductingPremiere
 } from "@/data/musicContent";
+import { profile } from "@/data/profile";
 
 /**
  * MusicPage — an artistic single page with three movements: Conducting, Piano,
@@ -356,9 +357,16 @@ export default function MusicPage() {
       </section>
 
       <footer className="mu-foot">
-        <span>© 2026 Álex Filipe Santos</span>
-        <span className="mu-foot-sep">·</span>
-        <span>San Francisco, CA</span>
+        <div className="page-foot-copy">
+          <span>© 2026 Álex Filipe Santos</span>
+          <span className="page-foot-sep">·</span>
+          <span>San Francisco, CA</span>
+        </div>
+        <nav className="page-foot-links" aria-label="Social links">
+          <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href={`mailto:${profile.email}`}>Email</a>
+        </nav>
       </footer>
     </div>
   );

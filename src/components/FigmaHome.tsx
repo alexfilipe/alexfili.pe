@@ -873,6 +873,7 @@ export default function FigmaHome() {
   const [isLoading, setIsLoading] = useState(true);
   const [showLoader, setShowLoader] = useState(true);
   const [showNav, setShowNav] = useState(false);
+  const pianoWrapRef = useRef<HTMLDivElement>(null);
 
   const handleArtifactReady = useCallback(() => {
     window.setTimeout(() => setIsLoading(false), 520);
@@ -882,11 +883,13 @@ export default function FigmaHome() {
     let lastY = window.scrollY;
     const onScroll = () => {
       const y = window.scrollY;
+      const pianoRect = pianoWrapRef.current?.getBoundingClientRect();
+      const pianoIsVisible = pianoRect ? pianoRect.top < window.innerHeight && pianoRect.bottom > 0 : false;
       if (y <= 260) {
         setShowNav(false);
       } else if (y > lastY + 2) {
         setShowNav(true);
-      } else if (y < lastY - 2) {
+      } else if (y < lastY - 2 && pianoIsVisible) {
         setShowNav(false);
       }
       lastY = y;
@@ -959,7 +962,7 @@ export default function FigmaHome() {
           </div>
         </section>
 
-        <div className="figma-piano-wrap">
+        <div className="figma-piano-wrap" ref={pianoWrapRef}>
           <PianoSeparator />
         </div>
 
@@ -988,10 +991,6 @@ export default function FigmaHome() {
             </a>
           ))}
         </nav>
-
-        <footer className="figma-home-footnote">
-          This site is an AI-first experiment in front-end interaction, design systems, and agentic workflows.
-        </footer>
 
         <p className="figma-home-copyright">© {new Date().getFullYear()} Álex Filipe Santos<span className="figma-copyright-sep" aria-hidden="true">·</span>San Francisco, CA</p>
       </div>

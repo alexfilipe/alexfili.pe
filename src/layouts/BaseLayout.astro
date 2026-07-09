@@ -39,9 +39,7 @@ const websiteJsonLd = {
   alternateName: [profile.shortName, profile.domain],
   url: "https://alexfili.pe/"
 };
-const navItems = [
-  { href: "/", label: "Home" }
-];
+const navItems: { href: string; label: string }[] = [];
 
 ---
 
@@ -86,7 +84,7 @@ const navItems = [
     <a class="skip-link" href="#main">Skip to content</a>
     <div class:list={["site-shell", hideChrome && "site-shell--bare"]}>
       {
-        !hideChrome && (
+        !hideChrome && navItems.length > 0 && (
           <header class="site-header">
             <nav class="site-nav" aria-label="Primary navigation">
               <a class="site-mark" href="/" aria-label={`${profile.name} home`}>
@@ -109,20 +107,6 @@ const navItems = [
       <main id="main">
         <slot />
       </main>
-      {
-        !hideChrome && (
-          <footer class="site-footer">
-            <div class="footer-inner">
-              <span>© {new Date().getFullYear()} {profile.name}. Built with Astro.</span>
-              <div class="footer-links">
-                <a href={profile.github}>GitHub</a>
-                <a href={profile.linkedin}>LinkedIn</a>
-                <a href={`mailto:${profile.email}`}>Email</a>
-              </div>
-            </div>
-          </footer>
-        )
-      }
     </div>
   </body>
 </html>

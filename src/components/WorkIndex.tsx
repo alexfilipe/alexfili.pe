@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import { projectGlyphs } from "@/components/ProjectGlyphs";
 import { projectPages } from "@/data/projectPages";
+import { profile } from "@/data/profile";
 
 /**
  * WorkIndex — the "Featured Work" index: hairline-separated rows, sans-serif
@@ -48,9 +49,16 @@ export default function WorkIndex() {
         </div>
 
         <footer className="wk-foot">
-          <span>© 2026 Álex Filipe Santos</span>
-          <span className="wk-foot-sep">·</span>
-          <span>San Francisco, CA</span>
+          <div className="page-foot-copy">
+            <span>© 2026 Álex Filipe Santos</span>
+            <span className="page-foot-sep">·</span>
+            <span>San Francisco, CA</span>
+          </div>
+          <nav className="page-foot-links" aria-label="Social links">
+            <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href={`mailto:${profile.email}`}>Email</a>
+          </nav>
         </footer>
       </div>
     </div>

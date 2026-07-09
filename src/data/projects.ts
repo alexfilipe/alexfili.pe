@@ -20,7 +20,7 @@ export const projects: Project[] = [
       start: "2026",
       end: "Present"
     },
-    href: "/projects/aetherloom"
+    href: "https://aetherloom.app/"
   },
   {
     title: "InspiraSonho",
