@@ -111,7 +111,11 @@
   .mu-body b, .mu-lede b { color: var(--text); font-weight: 700; }
 
   /* Conducting video */
+  .mu-conducting-grid { grid-template-areas: "heading video" "body video"; row-gap: 0; align-items: start; }
+  .mu-conducting-heading { grid-area: heading; }
+  .mu-conducting-body { grid-area: body; }
   .mu-video { display: block; align-self: start; margin-top: clamp(11rem, 12vw, 12.25rem); }
+  .mu-conducting .mu-video { grid-area: video; }
   @media (min-width: 821px) and (max-width: 1180px) {
     .mu-video { margin-top: clamp(7.5rem, 9vw, 9.5rem); }
   }
@@ -122,7 +126,7 @@
     background: #000; overflow: hidden; box-shadow: 0 24px 70px rgba(0,0,0,.55); }
   .mu-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
   .mu-video-cap { display: block; margin-top: .9rem; color: var(--text-muted); font-size: .78rem;
-    letter-spacing: .1em; text-transform: uppercase; }
+    letter-spacing: .1em; text-transform: uppercase; white-space: pre-line; }
 
   /* Piano stats + keys + recordings */
   .mu-stats { display: flex; gap: clamp(3.25rem, 6vw, 5rem); margin-top: 2.2rem; }
@@ -207,9 +211,12 @@
     }
 
     .mu-sec-grid { grid-template-columns: 1fr; }
+    .mu-conducting-grid { grid-template-areas: "heading" "video" "body"; row-gap: clamp(2rem, 5vw, 3.5rem); }
     .mu-sec-title { font-size: clamp(3.35rem, 10vw, 5rem); }
     .mu-video { margin-top: 0; }
-    .mu-piano-video { order: -1; justify-self: center; width: min(100%, 18rem); margin-left: 0; }
+    .mu-conducting .mu-video { margin-top: clamp(1.5rem, 5vw, 2rem); }
+    .mu-conducting-body .mu-lede { margin-top: clamp(.5rem, 2vw, 1rem); }
+    .mu-piano-video { order: -1; justify-self: center; width: min(100%, 18rem); margin-left: 0; margin-bottom: clamp(.75rem, 3vw, 1.25rem); }
     .mu-recs a { grid-template-columns: 2.2rem 1fr; }
     .mu-rec-date { grid-column: 2; padding-left: 0; }
     .mu-marquee-track span { font-size: clamp(1.05rem, 4.8vw, 1.42rem); }

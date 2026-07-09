@@ -163,6 +163,6 @@ export const violinTimeline: TimelineEntry[] = [
 // The conducting première embed on the Conducting movement.
 export const conductingPremiere = {
   youtubeId: "XrIh9qe9_MI",
-  caption: "Première · Amherst Symphony Orchestra · Spring 2020",
+  caption: "Première · Amherst Symphony Orchestra\nSpring 2020",
   title: "Conducting première — Schumann Piano Concerto in A minor"
 };

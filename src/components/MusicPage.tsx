@@ -399,14 +399,16 @@ export default function MusicPage() {
         <div className="mu-sec-mark" aria-hidden="true">
           {conductingMovement.numeral}
         </div>
-        <div className="mu-sec-grid">
-          <div className="mu-sec-copy">
+        <div className="mu-sec-grid mu-conducting-grid">
+          <div className="mu-sec-copy mu-conducting-heading">
             <Reveal as="span" className="mu-kicker">
               {conductingMovement.kicker}
             </Reveal>
             <Reveal as="h2" className="mu-sec-title">
               {conductingMovement.title}
             </Reveal>
+          </div>
+          <div className="mu-sec-copy mu-conducting-body">
             <Reveal as="p" className="mu-lede">
               <RenderRichText value={conductingMovement.lede} />
             </Reveal>
