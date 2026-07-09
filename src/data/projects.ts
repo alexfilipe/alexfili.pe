@@ -34,15 +34,15 @@ export const projects: Project[] = [
     href: "/projects/inspirasonho"
   },
   {
-    title: "Home Assistant Extensions",
-    description: "Open-source smart-home tools for legible, local-first, human-in-the-loop automation.",
+    title: "Home Intelligence",
+    description: "Open-source Home Assistant tools for readable, local-first, agentic smart-home automation.",
     focus: "Open source",
     year: "Selected",
     period: {
       start: "2025",
       end: "Present"
     },
-    href: "/projects/home-assistant"
+    href: "/projects/home-intelligence"
   },
   {
     title: "LabStocker",

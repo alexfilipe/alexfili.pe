@@ -1580,7 +1580,7 @@ main {
   color: var(--gold);
   font-size: 0.75rem;
   font-weight: 760;
-  letter-spacing: 0;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 

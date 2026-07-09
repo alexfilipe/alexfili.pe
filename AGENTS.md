@@ -16,8 +16,6 @@ Use browser QA only when:
 
 - I explicitly ask for visual QA
 
-- the change affects layout, responsive behavior, interactions, screenshots, animations, or JavaScript behavior
-
 - you need to debug a visual issue that cannot be verified from the code
 
 - the change is large enough that visual regression risk is meaningful

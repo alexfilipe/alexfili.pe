@@ -47,7 +47,7 @@ export const projectPages: ProjectPage[] = [
     period: "2026 — Present",
     tagline: "Your files, safely interwoven.",
     stub: true,
-    lede: "An AI-first native macOS app for safe, local-first sync across iCloud Drive, Google Drive, OneDrive, and NAS-backed storage — built from a belief that personal files, privacy, and AI-assisted workflows should remain under your control.",
+    lede: "An AI-first native macOS app for safe, local-first sync across iCloud Drive, Google Drive, OneDrive, and NAS-backed storage — built from a belief that your files should stay private, under your control, and never trapped inside a single cloud.",
     link: { label: "Visit aetherloom.app", href: "https://aetherloom.app/" },
     tags: ["macOS", "Swift", "Local-first", "Multi-cloud", "AI-first development", "Open source"]
   },
@@ -83,12 +83,12 @@ export const projectPages: ProjectPage[] = [
     tags: ["Full-Stack", "Databases", "SEO"]
   },
   {
-    id: "home-assistant",
-    name: "Home Assistant Extensions",
+    id: "home-intelligence",
+    name: "Home Intelligence",
     focus: ["Systems", "Automation"],
     period: "2025 — Present",
     tagline: "Automation you can actually read.",
-    lede: "A set of open-source Home Assistant extensions for legible, local-first, human-in-the-loop automation — built and maintained solo, in the open.",
+    lede: "Open-source Home Assistant tools for local-first, agentic smart-home automation — built around legibility, privacy, and human-in-the-loop control.",
     sections: [
       {
         heading: "The idea",

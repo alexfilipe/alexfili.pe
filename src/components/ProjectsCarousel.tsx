@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import { projectGlyphs } from "@/components/ProjectGlyphs";
@@ -17,6 +17,10 @@ import PageFooter from "@/components/PageFooter";
 type ProjectsCarouselProps = {
   initialProjectId?: string;
 };
+
+const SWIPE_MIN_DISTANCE = 64;
+const SWIPE_HORIZONTAL_RATIO = 1.25;
+const SWIPE_CLICK_SUPPRESSION_MS = 450;
 
 function projectIndexFromId(projectId?: string) {
   if (!projectId) return 0;
@@ -55,17 +59,17 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
             <h1 className="pp-title">{project.name}</h1>
             <p className="pp-tagline">{project.tagline}</p>
             <p className="pp-lede">{project.lede}</p>
-            <div className="pp-tags">
-              {project.tags.map((t) => (
-                <span className="tag" key={t}>{t}</span>
-              ))}
-            </div>
             {project.link ? (
               <a className="pp-cta" href={project.link.href} target="_blank" rel="noopener noreferrer">
                 <span>{project.link.label}</span>
                 <ArrowUpRight size={15} strokeWidth={2.4} />
               </a>
             ) : null}
+            <div className="pp-tags">
+              {project.tags.map((t) => (
+                <span className="tag" key={t}>{t}</span>
+              ))}
+            </div>
           </div>
           <div className="pp-visual" aria-hidden="true">
             <span className="pp-visual-frame" />
@@ -131,6 +135,11 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
 export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselProps) {
   const [i, setI] = useState(() => projectIndexFromId(initialProjectId));
   const [dir, setDir] = useState<1 | -1>(1);
+  const currentIndexRef = useRef(i);
+  const goRef = useRef<(next: number) => void>(() => undefined);
+  const swipeStartRef = useRef<{ x: number; y: number } | null>(null);
+  const suppressClickRef = useRef(false);
+  const suppressClickTimerRef = useRef<number | null>(null);
 
   // Preserve old hash deep-links, but normalize them into project path URLs.
   useEffect(() => {
@@ -153,6 +162,11 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
   );
 
   useEffect(() => {
+    currentIndexRef.current = i;
+    goRef.current = go;
+  }, [i, go]);
+
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") go(i + 1);
       else if (e.key === "ArrowLeft") go(i - 1);
@@ -160,6 +174,73 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [i, go]);
+
+  useEffect(() => {
+    const resetSwipe = () => {
+      swipeStartRef.current = null;
+    };
+
+    const armClickSuppression = () => {
+      suppressClickRef.current = true;
+      if (suppressClickTimerRef.current !== null) {
+        window.clearTimeout(suppressClickTimerRef.current);
+      }
+      suppressClickTimerRef.current = window.setTimeout(() => {
+        suppressClickRef.current = false;
+        suppressClickTimerRef.current = null;
+      }, SWIPE_CLICK_SUPPRESSION_MS);
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) {
+        resetSwipe();
+        return;
+      }
+
+      const touch = e.touches[0];
+      swipeStartRef.current = { x: touch.clientX, y: touch.clientY };
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      const start = swipeStartRef.current;
+      resetSwipe();
+
+      if (!start || e.changedTouches.length === 0) return;
+
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - start.x;
+      const dy = touch.clientY - start.y;
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+
+      if (absX < SWIPE_MIN_DISTANCE || absX < absY * SWIPE_HORIZONTAL_RATIO) return;
+
+      armClickSuppression();
+      goRef.current(dx < 0 ? currentIndexRef.current + 1 : currentIndexRef.current - 1);
+    };
+
+    const onClick = (e: MouseEvent) => {
+      if (!suppressClickRef.current) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      suppressClickRef.current = false;
+    };
+
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", resetSwipe, { passive: true });
+    window.addEventListener("click", onClick, true);
+
+    return () => {
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", resetSwipe);
+      window.removeEventListener("click", onClick, true);
+      if (suppressClickTimerRef.current !== null) {
+        window.clearTimeout(suppressClickTimerRef.current);
+      }
+    };
+  }, []);
 
   const project = projectPages[i];
   const nextProject = projectPages[(i + 1) % projectPages.length];

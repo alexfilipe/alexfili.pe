@@ -147,7 +147,6 @@ export const repertoireComposers: string[] = [
   "Scarlatti",
   "Shostakovich",
   "Glass",
-  "Nyman",
   "Satie",
   "Sibelius"
 ];
