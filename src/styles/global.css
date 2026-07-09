@@ -1217,10 +1217,10 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
   }
 }
 
-@media (min-width: 1200px) and (max-width: 1600px) {
+@media (min-width: 1200px) and (max-width: 1500px) {
   .figma-piano-wrap {
-    margin-top: 1rem;
-    margin-bottom: 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 }
 
