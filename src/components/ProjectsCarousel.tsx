@@ -137,6 +137,7 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
   const [dir, setDir] = useState<1 | -1>(1);
   const currentIndexRef = useRef(i);
   const goRef = useRef<(next: number) => void>(() => undefined);
+  const pendingScrollToTopRef = useRef(false);
   const swipeStartRef = useRef<{ x: number; y: number } | null>(null);
   const suppressClickRef = useRef(false);
   const suppressClickTimerRef = useRef<number | null>(null);
@@ -154,9 +155,9 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
     (next: number) => {
       setDir(next > i || (i === projectPages.length - 1 && next === 0) ? 1 : -1);
       const n = (next + projectPages.length) % projectPages.length;
+      pendingScrollToTopRef.current = n !== i;
       setI(n);
       history.replaceState(null, "", projectPath(projectPages[n].id));
-      window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [i]
   );
@@ -164,6 +165,15 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
   useEffect(() => {
     currentIndexRef.current = i;
     goRef.current = go;
+
+    if (!pendingScrollToTopRef.current) return;
+    pendingScrollToTopRef.current = false;
+
+    const frame = window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [i, go]);
 
   useEffect(() => {
