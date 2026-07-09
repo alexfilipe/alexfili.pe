@@ -24,6 +24,13 @@ export type ProjectLink = {
   href: string;
 };
 
+export type ProjectLogo = {
+  initials: string;
+  accent: string;
+  webpSrc?: string;
+  pngSrc?: string;
+};
+
 export type ProjectPage = {
   id: string;
   name: string;
@@ -34,6 +41,7 @@ export type ProjectPage = {
   /** A "stub" project has its own external home — render just the hero + CTA. */
   stub?: boolean;
   tags: string[];
+  logo: ProjectLogo;
   sections?: ProjectSection[];
   meta?: ProjectMeta;
   link?: ProjectLink | null;
@@ -49,6 +57,12 @@ export const projectPages: ProjectPage[] = [
     stub: true,
     lede: "An AI-first native macOS app for safe, local-first sync across iCloud Drive, Google Drive, OneDrive, and NAS-backed storage — built from a belief that your files should stay private, under your control, and never trapped inside a single cloud.",
     link: { label: "Visit aetherloom.app", href: "https://aetherloom.app/" },
+    logo: {
+      initials: "Ae",
+      accent: "#9fc7bd",
+      webpSrc: "/images/project-logos/aetherloom.webp",
+      pngSrc: "/images/project-logos/aetherloom.png"
+    },
     tags: ["macOS", "Swift", "Local-first", "Multi-cloud", "AI-first development", "Open source"]
   },
   {
@@ -80,6 +94,12 @@ export const projectPages: ProjectPage[] = [
       Status: ["Archived", "Handed off"]
     },
     // link: { label: "Visit inspirasonho.com.br", href: "https://www.inspirasonho.com.br/" },
+    logo: {
+      initials: "IS",
+      accent: "#d8a85f",
+      webpSrc: "/images/project-logos/inspirasonho.webp",
+      pngSrc: "/images/project-logos/inspirasonho.png"
+    },
     tags: ["Full-Stack", "Databases", "SEO"]
   },
   {
@@ -111,6 +131,12 @@ export const projectPages: ProjectPage[] = [
       Status: ["Active", "Open-source (planned)"]
     },
     // link: { label: "View on GitHub", href: "https://github.com/alexfilipe" },
+    logo: {
+      initials: "HI",
+      accent: "#8fb2df",
+      webpSrc: "/images/project-logos/home-intelligence.webp",
+      pngSrc: "/images/project-logos/home-intelligence.png"
+    },
     tags: ["Python", "Home Assistant", "MQTT", "Local-first", "AI-first development"]
   },
   {
@@ -142,6 +168,12 @@ export const projectPages: ProjectPage[] = [
       Status: "Archived"
     },
     link: null,
+    logo: {
+      initials: "LS",
+      accent: "#cda0b4",
+      webpSrc: "/images/project-logos/labstocker.webp",
+      pngSrc: "/images/project-logos/labstocker.png"
+    },
     tags: ["Java", "SQL", "Dashboards", "Predictive models", "Early work"]
   }
 ];

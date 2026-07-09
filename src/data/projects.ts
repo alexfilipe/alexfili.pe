@@ -8,6 +8,12 @@ export type Project = {
     end: string;
   };
   href?: string;
+  logo: {
+    initials: string;
+    accent: string;
+    webpSrc?: string;
+    pngSrc?: string;
+  };
 };
 
 export const projects: Project[] = [
@@ -20,7 +26,13 @@ export const projects: Project[] = [
       start: "2026",
       end: "Present"
     },
-    href: "/projects/aetherloom"
+    href: "/projects/aetherloom",
+    logo: {
+      initials: "Ae",
+      accent: "#9fc7bd",
+      webpSrc: "/images/project-logos/aetherloom.webp",
+      pngSrc: "/images/project-logos/aetherloom.png"
+    }
   },
   {
     title: "InspiraSonho",
@@ -31,7 +43,13 @@ export const projects: Project[] = [
       start: "2015",
       end: "2018"
     },
-    href: "/projects/inspirasonho"
+    href: "/projects/inspirasonho",
+    logo: {
+      initials: "IS",
+      accent: "#d8a85f",
+      webpSrc: "/images/project-logos/inspirasonho.webp",
+      pngSrc: "/images/project-logos/inspirasonho.png"
+    }
   },
   {
     title: "Home Intelligence",
@@ -42,7 +60,13 @@ export const projects: Project[] = [
       start: "2025",
       end: "Present"
     },
-    href: "/projects/home-intelligence"
+    href: "/projects/home-intelligence",
+    logo: {
+      initials: "HI",
+      accent: "#8fb2df",
+      webpSrc: "/images/project-logos/home-intelligence.webp",
+      pngSrc: "/images/project-logos/home-intelligence.png"
+    }
   },
   {
     title: "LabStocker",
@@ -53,6 +77,12 @@ export const projects: Project[] = [
       start: "2014",
       end: "2015"
     },
-    href: "/projects/labstocker"
+    href: "/projects/labstocker",
+    logo: {
+      initials: "LS",
+      accent: "#cda0b4",
+      webpSrc: "/images/project-logos/labstocker.webp",
+      pngSrc: "/images/project-logos/labstocker.png"
+    }
   }
 ];

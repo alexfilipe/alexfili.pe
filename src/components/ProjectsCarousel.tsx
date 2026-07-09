@@ -1,4 +1,5 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import { projectGlyphs } from "@/components/ProjectGlyphs";
@@ -47,6 +48,39 @@ function SpacedMetadata({ value }: { value: ProjectMetaValue }) {
   );
 }
 
+function ProjectVisual({ project }: { project: ProjectPage }) {
+  const logoStyle = {
+    "--pp-project-logo-accent": project.logo.accent
+  } as CSSProperties;
+
+  return (
+    <div className="pp-visual" aria-hidden="true">
+      <span className="pp-visual-frame" />
+      <span className="pp-visual-glyph">{projectGlyphs[project.id]}</span>
+      <span
+        className={`pp-project-logo${project.logo.webpSrc || project.logo.pngSrc ? " pp-project-logo--image" : ""}`}
+        style={logoStyle}
+      >
+        {project.logo.webpSrc || project.logo.pngSrc ? (
+          <picture className="pp-project-logo-picture">
+            {project.logo.webpSrc ? <source srcSet={project.logo.webpSrc} type="image/webp" /> : null}
+            <img
+              src={project.logo.pngSrc ?? project.logo.webpSrc}
+              alt=""
+              width="256"
+              height="256"
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        ) : (
+          <span>{project.logo.initials}</span>
+        )}
+      </span>
+    </div>
+  );
+}
+
 function ProjectDetail({ project }: { project: ProjectPage }) {
   const pageClassName = ["pp-page", !project.link && "pp-page--no-cta", project.stub && "pp-page-stub"]
     .filter(Boolean)
@@ -75,10 +109,7 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
               ))}
             </div>
           </div>
-          <div className="pp-visual" aria-hidden="true">
-            <span className="pp-visual-frame" />
-            <span className="pp-visual-glyph">{projectGlyphs[project.id]}</span>
-          </div>
+          <ProjectVisual project={project} />
         </header>
       </article>
     );
@@ -100,10 +131,7 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
             ))}
           </div>
         </div>
-        <div className="pp-visual" aria-hidden="true">
-          <span className="pp-visual-frame" />
-          <span className="pp-visual-glyph">{projectGlyphs[project.id]}</span>
-        </div>
+        <ProjectVisual project={project} />
       </header>
 
       <div className="pp-body">

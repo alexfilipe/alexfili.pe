@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { ReactNode, SVGProps } from "react";
+import type { CSSProperties, ReactNode, SVGProps } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Mail } from "lucide-react";
 import PianoSeparator from "@/components/PianoSeparator";
 import PageFooter from "@/components/PageFooter";
 import { musicDisciplines } from "@/data/music";
 import { profile } from "@/data/profile";
-import { projects } from "@/data/projects";
+import { projects, type Project } from "@/data/projects";
 
 const ACCENT = "#c8a96e";
 
@@ -758,17 +758,47 @@ function SectionHeader({ id, title, href }: { id: string; title: string; href?: 
   );
 }
 
-function ArtworkFrame({ children }: { children: ReactNode }) {
+type ProjectLogoPlaceholder = Project["logo"];
+
+function ArtworkFrame({ children, logo }: { children: ReactNode; logo?: ProjectLogoPlaceholder }) {
+  const logoStyle = logo
+    ? ({
+        "--figma-project-logo-accent": logo.accent
+      } as CSSProperties)
+    : undefined;
+
   return (
     <span className="figma-carousel-media" aria-hidden="true">
       <span className="figma-carousel-art">{children}</span>
+      {logo ? (
+        <span
+          className={`figma-project-logo${logo.webpSrc || logo.pngSrc ? " figma-project-logo--image" : ""}`}
+          style={logoStyle}
+        >
+          {logo.webpSrc || logo.pngSrc ? (
+            <picture className="figma-project-logo-picture">
+              {logo.webpSrc ? <source srcSet={logo.webpSrc} type="image/webp" /> : null}
+              <img
+                src={logo.pngSrc ?? logo.webpSrc}
+                alt=""
+                width="256"
+                height="256"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          ) : (
+            <span>{logo.initials}</span>
+          )}
+        </span>
+      ) : null}
     </span>
   );
 }
 
-function ProjectArtwork() {
+function ProjectArtwork({ logo }: { logo: ProjectLogoPlaceholder }) {
   return (
-    <ArtworkFrame>
+    <ArtworkFrame logo={logo}>
       <svg viewBox="0 0 44 44" focusable="false">
         <rect x="11" y="11" width="22" height="22" rx="1" transform="rotate(45 22 22)" />
         <circle cx="22" cy="22" r="7.5" />
@@ -840,7 +870,7 @@ function FeaturedWorkSection() {
             role="listitem"
             {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           >
-            <ProjectArtwork />
+            <ProjectArtwork logo={project.logo} />
             <span className="figma-carousel-copy">
               <span className="figma-carousel-meta">
                 {project.period.start}&mdash;{project.period.end}
