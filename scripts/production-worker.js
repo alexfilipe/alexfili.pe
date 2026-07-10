@@ -14,9 +14,20 @@ export default {
       return Response.redirect(LABSTOCKER_TARGET, SOFT_REDIRECT);
     }
 
+    let shouldCanonicalize = false;
+
     if (url.protocol === "http:" || hostname === WWW_HOST) {
       url.protocol = "https:";
       url.hostname = CANONICAL_HOST;
+      shouldCanonicalize = true;
+    }
+
+    if (url.pathname !== "/" && url.pathname.endsWith("/")) {
+      url.pathname = url.pathname.replace(/\/+$/, "");
+      shouldCanonicalize = true;
+    }
+
+    if (shouldCanonicalize) {
       return Response.redirect(url.toString(), PERMANENT_REDIRECT);
     }
 
