@@ -114,9 +114,9 @@
     pointer-events: none;
     transform: rotate(-5deg);
     transform-origin: 62% 72%;
-    transition: opacity .8s var(--ease);
+    transition: opacity .5s var(--ease);
   }
-  .mu-conducting:has(.mu-conducting-body .reveal.is-in)::after { opacity: var(--conducting-baton-opacity); }
+  .mu-conducting:has(.mu-conducting-heading .mu-kicker.is-in)::after { opacity: var(--conducting-baton-opacity); }
   @media (prefers-reduced-motion: reduce) {
     .mu-conducting::after { opacity: var(--conducting-baton-opacity); }
   }
@@ -580,7 +580,7 @@
       width: min(96vw, 28rem);
       --conducting-baton-opacity: .15;
     }
-    .mu-conducting:has(.mu-conducting-body .reveal.is-in)::after { opacity: var(--conducting-baton-opacity); }
+    .mu-conducting:has(.mu-conducting-heading .mu-kicker.is-in)::after { opacity: var(--conducting-baton-opacity); }
     .mu-piano { padding-top: 6.25rem; }
     .mu-piano-video { order: -1; justify-self: center; width: min(100%, 21.5rem); margin-left: 0; margin-bottom: clamp(.2rem, 1.2vw, .45rem); }
     .mu-piano-video-swipe-layer { position: absolute; inset: 0; z-index: 3; display: block; background: transparent; touch-action: pan-y; }

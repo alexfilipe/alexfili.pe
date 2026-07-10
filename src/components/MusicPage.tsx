@@ -385,6 +385,7 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
   const animationFrameRef = useRef<number | null>(null);
   const scrollSnapTypeRef = useRef<string | null>(null);
   const autoScrollDirectionRef = useRef<-1 | 1>(1);
+  const manualScrollResetTimeoutRef = useRef<number | null>(null);
   const [loadedPhotoIds, setLoadedPhotoIds] = useState<Set<string>>(() => new Set());
   // Single source of truth for the one caption that may be visible at a time.
   // Starts empty so nothing shows until the visitor scrolls, steps, or taps.
@@ -394,6 +395,7 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
     canScrollRight: false
   });
   const [isCarouselHovered, setIsCarouselHovered] = useState(false);
+  const [autoScrollResetToken, setAutoScrollResetToken] = useState(0);
 
   const markPhotoLoaded = useCallback((photoId: string) => {
     setLoadedPhotoIds((currentIds) => {
@@ -451,6 +453,16 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
 
     const handleScroll = () => {
       updateScrollState();
+
+      if (!scroller.hasAttribute("data-auto-scrolling")) {
+        if (manualScrollResetTimeoutRef.current !== null) {
+          window.clearTimeout(manualScrollResetTimeoutRef.current);
+        }
+        manualScrollResetTimeoutRef.current = window.setTimeout(() => {
+          manualScrollResetTimeoutRef.current = null;
+          setAutoScrollResetToken((token) => token + 1);
+        }, 120);
+      }
     };
     const dropTarget = () => {
       cancelScrollAnimation();
@@ -473,6 +485,10 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
       scroller.removeEventListener("pointerdown", dropTarget);
       scroller.removeEventListener("wheel", dropTarget);
       window.removeEventListener("resize", updateScrollState);
+      if (manualScrollResetTimeoutRef.current !== null) {
+        window.clearTimeout(manualScrollResetTimeoutRef.current);
+        manualScrollResetTimeoutRef.current = null;
+      }
       cancelScrollAnimation();
       resizeObserver?.disconnect();
     };
@@ -591,7 +607,7 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
     autoScroll = window.setTimeout(runAutoScroll, 7000);
 
     return () => window.clearTimeout(autoScroll);
-  }, [isCarouselHovered, photos.length, scrollByDirection]);
+  }, [isCarouselHovered, photos.length, scrollByDirection, autoScrollResetToken]);
 
   return (
     <div
