@@ -12,6 +12,7 @@
     "build:placeholder": "node scripts/build-placeholder.mjs",
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
     "deploy:production": "npm run build:production && npx wrangler deploy --config wrangler.production.jsonc",
+    "production": "./scripts/deploy-production.sh",
     "deploy:production:dry-run": "npm run build:production && npx wrangler deploy --config wrangler.production.jsonc --dry-run",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
   },

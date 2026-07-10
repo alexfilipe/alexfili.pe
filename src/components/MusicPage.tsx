@@ -543,7 +543,7 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
       if (!reduceMotion && options.transitionMs) {
         const start = scroller.scrollLeft;
         const distance = target - start;
-        const duration = Math.max(1000, options.transitionMs);
+        const duration = Math.max(600, options.transitionMs);
         const startedAt = window.performance.now();
         scrollSnapTypeRef.current = scroller.style.scrollSnapType;
         if (options.automatic) scroller.setAttribute("data-auto-scrolling", "true");
@@ -600,7 +600,8 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
       }
 
       autoScrollDirectionRef.current = direction;
-      scrollByDirection(direction, { revealLabel: false, transitionMs: 1000, automatic: true });
+      const transitionMs = window.matchMedia("(max-width: 600px)").matches ? 700 : 1000;
+      scrollByDirection(direction, { revealLabel: false, transitionMs, automatic: true });
       autoScroll = window.setTimeout(runAutoScroll, 8000);
     };
 

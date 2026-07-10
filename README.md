@@ -112,6 +112,19 @@ Worker. Do not commit Cloudflare credentials to the repo.
 
 To deploy production:
 
+From a clean, committed `main` branch, run:
+
+```bash
+npm run production
+```
+
+This pushes `main`, starts **Deploy alexfili.pe production** for that exact
+commit, waits for it to finish, and verifies the live apex, `www` redirect, and
+`robots.txt`. It requires authenticated GitHub CLI access. If needed, run
+`gh auth login -h github.com -w -s workflow` once.
+
+You can also deploy manually:
+
 1. Push the commit you want to deploy.
 2. In GitHub, open **Actions** → **Deploy alexfili.pe production**.
 3. Click **Run workflow**, choose the branch/ref, and type `alexfili.pe` in the
