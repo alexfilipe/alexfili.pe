@@ -1047,13 +1047,17 @@
   .wk-main { position: relative; z-index: 1; grid-column: 2; grid-row: 1; min-width: 0; }
   .wk-name { margin: 0; font-family: var(--sans); font-size: clamp(1.45rem, 3vw, 2.15rem);
     font-weight: 600; line-height: 1.05; letter-spacing: -.005em; transition: color .25s var(--ease); }
-  .wk-item:hover .wk-name { color: var(--gold); }
+  .wk-item:hover .wk-name,
+  .wk-item:focus-visible .wk-name { color: var(--gold); }
+  .wk-title-tail { white-space: nowrap; }
   .wk-desc { margin: .5rem 0 0; color: var(--text-soft); font-size: 1.02rem; line-height: 1.5;
     max-width: 40rem; }
 
-  .wk-arrow { position: absolute; right: 1.5rem; bottom: clamp(1.5rem, 3vw, 2.2rem);
-    z-index: 1; color: var(--gold); opacity: .7; transition: opacity .25s var(--ease), transform .25s var(--ease); }
-  .wk-item:hover .wk-arrow { opacity: 1; transform: translateX(.2rem); }
+  .wk-arrow { display: inline-flex; align-items: center; margin-left: .48rem; color: var(--gold);
+    opacity: 0; pointer-events: none; transform: translate(-.16rem, .14rem);
+    transition: opacity .25s var(--ease), transform .25s var(--ease); vertical-align: -.08em; }
+  .wk-item:hover .wk-arrow,
+  .wk-item:focus-visible .wk-arrow { opacity: 1; transform: translate(.08rem, -.06rem); }
 
   .wk-foot { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; margin-top: auto; padding: 1.1rem 0 3rem;
     border-top: 1px solid var(--line-soft); color: var(--text-faint); font-size: .82rem; }
@@ -1101,7 +1105,6 @@
     .wk-item { grid-template-columns: 112px minmax(0, 1fr); gap: .5rem 1.2rem;
       padding: clamp(1.4rem, 5vw, 1.9rem) 1rem; }
     .wk-preview { width: 112px; }
-    .wk-arrow { right: calc(var(--wk-gutter) + .25rem); bottom: clamp(1.4rem, 5vw, 1.9rem); }
   }
 
   @media (max-width: 1040px) {
@@ -1147,5 +1150,4 @@
       padding-left: var(--wk-gutter);
       padding-right: var(--wk-gutter);
     }
-    .wk-arrow { right: calc(var(--wk-gutter) + .25rem); }
   }

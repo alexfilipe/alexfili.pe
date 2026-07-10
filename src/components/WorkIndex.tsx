@@ -24,6 +24,27 @@ const workDescriptions: Record<string, string> = {
   labstocker: "A chemistry-lab inventory platform recognized nationally in Brazil."
 };
 
+function WorkTitle({ name }: { name: string }) {
+  const parts = name.trim().split(/\s+/);
+  const lastWord = parts.pop();
+
+  if (!lastWord) {
+    return null;
+  }
+
+  return (
+    <>
+      {parts.length > 0 ? `${parts.join(" ")} ` : null}
+      <span className="wk-title-tail">
+        {lastWord}
+        <span className="wk-arrow" aria-hidden="true">
+          <ArrowUpRight size={22} strokeWidth={2.4} />
+        </span>
+      </span>
+    </>
+  );
+}
+
 /**
  * WorkIndex — the "Featured Work" index: hairline-separated rows, sans-serif
  * titles, 4:3 preview tiles. Each row deep-links into the project carousel at
@@ -88,11 +109,10 @@ export default function WorkIndex() {
                   <SpacedMetadata value={p.focus} className="wk-focus" />
                 </span>
                 <span className="wk-main">
-                  <h2 className="wk-name">{p.name}</h2>
+                  <h2 className="wk-name">
+                    <WorkTitle name={p.name} />
+                  </h2>
                   <p className="wk-desc">{workDescriptions[p.id] ?? p.tagline}</p>
-                </span>
-                <span className="wk-arrow" aria-hidden="true">
-                  <ArrowUpRight size={22} strokeWidth={2.4} />
                 </span>
               </a>
             );

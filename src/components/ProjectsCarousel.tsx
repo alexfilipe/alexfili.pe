@@ -3,6 +3,8 @@ import type { CSSProperties } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import { projectPages, type ProjectMetaValue, type ProjectPage } from "@/data/projectPages";
+import { profile } from "@/data/profile";
+import { getProjectSeo } from "@/data/seo";
 import PageFooter from "@/components/PageFooter";
 
 /**
@@ -30,6 +32,16 @@ function projectIndexFromId(projectId?: string) {
 
 function projectPath(projectId: string) {
   return `/projects/${projectId}`;
+}
+
+function projectBrowserTitle(project: ProjectPage) {
+  const title = getProjectSeo(project).title;
+  return title.includes(profile.name) ? title : `${title} | ${profile.name}`;
+}
+
+function replaceProjectLocation(project: ProjectPage) {
+  history.replaceState(null, "", projectPath(project.id));
+  document.title = projectBrowserTitle(project);
 }
 
 function SpacedMetadata({ value }: { value: ProjectMetaValue }) {
@@ -206,7 +218,7 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
     const n = projectPages.findIndex((p) => p.id === hashProjectId);
     if (n === -1) return;
     setI(n);
-    history.replaceState(null, "", projectPath(projectPages[n].id));
+    replaceProjectLocation(projectPages[n]);
   }, []);
 
   const go = useCallback(
@@ -215,7 +227,7 @@ export default function ProjectsCarousel({ initialProjectId }: ProjectsCarouselP
       const n = (next + projectPages.length) % projectPages.length;
       pendingScrollToTopRef.current = n !== i;
       setI(n);
-      history.replaceState(null, "", projectPath(projectPages[n].id));
+      replaceProjectLocation(projectPages[n]);
     },
     [i]
   );
