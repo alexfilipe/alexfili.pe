@@ -88,7 +88,7 @@ export const projectPages: ProjectPage[] = [
         heading: "The idea",
         body: [
           "InspiraSonho began from a simple but powerful insight: many students are not missing ambition — they are missing access to information.",
-          "After returning from the Youth Ambassadors Program in the United States, my co-founder Larissa Moreira started giving talks in schools about exchange programs and academic opportunities. Again and again, students would say they had never heard of those programs before. The problem was not a lack of interest. The problem was that information about opportunities was not reaching the people who could benefit from it.",
+          "After returning from the Youth Ambassadors Program in the United States, my co-founder Larissa Moreira started giving talks in schools about exchange programs and academic opportunities. Again and again, students would say they had never heard of those programs before. The problem was not a lack of interest, but that information about opportunities was not reaching the people who could benefit from it.",
           "Talks could inspire a room. The internet could reach a country.",
           "That became the premise of InspiraSonho: use the web to connect Brazilian students with meaningful learning experiences outside the classroom — opportunities that could expand their sense of possibility, strengthen their development, and help them imagine futures they had not been shown before."
         ]
@@ -97,8 +97,8 @@ export const projectPages: ProjectPage[] = [
         heading: "What we built",
         body: [
           "Together with Larissa Moreira, I co-founded InspiraSonho and led the technical side of the project as CTO.",
-          "I developed and deployed inspirasonho.com.br, leading the system architecture, full-stack web development, database design and administration, and production hosting. The platform became a public portal where students could discover opportunities such as scholarships, exchanges, scientific olympiads, volunteering, academic programs, and other experiences beyond the traditional classroom.",
-          "The work was not only technical. It required translating a social mission into a usable product: making opportunities easier to find, organizing information clearly, supporting a growing team, and building a platform that could serve students across Brazil."
+          "I developed and deployed *inspirasonho.com.br*, leading the system architecture, full-stack web development, database design and administration, and production hosting. The platform became a public portal where students could discover opportunities such as scholarships, exchanges, scientific olympiads, volunteering, academic programs, and other experiences beyond the traditional classroom.",
+          "The work wasn't just technical, but required translating a social mission into a usable product: making opportunities easier to find, organizing information clearly, supporting a growing team, and building a platform that could serve students across Brazil."
         ]
       },
       {
@@ -130,7 +130,7 @@ export const projectPages: ProjectPage[] = [
         body: [
           "InspiraSonho was one of the projects that shaped how I think about technology.",
           "It showed me that software can be more than a product interface. It can be a bridge between information and people; between a student and an opportunity; between someone’s current environment and a future they did not yet know how to reach.",
-          "It was also where I learned to connect engineering, mission, product, and community. I was not just building pages and databases. I was helping build a system for access — one that tried to make opportunity travel farther than privilege usually does."
+          "It was also where I learned to connect engineering, mission, product, and community. I was not just building pages and databases, but helping build a system for access — one that tried to make opportunity travel farther than privilege usually does."
         ]
       }
     ],
@@ -173,7 +173,7 @@ export const projectPages: ProjectPage[] = [
         ]
       },
       {
-        heading: "What I’m building",
+        heading: "What I'm building",
         body: [
           "The first area is **adaptive ambience**: orchestration across lights, displays, TVs, monitors, and sound. The goal is to let the home move naturally through modes like morning, focus, evening, cinema, and night — adjusting brightness, color temperature, screen behavior, and audio atmosphere together instead of treating each device as a separate toggle.",
           "The second area is **energy intelligence**: PG&E electricity usage reports and alerts that make energy behavior easier to understand. Rather than only showing raw usage, the system is designed to surface useful signals such as usage spikes, projected bill changes, unusual baselines, and patterns worth acting on.",
@@ -255,7 +255,7 @@ export const projectPages: ProjectPage[] = [
         heading: "Research and recognition",
         body: [
           "Under the guidance of Prof. Roberto Lima, LabStocker became both a software project and a chemistry research project — eventually presented at national conferences and recognized among Brazil’s top student chemistry projects.",
-          "In 2015, the project returned as LabStocker.com, a web platform for reagent management. That version emphasized productivity, waste reduction, safer storage through compatibility groups, cost planning, dashboards, statistical consumption forecasts, and simultaneous access across desktop, tablet, and smartphone devices.",
+          "In 2015, the project returned as *LabStocker.com*, a web platform for reagent management. That version emphasized productivity, waste reduction, safer storage through compatibility groups, cost planning, dashboards, statistical consumption forecasts, and simultaneous access across desktop, tablet, and smartphone devices.",
           "The project was also recognized among the top three Brazilian student chemistry projects at the National Brazilian Chemistry Congress in 2015 and 2016."
         ]
       },
@@ -297,6 +297,6 @@ export const projectPages: ProjectPage[] = [
       pngSrc: "/images/project-logos/labstocker.png",
       scale: 1.16
     },
-    tags: ["Java", "SQL", "Dashboards", "Predictive models", "Chemistry research"]
+    tags: ["Java", "Web", "SQL", "Dashboards", "Predictive models", "Chemistry research"]
   }
 ];
