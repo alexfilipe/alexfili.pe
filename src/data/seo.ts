@@ -28,8 +28,8 @@ export const OPEN_GRAPH_LOCALE = "en_US";
 export const SEO_LASTMOD = "2026-07-09";
 
 export const defaultShareImage: SocialImage = {
-  src: "/og-image-1.png",
-  width: 1200,
+  src: "/og-image.png",
+  width: 1120,
   height: 630,
   type: "image/png",
   alt: `${profile.name} - ${profile.tagline}`

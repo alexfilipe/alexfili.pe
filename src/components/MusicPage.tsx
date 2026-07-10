@@ -580,7 +580,7 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
         disabled={!scrollState.canScrollLeft}
         onClick={() => scrollByDirection(-1)}
       >
-        <ArrowLeft size={18} strokeWidth={2.8} aria-hidden="true" />
+        <ArrowLeft size={15} strokeWidth={3} aria-hidden="true" />
       </button>
       <button
         type="button"
@@ -589,7 +589,7 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
         disabled={!scrollState.canScrollRight}
         onClick={() => scrollByDirection(1)}
       >
-        <ArrowRight size={18} strokeWidth={2.8} aria-hidden="true" />
+        <ArrowRight size={15} strokeWidth={3} aria-hidden="true" />
       </button>
     </div>
   );
