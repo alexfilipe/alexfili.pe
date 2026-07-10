@@ -138,15 +138,15 @@
   .mu-conducting-body { grid-area: body; }
   .mu-video { display: block; align-self: start; margin-top: clamp(11rem, 12vw, 12.25rem); }
   .mu-conducting .mu-video { grid-area: video; }
-  @media (min-width: 821px) and (max-width: 1180px) {
+  @media (min-width: 821px) and (max-width: 1200px) {
     .mu-video { margin-top: clamp(7.5rem, 9vw, 9.5rem); }
     .mu-piano .mu-sec-grid { column-gap: clamp(1rem, 2vw, 1.5rem); }
     .mu-piano-video { margin-left: clamp(-5.25rem, -6vw, -3rem); }
     .mu-conducting::after {
-      top: 50%;
+      top: 46%;
       right: clamp(-7rem, -6vw, -3rem);
       bottom: auto;
-      width: clamp(35rem, 62vw, 44rem);
+      width: clamp(36rem, 61.2vw, 43.2rem);
       transform: translateY(-12%) rotate(-5deg);
     }
   }
@@ -162,6 +162,9 @@
   }
   @media (min-width: 1181px) {
     .mu-video { margin-top: clamp(10.25rem, 8.8vw, 11rem); }
+  }
+  @media (min-width: 1201px) {
+    .mu-conducting::after { width: clamp(41.4rem, 40.5vw, 46.8rem); }
   }
   .mu-video-frame { position: relative; aspect-ratio: 16 / 9; border: 1px solid var(--line-strong);
     background: #000; overflow: hidden; box-shadow: 0 24px 70px rgba(0,0,0,.55); }
@@ -251,9 +254,15 @@
       right: max(2rem, calc((100vw - 1120px) / 2 - 10rem));
     }
   }
+  @media (min-width: 1601px) {
+    .mu-conducting {
+      padding-top: clamp(6rem, calc(10vw - 4rem), 8rem);
+      padding-bottom: clamp(6rem, calc(10vw - 4rem), 8rem);
+    }
+  }
   /* Violin timeline */
   .mu-violin {
-    --violin-line-opacity: .065;
+    --violin-line-opacity: .09;
     margin-top: calc(var(--mu-marquee-gap) * .5);
     padding-top: 0;
     padding-bottom: clamp(2.5rem, 5vw, 4rem);
@@ -263,17 +272,19 @@
   .mu-violin::after {
     content: "";
     position: absolute;
-    left: 55%;
-    top: 44%;
-    z-index: 0;
+    left: 65%;
+    top: 39%;
+    z-index: 1;
     width: min(100%, 1120px);
     aspect-ratio: 1872 / 847;
-    background: url("/violin-white-lines.png") center / contain no-repeat;
     background-image: image-set(
       url("/violin-white-lines.avif") type("image/avif"),
       url("/violin-white-lines.webp") type("image/webp"),
       url("/violin-white-lines.png") type("image/png")
-    );
+    ), radial-gradient(ellipse at center, rgba(7, 7, 6, .82) 22%, rgba(7, 7, 6, .56) 48%, transparent 76%);
+    background-position: center, center;
+    background-size: contain, 94% 90%;
+    background-repeat: no-repeat;
     opacity: 0;
     pointer-events: none;
     transform: translate(-50%, -50%);
@@ -283,7 +294,10 @@
   @media (prefers-reduced-motion: reduce) {
     .mu-violin::after { opacity: var(--violin-line-opacity); }
   }
-  .mu-violin .mu-sec-grid { column-gap: clamp(3.5rem, 7.5vw, 6.5rem); }
+  .mu-violin .mu-sec-grid {
+    z-index: auto;
+    column-gap: clamp(3.5rem, 7.5vw, 6.5rem);
+  }
   .mu-violin-copy {
     position: relative;
   }
@@ -302,7 +316,7 @@
   .mu-violin .mu-sec-copy,
   .mu-violin .mu-timeline {
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
   .mu-violin-copy > .reveal {
     position: relative;
@@ -348,6 +362,8 @@
   .mu-violin-carousel::-webkit-scrollbar { height: .35rem; }
   .mu-violin-carousel::-webkit-scrollbar-track { background: transparent; }
   .mu-violin-carousel::-webkit-scrollbar-thumb { background: rgba(200, 169, 110, 0.32); }
+  .mu-violin-carousel[data-auto-scrolling="true"] { scrollbar-width: none; }
+  .mu-violin-carousel[data-auto-scrolling="true"]::-webkit-scrollbar { display: none; }
   .mu-violin-photo {
     position: relative;
     display: grid;
@@ -397,7 +413,7 @@
     pointer-events: none;
   }
   .mu-violin-photo + .mu-violin-photo::after {
-    border-left: 2px solid var(--violin-carousel-divider);
+    border-left: 4px solid var(--violin-carousel-divider);
   }
   .mu-violin-photo::before {
     content: "";
@@ -442,9 +458,8 @@
     opacity: 0;
     transition: opacity .7s var(--ease);
   }
-  .mu-violin-photo[data-photo-id="recital-hall-goettingen"] .mu-violin-photo-img {
-    height: calc(100% + 2px);
-    transform: translateY(-1px);
+  .mu-violin-photo[data-photo-id="principal-second-violin"] .mu-violin-photo-img {
+    transform: translateY(1px);
   }
   .mu-violin-photo-img.is-loaded {
     opacity: .9;
@@ -550,7 +565,7 @@
     .mu-conducting-body .mu-lede { margin-top: clamp(.5rem, 2vw, 1rem); }
     .mu-conducting {
       padding-top: clamp(6rem, 19vw, 8rem);
-      padding-bottom: 2.5rem;
+      padding-bottom: 5rem;
     }
     .mu-conducting::after {
       top: clamp(-1.25rem, -3vw, -.35rem);
@@ -560,7 +575,7 @@
       --conducting-baton-opacity: .18;
     }
     .mu-conducting:has(.mu-conducting-body .reveal.is-in)::after { opacity: var(--conducting-baton-opacity); }
-    .mu-piano { padding-top: 3.125rem; }
+    .mu-piano { padding-top: 6.25rem; }
     .mu-piano-video { order: -1; justify-self: center; width: min(100%, 21.5rem); margin-left: 0; margin-bottom: clamp(.2rem, 1.2vw, .45rem); }
     .mu-piano-video-swipe-layer { position: absolute; inset: 0; z-index: 3; display: block; background: transparent; touch-action: pan-y; }
     .mu-piano-video-swipe-layer.is-disabled { pointer-events: none; }
@@ -839,8 +854,8 @@
   .pp-page--no-cta .pp-tags { margin-top: 1.6rem; }
   .pp-tags > span { white-space: nowrap; }
   .pp-cta { display: inline-flex; align-items: center; gap: .55rem; margin-top: 1.5rem; margin-bottom: 1rem;
-    border: 1px solid var(--gold-2); border-radius: 999px; padding: .95rem 1.5rem;
-    background: var(--gold); color: #050504; font-size: .84rem; font-weight: 760; letter-spacing: .06em; text-transform: uppercase;
+    border: 3px solid var(--gold-2); border-radius: 999px; padding: .95rem 1.5rem;
+    background: var(--gold); color: #050504; font-size: .84rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase;
     transition: background .18s var(--ease), border-color .18s var(--ease), transform .18s var(--ease); }
   .pp-cta:hover { background: #dcc17e; border-color: var(--gold-2); transform: translateY(-1px); }
   .pp-cta span { white-space: nowrap; }

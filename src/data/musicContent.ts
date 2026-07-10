@@ -114,7 +114,7 @@ export const musicMovements: MusicMovement[] = [
     title: "Violin",
     lede: "My first musical language. I picked up the violin at three and have never really put it down.",
     body: [
-      "It carried me from a church philharmonic in Natal at 10, to the conservatory at the Federal University of Rio Grande do Norte in 2011, and later to the Amherst Symphony Orchestra. At Amherst, I played every semester throughout all my college years, led the second violin section, and joined a few chamber programs each season.",
+      "It carried me from a church philharmonic in Natal at ten, to the conservatory at the Federal University of Rio Grande do Norte in 2011, and later to the Amherst Symphony Orchestra. At Amherst, I played every semester throughout all my college years, led the second violin section, and joined a few chamber programs each season.",
       "When I lived in Germany in 2017, I also brought the violin into a different musical space, performing pop music on violin and keyboard with a band I put together with other international students for university events.",
       "In San Francisco, it continues through string quartets, music groups, recitals, and musical lounges — keeping chamber music present in my life in a more intimate, living way, while also making space for pop music and improvisation with friends. Music has become one of the ways I build community here."
     ]
@@ -166,7 +166,7 @@ export const violinTimeline: TimelineEntry[] = [
   { when: "2011", what: { main: "Conservatory lessons", detail: "Prof. Ronedilk Dantas" } },
   { when: "2015", what: { main: "Amherst Symphony Orchestra", detail: ["Principal 2", { sup: "nd" }, " Violin"] } },
   { when: "2017", what: { main: "Pop violin & keyboard", detail: "International student band, Germany" } },
-  { when: "2025—", what: { main: "String quartets & recitals", detail: "San Francisco" } }
+  { when: "2025—", what: { main: "Chamber music, quartets & recitals", detail: "San Francisco" } }
 ];
 
 export const violinPhotos: ViolinPhoto[] = [
@@ -182,7 +182,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "portrait-study",
     src: "/images/music/violin/portrait-study.webp",
     alt: "Álex holding a violin in side light.",
-    label: "Portrait in São Paulo — 2018",
+    label: "Profile by Gabriela Mo — São Paulo, 2018",
     width: 1139,
     height: 854
   },
@@ -198,7 +198,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "recital-hall-goettingen",
     src: "/images/music/violin/recital-hall-goettingen.webp",
     alt: "Álex performing violin in a recital hall at the University of Göttingen.",
-    label: "University Recital Hall performance — Göttingen, 2017",
+    label: "Solo at Aula am Wilhelmsplatz — University of Göttingen, 2017",
     width: 434,
     height: 326
   },
@@ -206,7 +206,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "high-school-duo",
     src: "/images/music/violin/high-school-duo.webp",
     alt: "Álex playing violin in high school while seated beside a guitarist.",
-    label: "Violin-Guitar duo in high school — Natal, 2013",
+    label: "Violin-Guitar duo in high school — Natal, 2013; with Amanda Myris",
     width: 1200,
     height: 900
   },
@@ -222,7 +222,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "us-embassy-performance",
     src: "/images/music/violin/us-embassy-performance.webp",
     alt: "Álex playing violin at an event at the U.S. Embassy in Brasília.",
-    label: "Performance at U.S. Embassy — Brasília, 2013",
+    label: "Performance at U.S. Embassy event — Brasília, 2013",
     width: 1200,
     height: 900
   },
@@ -230,7 +230,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "amherst-symphony",
     src: "/images/music/violin/amherst-symphony.webp",
     alt: "Álex playing violin with the Amherst Symphony Orchestra.",
-    label: "Before orchestra concert — 2020",
+    label: "Preparing for orchestra concert — Amherst, 2020",
     width: 1200,
     height: 900
   }

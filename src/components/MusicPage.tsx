@@ -382,6 +382,9 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
   const carouselId = useId();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const scrollSnapTypeRef = useRef<string | null>(null);
+  const autoScrollDirectionRef = useRef<-1 | 1>(1);
   const [loadedPhotoIds, setLoadedPhotoIds] = useState<Set<string>>(() => new Set());
   // Single source of truth for the one caption that may be visible at a time.
   // Starts empty so nothing shows until the visitor scrolls, steps, or taps.
@@ -390,6 +393,7 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
     canScrollLeft: false,
     canScrollRight: false
   });
+  const [isCarouselHovered, setIsCarouselHovered] = useState(false);
 
   const markPhotoLoaded = useCallback((photoId: string) => {
     setLoadedPhotoIds((currentIds) => {
@@ -403,6 +407,21 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
 
   const togglePhotoLabel = useCallback((photoId: string) => {
     setActiveLabelPhotoId((currentPhotoId) => (currentPhotoId === photoId ? null : photoId));
+  }, []);
+
+  const cancelScrollAnimation = useCallback(() => {
+    if (animationFrameRef.current !== null) {
+      window.cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+
+    if (scrollSnapTypeRef.current !== null) {
+      const scroller = scrollerRef.current;
+      if (scroller) scroller.style.scrollSnapType = scrollSnapTypeRef.current;
+      scrollSnapTypeRef.current = null;
+    }
+
+    scrollerRef.current?.removeAttribute("data-auto-scrolling");
   }, []);
 
   const updateScrollState = useCallback(() => {
@@ -422,27 +441,6 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
     );
   }, []);
 
-  // Which photo is closest to the horizontal center of the scrollport. Pure
-  // read — the caller decides whether to surface its caption.
-  const getCenteredPhotoId = useCallback(() => {
-    const scroller = scrollerRef.current;
-    if (!scroller) return null;
-
-    const viewportCenter = scroller.scrollLeft + scroller.clientWidth / 2;
-    let nearestId: string | null = null;
-    let nearestDistance = Number.POSITIVE_INFINITY;
-    scroller.querySelectorAll<HTMLElement>(".mu-violin-photo").forEach((card) => {
-      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-      const distance = Math.abs(cardCenter - viewportCenter);
-      if (distance < nearestDistance) {
-        nearestDistance = distance;
-        nearestId = card.dataset.photoId ?? null;
-      }
-    });
-
-    return nearestId;
-  }, []);
-
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
@@ -453,9 +451,9 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
 
     const handleScroll = () => {
       updateScrollState();
-      setActiveLabelPhotoId(getCenteredPhotoId());
     };
     const dropTarget = () => {
+      cancelScrollAnimation();
       targetRef.current = null;
     };
     scroller.addEventListener("scroll", handleScroll, { passive: true });
@@ -475,12 +473,16 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
       scroller.removeEventListener("pointerdown", dropTarget);
       scroller.removeEventListener("wheel", dropTarget);
       window.removeEventListener("resize", updateScrollState);
+      cancelScrollAnimation();
       resizeObserver?.disconnect();
     };
-  }, [updateScrollState, getCenteredPhotoId]);
+  }, [updateScrollState, cancelScrollAnimation]);
 
   const scrollByDirection = useCallback(
-    (direction: -1 | 1) => {
+    (
+      direction: -1 | 1,
+      options: { revealLabel?: boolean; transitionMs?: number; wrap?: boolean; automatic?: boolean } = {}
+    ) => {
       const scroller = scrollerRef.current;
       if (!scroller) return;
 
@@ -503,15 +505,55 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
         }
       });
 
-      const nextCard = cards[Math.max(0, Math.min(currentIndex + direction, cards.length - 1))];
+      const nextIndex =
+        options.wrap && direction === 1 && currentIndex >= cards.length - 1
+          ? 0
+          : options.wrap && direction === -1 && currentIndex <= 0
+            ? cards.length - 1
+            : Math.max(0, Math.min(currentIndex + direction, cards.length - 1));
+      const nextCard = cards[nextIndex];
       const target = Math.max(
         0,
         Math.min(nextCard.offsetLeft + nextCard.offsetWidth / 2 - scroller.clientWidth / 2, maxScrollLeft)
       );
       targetRef.current = target;
-      setActiveLabelPhotoId(nextCard.dataset.photoId ?? null);
+      if (options.revealLabel ?? true) {
+        setActiveLabelPhotoId(nextCard.dataset.photoId ?? null);
+      }
 
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      cancelScrollAnimation();
+
+      if (!reduceMotion && options.transitionMs) {
+        const start = scroller.scrollLeft;
+        const distance = target - start;
+        const duration = Math.max(1000, options.transitionMs);
+        const startedAt = window.performance.now();
+        scrollSnapTypeRef.current = scroller.style.scrollSnapType;
+        if (options.automatic) scroller.setAttribute("data-auto-scrolling", "true");
+        const easeOutCubic = (progress: number) => 1 - Math.pow(1 - progress, 3);
+        const step = (now: number) => {
+          const progress = Math.min(1, (now - startedAt) / duration);
+          scroller.scrollLeft = start + distance * easeOutCubic(progress);
+
+          if (progress < 1) {
+            animationFrameRef.current = window.requestAnimationFrame(step);
+            return;
+          }
+
+          animationFrameRef.current = null;
+          scroller.scrollLeft = target;
+          scroller.style.scrollSnapType = scrollSnapTypeRef.current ?? "";
+          scrollSnapTypeRef.current = null;
+          scroller.removeAttribute("data-auto-scrolling");
+          updateScrollState();
+        };
+
+        scroller.style.scrollSnapType = "none";
+        animationFrameRef.current = window.requestAnimationFrame(step);
+        return;
+      }
+
       scroller.scrollTo({
         left: target,
         behavior: reduceMotion ? "auto" : "smooth"
@@ -519,14 +561,49 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
 
       window.setTimeout(updateScrollState, reduceMotion ? 0 : 260);
     },
-    [updateScrollState]
+    [updateScrollState, cancelScrollAnimation]
   );
+
+  useEffect(() => {
+    if (isCarouselHovered || photos.length < 2) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let autoScroll: number;
+    const runAutoScroll = () => {
+      const scroller = scrollerRef.current;
+      if (!scroller) return;
+
+      const maxScrollLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+      const currentTarget = targetRef.current ?? scroller.scrollLeft;
+      let direction = autoScrollDirectionRef.current;
+
+      if (direction === 1 && currentTarget >= maxScrollLeft - SCROLL_EDGE_EPSILON) {
+        direction = -1;
+      } else if (direction === -1 && currentTarget <= SCROLL_EDGE_EPSILON) {
+        direction = 1;
+      }
+
+      autoScrollDirectionRef.current = direction;
+      scrollByDirection(direction, { revealLabel: false, transitionMs: 1000, automatic: true });
+      autoScroll = window.setTimeout(runAutoScroll, 8000);
+    };
+
+    autoScroll = window.setTimeout(runAutoScroll, 7000);
+
+    return () => window.clearTimeout(autoScroll);
+  }, [isCarouselHovered, photos.length, scrollByDirection]);
 
   return (
     <div
       className="mu-violin-carousel-shell"
       data-can-scroll-left={scrollState.canScrollLeft ? "true" : "false"}
       data-can-scroll-right={scrollState.canScrollRight ? "true" : "false"}
+      onPointerEnter={(event) => {
+        if (event.pointerType === "mouse") setIsCarouselHovered(true);
+      }}
+      onPointerLeave={(event) => {
+        if (event.pointerType === "mouse") setIsCarouselHovered(false);
+      }}
     >
       <div ref={scrollerRef} className="mu-violin-carousel" role="list" aria-label="Violin photo archive">
         {photos.map((photo) => {
@@ -578,7 +655,10 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
         className="mu-violin-carousel-control mu-violin-carousel-control--left"
         aria-label="Scroll violin photos left"
         disabled={!scrollState.canScrollLeft}
-        onClick={() => scrollByDirection(-1)}
+        onClick={() => {
+          autoScrollDirectionRef.current = 1;
+          scrollByDirection(-1);
+        }}
       >
         <ArrowLeft size={15} strokeWidth={3} aria-hidden="true" />
       </button>
@@ -587,7 +667,10 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
         className="mu-violin-carousel-control mu-violin-carousel-control--right"
         aria-label="Scroll violin photos right"
         disabled={!scrollState.canScrollRight}
-        onClick={() => scrollByDirection(1)}
+        onClick={() => {
+          autoScrollDirectionRef.current = 1;
+          scrollByDirection(1);
+        }}
       >
         <ArrowRight size={15} strokeWidth={3} aria-hidden="true" />
       </button>
