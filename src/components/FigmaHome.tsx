@@ -690,14 +690,33 @@ function CarouselControls({ children, label, controlLabel }: { children: ReactNo
         return;
       }
 
-      const firstCard = scroller.querySelector<HTMLElement>(".figma-carousel-card");
-      const columnGap = Number.parseFloat(window.getComputedStyle(scroller).columnGap || "0") || 0;
+      const cards = Array.from(scroller.querySelectorAll<HTMLElement>(".figma-carousel-card"));
+      const scrollerStyle = window.getComputedStyle(scroller);
+      const columnGap = Number.parseFloat(scrollerStyle.columnGap || "0") || 0;
+      const scrollPaddingStart = Number.parseFloat(scrollerStyle.scrollPaddingLeft || "0") || 0;
+      const firstCard = cards[0];
       const scrollAmount = firstCard ? firstCard.offsetWidth + columnGap : scroller.clientWidth * 0.82;
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       const maxScrollLeft = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
       const base = targetRef.current ?? scroller.scrollLeft;
-      const target = Math.max(0, Math.min(base + direction * scrollAmount, maxScrollLeft));
+      const alignedStart = base + scrollPaddingStart;
+      const alignmentEpsilon = 2;
+      let targetCard: HTMLElement | undefined;
+
+      if (direction === 1) {
+        targetCard = cards.find((card) => card.offsetLeft > alignedStart + alignmentEpsilon);
+      } else {
+        for (let index = cards.length - 1; index >= 0; index -= 1) {
+          if (cards[index].offsetLeft < alignedStart - alignmentEpsilon) {
+            targetCard = cards[index];
+            break;
+          }
+        }
+      }
+
+      const nextTarget = targetCard ? targetCard.offsetLeft - scrollPaddingStart : base + direction * scrollAmount;
+      const target = Math.max(0, Math.min(nextTarget, maxScrollLeft));
       targetRef.current = target;
 
       scroller.scrollTo({

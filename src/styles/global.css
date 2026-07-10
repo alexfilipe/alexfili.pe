@@ -711,7 +711,7 @@ select {
   border-bottom: 1px solid var(--line);
   background: var(--line);
   scrollbar-color: rgba(200, 169, 110, 0.45) transparent;
-  scroll-padding-inline: 0;
+  scroll-padding-inline: var(--carousel-rail);
   scroll-snap-type: x proximity;
 }
 
