@@ -904,7 +904,7 @@
   .pp-next-label { display: block; color: var(--text-faint); font-size: .7rem; font-weight: 700;
     letter-spacing: .16em; text-transform: uppercase; margin-bottom: .5rem; }
   .pp-next-name { display: block; font-family: var(--display); font-size: clamp(1.25rem, 2.6vw, 1.85rem);
-    font-weight: 600; line-height: .95; color: var(--text-muted); transition: color .3s var(--ease); }
+    font-weight: 600; line-height: .95; color: var(--text); transition: color .3s var(--ease); }
   .pp-next:hover .pp-next-name { color: var(--gold); }
 
   .pp-foot { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; margin-top: auto; padding: 1.1rem 0 3rem;
