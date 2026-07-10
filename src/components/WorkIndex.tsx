@@ -47,7 +47,7 @@ function WorkTitle({ name }: { name: string }) {
 
 /**
  * WorkIndex — the "Featured Work" index: hairline-separated rows, sans-serif
- * titles, 4:3 preview tiles. Each row deep-links into the project carousel at
+ * titles, square project icons. Each row deep-links into the project carousel at
  * /projects/<id>. Ported from the design-system work.html recreation.
  */
 export default function WorkIndex() {
@@ -77,8 +77,9 @@ export default function WorkIndex() {
         <div className="wk-list">
           {projectPages.map((p) => {
             const logoStyle = {
-              "--wk-watermark-accent": p.logo.accent,
-              "--wk-watermark-scale": p.logo.scale ?? 1.02
+              "--wk-watermark-scale": p.logo.scale ?? 1.02,
+              "--wk-icon-accent": p.logo.accent,
+              "--wk-icon-scale": p.logo.scale ?? 1.02
             } as CSSProperties;
             const hasLogoImage = Boolean(p.logo.webpSrc || p.logo.pngSrc);
 
@@ -98,11 +99,19 @@ export default function WorkIndex() {
                     <span className="wk-watermark-initials">{p.logo.initials}</span>
                   )}
                 </span>
-                <span className="wk-preview" aria-hidden="true">
-                  <picture className="wk-preview-picture">
-                    <source srcSet={p.preview.webpSrc} type="image/webp" />
-                    <img src={p.preview.pngSrc} alt="" width="960" height="720" loading="lazy" decoding="async" />
-                  </picture>
+                <span
+                  className={`wk-icon${hasLogoImage ? " wk-icon--image" : ""}`}
+                  style={logoStyle}
+                  aria-hidden="true"
+                >
+                  {hasLogoImage ? (
+                    <picture className="wk-icon-picture">
+                      {p.logo.webpSrc ? <source srcSet={p.logo.webpSrc} type="image/webp" /> : null}
+                      <img src={p.logo.pngSrc ?? p.logo.webpSrc} alt="" loading="lazy" decoding="async" />
+                    </picture>
+                  ) : (
+                    <span className="wk-icon-initials">{p.logo.initials}</span>
+                  )}
                 </span>
                 <span className="wk-when">
                   <span className="wk-year">{p.period}</span>
