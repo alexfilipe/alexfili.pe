@@ -1,8 +1,8 @@
 const TARGET_URL = "https://alexfili.pe/";
 const AFCBS_PAGE_REDIRECTS = new Map([
   ["", TARGET_URL],
-  ["/projects", "https://alexfili.pe/projects"],
-  ["/music", "https://alexfili.pe/music"],
+  ["/projects", "https://alexfili.pe/projects/"],
+  ["/music", "https://alexfili.pe/music/"],
 ]);
 const AFCBS_FILE_REDIRECTS = new Map([
   ["/robots.txt", "https://alexfili.pe/robots.txt"],
