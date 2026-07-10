@@ -25,7 +25,7 @@ export type SeoEntry = {
 export const DEFAULT_SITE_URL = "https://alexfili.pe";
 export const CONTENT_LANGUAGE = "en-US";
 export const OPEN_GRAPH_LOCALE = "en_US";
-export const SEO_LASTMOD = "2026-07-09";
+export const SEO_LASTMOD = "2026-07-10";
 
 export const defaultShareImage: SocialImage = {
   src: "/og-image.png",
@@ -102,7 +102,7 @@ const projectSeoOverrides: Record<string, ProjectSeoOverride> = {
   labstocker: {
     title: "LabStocker | Chemistry Lab Inventory Software",
     description:
-      "Explore LabStocker, Álex Filipe Santos's chemistry-lab inventory platform for reagents, safety, reporting, and predictive reorder planning.",
+      "Explore LabStocker, a chemistry-lab inventory platform Álex Filipe Santos co-created for reagents, safety, reporting, and predictive reorder planning.",
     socialDescription:
       "A chemistry-lab inventory platform for reagents, safer storage, reporting, and predictive reorder planning.",
     keywords: [
@@ -142,9 +142,9 @@ export const seoPages = {
     title: "Featured Work | Álex Filipe Santos",
     description:
       "Explore Álex Filipe Santos's featured software projects, from AI-first macOS sync and Home Assistant automation to education access and chemistry-lab systems.",
-    socialTitle: "Featured Work by Álex Filipe Santos",
+    socialTitle: "Featured Work | Álex Filipe Santos",
     socialDescription:
-      "AI systems, social-impact software, local-first automation, and research-lab tools by Álex Filipe Santos.",
+      "AI systems, collaborative social-impact software, local-first automation, and research-lab tools.",
     keywords: [
       "Álex Filipe Santos projects",
       "software engineering portfolio",
@@ -187,7 +187,7 @@ export function getProjectSeo(project: ProjectPage): SeoEntry {
     path: `/projects/${project.id}`,
     title: override.title,
     description: override.description,
-    socialTitle: `${project.name} by ${profile.name}`,
+    socialTitle: override.title,
     socialDescription: override.socialDescription,
     keywords: [...new Set([...override.keywords, ...project.tags, ...project.focus])],
     image: projectSocialImages[project.id] ?? defaultShareImage,
@@ -221,7 +221,7 @@ export function getProjectsItemList(site: string | URL | undefined = DEFAULT_SIT
   return {
     "@type": "ItemList",
     "@id": `${makeAbsoluteUrl(seoPages.projects.path, site)}#projects`,
-    name: "Featured software projects by Álex Filipe Santos",
+    name: "Featured software projects and collaborations from Álex Filipe Santos",
     itemListOrder: "https://schema.org/ItemListOrderAscending",
     numberOfItems: projectPages.length,
     itemListElement: projectPages.map((project, index) => {
@@ -237,8 +237,50 @@ export function getProjectsItemList(site: string | URL | undefined = DEFAULT_SIT
   };
 }
 
+function getProjectCredit(project: ProjectPage, site: string | URL | undefined = DEFAULT_SITE_URL) {
+  const alex = {
+    "@id": `${makeAbsoluteUrl("/", site)}#person`
+  };
+
+  if (project.id === "inspirasonho") {
+    return {
+      creator: [
+        alex,
+        {
+          "@type": "Person",
+          name: "Larissa Moreira"
+        }
+      ],
+      creditText:
+        "Co-founded by Álex Filipe Santos and Larissa Moreira; Álex led technical development as CTO."
+    };
+  }
+
+  if (project.id === "labstocker") {
+    return {
+      creator: [
+        alex,
+        {
+          "@type": "Person",
+          name: "Amanda Myris"
+        },
+        {
+          "@type": "Person",
+          name: "Bruno Valniery"
+        }
+      ],
+      creditText: "Co-created by Álex Filipe Santos, Amanda Myris, and Bruno Valniery."
+    };
+  }
+
+  return {
+    creator: alex
+  };
+}
+
 export function getProjectCreativeWork(project: ProjectPage, site: string | URL | undefined = DEFAULT_SITE_URL) {
   const seo = getProjectSeo(project);
+  const credit = getProjectCredit(project, site);
 
   return {
     "@type": "CreativeWork",
@@ -247,9 +289,8 @@ export function getProjectCreativeWork(project: ProjectPage, site: string | URL 
     headline: project.tagline,
     description: seo.description,
     url: makeAbsoluteUrl(seo.path, site),
-    creator: {
-      "@id": `${makeAbsoluteUrl("/", site)}#person`
-    },
+    creator: credit.creator,
+    ...(credit.creditText ? { creditText: credit.creditText } : {}),
     image: makeAbsoluteUrl(seo.image?.src ?? defaultShareImage.src, site),
     keywords: [...new Set([...project.tags, ...project.focus])].join(", "),
     temporalCoverage: project.period,

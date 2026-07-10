@@ -1018,13 +1018,16 @@
 
   .wk-icon { --wk-icon-accent: var(--gold); --wk-icon-scale: 1.02;
     position: relative; z-index: 1; display: grid; place-items: center; width: 96px; aspect-ratio: 1;
-    grid-column: 1; grid-row: 1 / span 2; align-self: start; justify-self: center;
+    grid-column: 1; grid-row: 1 / span 2; align-self: center; justify-self: center;
     overflow: hidden; border-radius: 24%; color: #070706;
     background:
       linear-gradient(135deg, rgba(255,252,244,.52), rgba(255,252,244,0) 46%),
       var(--wk-icon-accent);
     box-shadow: 0 0 0 1px rgba(255,252,244,.22), 0 .9rem 2.2rem rgba(0,0,0,.34);
-    filter: drop-shadow(0 .85rem 1.25rem rgba(0,0,0,.34)); }
+    filter: drop-shadow(0 .85rem 1.25rem rgba(0,0,0,.34));
+    transform: scale(1); transition: transform .25s var(--ease), filter .25s var(--ease); }
+  .wk-item:hover .wk-icon,
+  .wk-item:focus-visible .wk-icon { transform: scale(1.045); }
   .wk-icon--image { background: transparent; box-shadow: 0 0 0 1px rgba(255,255,255,.16); }
   .wk-icon-picture { display: grid; place-items: center; width: 100%; height: 100%; }
   .wk-icon-picture img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(var(--wk-icon-scale)); }

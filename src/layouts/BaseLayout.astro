@@ -5,6 +5,7 @@ import {
   CONTENT_LANGUAGE,
   DEFAULT_SITE_URL,
   OPEN_GRAPH_LOCALE,
+  SEO_LASTMOD,
   defaultShareImage,
   getSiteRoot,
   type SocialImage
@@ -55,6 +56,7 @@ const metaDescription = description;
 const socialTitle = socialTitleProp ?? pageTitle;
 const socialDescription = socialDescriptionProp ?? metaDescription;
 const canonicalUrl = new URL(canonical, siteRoot).toString();
+const updatedAt = `${SEO_LASTMOD}T00:00:00-07:00`;
 const assetVersion = "20260624-dodecahedron";
 const assetSuffix = `?v=${assetVersion}`;
 const versionedAsset = (src: string) => {
@@ -180,7 +182,7 @@ const navItems: { href: string; label: string }[] = [];
     <meta property="og:image:width" content={String(image.width)} />
     <meta property="og:image:height" content={String(image.height)} />
     <meta property="og:image:alt" content={image.alt} />
-    <meta property="og:updated_time" content="2026-07-09T00:00:00-07:00" />
+    <meta property="og:updated_time" content={updatedAt} />
     {
       ogType === "profile" && (
         <>
@@ -194,7 +196,7 @@ const navItems: { href: string; label: string }[] = [];
       ogType === "article" && (
         <>
           <meta property="article:author" content={profile.name} />
-          <meta property="article:modified_time" content="2026-07-09T00:00:00-07:00" />
+          <meta property="article:modified_time" content={updatedAt} />
           {keywords.slice(0, 8).map((keyword) => (
             <meta property="article:tag" content={keyword} />
           ))}
