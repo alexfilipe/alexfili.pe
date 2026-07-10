@@ -92,7 +92,7 @@
 
   /* Sections */
   .mu-sec { position: relative; padding: clamp(5rem, 12vw, 10rem) clamp(1.5rem, 6vw, 6rem); overflow: hidden;
-    border-top: 1px solid var(--line); }
+    border-top: 1px solid rgba(240, 237, 230, 0.2); }
   .mu-sec::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .8; }
   .mu-conducting { --conducting-baton-opacity: .15; isolation: isolate; }
   .mu-conducting::before { background: radial-gradient(80% 60% at 78% 30%, rgba(200,169,110,.08), transparent 60%); }
@@ -278,7 +278,7 @@
   .mu-violin::after {
     content: "";
     position: absolute;
-    left: 45%;
+    left: 80%;
     top: 35%;
     z-index: 1;
     width: min(100%, 1120px);
@@ -361,15 +361,11 @@
     overflow-y: hidden;
     background: transparent;
     padding-bottom: clamp(3.65rem, 5.05vw, 4.625rem);
-    scrollbar-color: rgba(200, 169, 110, 0.45) transparent;
+    scrollbar-width: none;
     scroll-padding-inline: 0;
     scroll-snap-type: x proximity;
   }
-  .mu-violin-carousel::-webkit-scrollbar { height: .35rem; }
-  .mu-violin-carousel::-webkit-scrollbar-track { background: transparent; }
-  .mu-violin-carousel::-webkit-scrollbar-thumb { background: rgba(200, 169, 110, 0.32); }
-  .mu-violin-carousel[data-auto-scrolling="true"] { scrollbar-width: none; }
-  .mu-violin-carousel[data-auto-scrolling="true"]::-webkit-scrollbar { display: none; }
+  .mu-violin-carousel::-webkit-scrollbar { display: none; }
   .mu-violin-photo {
     position: relative;
     display: grid;
@@ -650,9 +646,12 @@
     }
     .mu-violin-gallery--mobile {
       display: block;
-      margin-block: clamp(3.5rem, 15vw, 5.4rem) clamp(2.1rem, 8vw, 3rem);
+      margin-block: clamp(3.5rem, 15vw, 5.4rem) .75rem;
       margin-inline: calc(-1 * clamp(1.5rem, 6vw, 6rem));
       width: auto;
+    }
+    .mu-violin-gallery--mobile + .mu-lede {
+      margin-top: .9rem;
     }
     .mu-violin-photo {
       flex-basis: 58.5%;
@@ -677,6 +676,9 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: .25rem;
+    }
+    .mu-lede {
+      font-size: 1.4rem;
     }
     .mu-violin-photo {
       flex-basis: 66%;
