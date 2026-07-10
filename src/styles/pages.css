@@ -262,7 +262,7 @@
   }
   /* Violin timeline */
   .mu-violin {
-    --violin-line-opacity: .09;
+    --violin-line-opacity: .08;
     margin-top: calc(var(--mu-marquee-gap) * .5);
     padding-top: 0;
     padding-bottom: clamp(2.5rem, 5vw, 4rem);
@@ -272,8 +272,8 @@
   .mu-violin::after {
     content: "";
     position: absolute;
-    left: 65%;
-    top: 39%;
+    left: 45%;
+    top: 35%;
     z-index: 1;
     width: min(100%, 1120px);
     aspect-ratio: 1872 / 847;
@@ -605,7 +605,7 @@
       z-index: 1;
     }
     .mu-violin {
-      --violin-line-opacity: .055;
+      --violin-line-opacity: .065;
       padding-bottom: clamp(4.6875rem, 16.25vw, 6.5625rem);
     }
     .mu-violin::after {
@@ -644,7 +644,7 @@
     }
     .mu-violin-gallery--mobile {
       display: block;
-      margin-block: clamp(4.40625rem, 18.75vw, 6.75rem) clamp(2.1rem, 8vw, 3rem);
+      margin-block: clamp(3.5rem, 15vw, 5.4rem) clamp(2.1rem, 8vw, 3rem);
       margin-inline: calc(-1 * clamp(1.5rem, 6vw, 6rem));
       width: auto;
     }
