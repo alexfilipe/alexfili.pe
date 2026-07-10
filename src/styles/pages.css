@@ -991,14 +991,14 @@
   /* List — hairline-separated rows, like the site's work-list */
   .wk-list { display: grid; gap: 1px; width: calc(100% + var(--wk-list-bleed)); margin-bottom: 3rem; margin-left: calc(var(--wk-list-bleed) / -2); background: var(--line); }
   .wk-item { position: relative; display: grid; grid-template-columns: 128px minmax(0, 1fr);
-    align-items: start; gap: .55rem clamp(1.5rem, 3vw, 2.4rem);
+    align-items: start; gap: .55rem clamp(.9rem, 1.6vw, 1.45rem);
     padding: clamp(1.5rem, 3vw, 2.2rem) 1.5rem;
     background: var(--card-wash); overflow: hidden; isolation: isolate; transition: background-color .25s var(--ease); }
   .wk-item:hover { background-color: rgba(211,178,112,.035); }
 
-  .wk-watermark { --wk-watermark-scale: 1.02;
+  .wk-watermark { --wk-watermark-scale: 1.02; --wk-watermark-size: clamp(12rem, 17vw, 14rem);
     position: absolute; top: 50%; right: -2rem;
-    z-index: 0; display: grid; place-items: center; height: calc(100% + 3rem); aspect-ratio: 1;
+    z-index: 0; display: grid; place-items: center; height: var(--wk-watermark-size); aspect-ratio: 1;
     overflow: hidden; border-radius: 24%; color: #070706;
     background:
       linear-gradient(135deg, rgba(255,255,255,.52), rgba(255,255,255,0) 46%),
@@ -1023,8 +1023,9 @@
     background:
       linear-gradient(135deg, rgba(255,252,244,.52), rgba(255,252,244,0) 46%),
       var(--wk-icon-accent);
-    box-shadow: 0 0 0 1px rgba(255,252,244,.22), 0 .9rem 2.2rem rgba(0,0,0,.34); }
-  .wk-icon--image { background: transparent; box-shadow: none; }
+    box-shadow: 0 0 0 1px rgba(255,252,244,.22), 0 .9rem 2.2rem rgba(0,0,0,.34);
+    filter: drop-shadow(0 .85rem 1.25rem rgba(0,0,0,.34)); }
+  .wk-icon--image { background: transparent; box-shadow: 0 0 0 1px rgba(255,255,255,.16); }
   .wk-icon-picture { display: grid; place-items: center; width: 100%; height: 100%; }
   .wk-icon-picture img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(var(--wk-icon-scale)); }
   .wk-icon-initials { font-family: var(--sans); font-size: 2.1rem; font-weight: 800; line-height: 1; letter-spacing: 0; }
@@ -1112,6 +1113,7 @@
     .wk-item { grid-template-columns: 112px minmax(0, 1fr); gap: .5rem 1.2rem;
       padding: clamp(1.4rem, 5vw, 1.9rem) 1rem; }
     .wk-icon { width: 88px; }
+    .wk-watermark { --wk-watermark-size: 12rem; }
     .wk-item:hover .wk-watermark,
     .wk-item:active .wk-watermark { opacity: .05; }
   }
