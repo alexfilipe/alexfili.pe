@@ -272,6 +272,9 @@
     border-top: 0;
     isolation: isolate;
   }
+  @media (min-width: 821px) {
+    .mu-violin { margin-top: clamp(2.5rem, 4vw, 3.5rem); }
+  }
   .mu-violin::after {
     content: "";
     position: absolute;
@@ -857,16 +860,17 @@
   .pp-page--no-cta .pp-tags { margin-top: 1.6rem; }
   .pp-tags > span { white-space: nowrap; }
   .pp-cta { display: inline-flex; align-items: center; gap: .55rem; margin-top: 1.5rem; margin-bottom: 1rem;
-    border: 3px solid var(--gold-2); border-radius: 999px; padding: .95rem 1.5rem;
-    background: var(--gold); color: #050504; font-size: .84rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase;
-    transition: background .18s var(--ease), border-color .18s var(--ease), transform .18s var(--ease); }
-  .pp-cta:hover { background: #dcc17e; border-color: var(--gold-2); transform: translateY(-1px); }
-  .pp-cta span { white-space: nowrap; }
+    border: 0; border-radius: 999px; padding: .95rem 1.5rem;
+    background: var(--gold); color: #050504; font-size: .84rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    transition: background .18s var(--ease), transform .18s var(--ease); }
+  .pp-cta:hover { background: #dcc17e; transform: translateY(-1px); }
+  .pp-cta span { white-space: nowrap; -webkit-text-stroke: .35px currentColor; paint-order: stroke fill; }
 
   .pp-cta svg { width: 15px; height: 15px; }
 
   .pp-visual { position: relative; grid-column: 2; grid-row: 1; display: grid; place-items: center; aspect-ratio: 4 / 3;
-    margin-top: 2.5rem; border: 1px solid var(--line); background: var(--card-wash); overflow: hidden; }
+    margin-top: 2.5rem; border: 0; outline: 1px solid rgba(245, 240, 232, .14); outline-offset: 0;
+    background: var(--card-wash); overflow: hidden; }
   .pp-visual--image { place-items: stretch; }
   .pp-visual-picture { display: block; width: 100%; height: 100%; }
   .pp-visual-picture img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -1041,12 +1045,12 @@
     background:
       linear-gradient(135deg, rgba(255,252,244,.52), rgba(255,252,244,0) 46%),
       var(--wk-icon-accent);
-    box-shadow: 0 0 0 1px rgba(255,252,244,.22), 0 .9rem 2.2rem rgba(0,0,0,.34);
-    filter: drop-shadow(0 .85rem 1.25rem rgba(0,0,0,.34));
-    transform: scale(1); transition: transform .25s var(--ease), filter .25s var(--ease); }
+    box-shadow: 0 0 0 1px rgba(255,252,244,.22), 0 .65rem .8rem rgba(211,178,112,.2), 0 .85rem 1.25rem rgba(0,0,0,.34);
+    transform: scale(1); transition: transform .25s var(--ease); }
   .wk-item:hover .wk-icon,
   .wk-item:focus-visible .wk-icon { transform: scale(1.045); }
-  .wk-icon--image { background: transparent; box-shadow: 0 0 0 1px rgba(255,255,255,.16); }
+  .wk-icon--image { background: transparent;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.16), 0 .65rem .8rem rgba(211,178,112,.2), 0 .85rem 1.25rem rgba(0,0,0,.34); }
   .wk-icon-picture { display: grid; place-items: center; width: 100%; height: 100%; }
   .wk-icon-picture img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(var(--wk-icon-scale)); }
   .wk-icon-initials { font-family: var(--sans); font-size: 2.1rem; font-weight: 800; line-height: 1; letter-spacing: 0; }
@@ -1079,7 +1083,7 @@
   .wk-item:hover .wk-name,
   .wk-item:focus-visible .wk-name { color: var(--gold); }
   .wk-title-tail { white-space: nowrap; }
-  .wk-desc { margin: .5rem 0 0; color: var(--text-soft); font-size: 1.02rem; line-height: 1.5;
+  .wk-desc { margin: .5rem 0 0; color: var(--text-soft); font-size: 1.1rem; line-height: 1.5;
     max-width: 40rem; }
 
   .wk-arrow { display: inline-flex; align-items: center; margin-left: .48rem; color: var(--gold);
@@ -1139,6 +1143,10 @@
     .wk-item:active .wk-watermark { opacity: .05; }
   }
 
+  @media (max-width: 762px) {
+    .wk-icon { align-self: start; margin-top: 0; }
+  }
+
   @media (max-width: 1040px) {
     .wk-list { width: 100vw; margin-left: calc(50% - 50vw); }
   }
@@ -1146,6 +1154,10 @@
   @media (max-width: 600px) {
     .pp-next { display: grid; grid-template-columns: minmax(0, max-content) auto; justify-content: center; margin-bottom: .385rem; padding-block: clamp(1.7rem, 5vw, 2.15rem); text-align: left; }
     .pp-next-inner { text-align: left; }
+    .wk-item { grid-template-columns: 92px minmax(0, 1fr); gap: .45rem .9rem; }
+    .wk-icon { width: 74.8px; margin-top: .35rem; }
+    .wk-name { font-size: 1.3rem; }
+    .wk-desc { font-size: .94rem; }
 
     .wk-foot,
     .pp-foot,

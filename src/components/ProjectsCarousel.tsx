@@ -134,7 +134,7 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
             {project.link ? (
               <a className="pp-cta" href={project.link.href} target="_blank" rel="noopener noreferrer">
                 <span>{project.link.label}</span>
-                <ArrowUpRight size={15} strokeWidth={2.4} />
+                <ArrowUpRight size={15} strokeWidth={3.2} />
               </a>
             ) : null}
             <div className="pp-tags">
@@ -193,7 +193,7 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
           {project.link ? (
             <a className="pp-link" href={project.link.href} target="_blank" rel="noopener noreferrer">
               <span>{project.link.label}</span>
-              <ArrowUpRight size={15} strokeWidth={2.4} />
+              <ArrowUpRight size={15} strokeWidth={3.2} />
             </a>
           ) : null}
         </aside>
