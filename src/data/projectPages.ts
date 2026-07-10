@@ -88,7 +88,7 @@ export const projectPages: ProjectPage[] = [
         heading: "The idea",
         body: [
           "InspiraSonho began from a simple but powerful insight: many students are not missing ambition — they are missing access to information.",
-          "After returning from the Youth Ambassadors Program in the United States, my co-founder Larissa Moreira started giving talks in schools about exchange programs and academic opportunities. Again and again, students would say they had never heard of those programs before. The problem was not a lack of interest, but that information about opportunities was not reaching the people who could benefit from it.",
+          "After returning from the Youth Ambassadors Program in the United States, my co-founder Larissa Moreira started giving talks in schools about exchange programs and academic opportunities. Again and again, students would say they had never heard of those programs before. The problem was not a lack of interest: information about opportunities was not reaching the people who could benefit from it.",
           "Talks could inspire a room. The internet could reach a country.",
           "That became the premise of InspiraSonho: use the web to connect Brazilian students with meaningful learning experiences outside the classroom — opportunities that could expand their sense of possibility, strengthen their development, and help them imagine futures they had not been shown before."
         ]
@@ -129,7 +129,7 @@ export const projectPages: ProjectPage[] = [
         heading: "Looking back",
         body: [
           "InspiraSonho was one of the projects that shaped how I think about technology.",
-          "It showed me that software can be more than a product interface. It can be a bridge between information and people; between a student and an opportunity; between someone’s current environment and a future they did not yet know how to reach.",
+          "It showed me that software can be more than a product interface. It can be a bridge between information and people; between a student and an opportunity; between someone's current environment and a future they did not yet know how to reach.",
           "It was also where I learned to connect engineering, mission, product, and community. I was not just building pages and databases, but helping build a system for access — one that tried to make opportunity travel farther than privilege usually does."
         ]
       }
@@ -194,7 +194,7 @@ export const projectPages: ProjectPage[] = [
         body: [
           "Home Intelligence is being designed as a set of small, composable Home Assistant plugins rather than one monolithic smart-home brain. Each plugin should solve a concrete home problem on its own, while also fitting into a broader orchestration layer.",
           "The architecture prioritizes local execution, readable event flows, graceful degradation when devices drop, and explicit approval gates for agentic actions. Where AI is involved, the goal is not unchecked autonomy. It is a system that can reason about context, suggest useful actions, coordinate devices, and remain inspectable.",
-          "I’m building it from the belief that home automation should be understandable months later — not just by the person who wrote the rule, but by anyone trying to understand what the home is doing."
+          "I'm building it from the belief that home automation should be understandable months later — not just by the person who wrote the rule, but by anyone trying to understand what the home is doing."
         ]
       },
       {
@@ -202,7 +202,7 @@ export const projectPages: ProjectPage[] = [
         body: [
           "The first phase focuses on adaptive ambience, PG&E energy insights, and smart-speaker coordination across AirPlay, Google speakers, and AI-enabled workflows.",
           "Planned integrations include Alexa and HomePod support, along with broader display and audio orchestration so ambience can adapt across lights, screens, and sound together.",
-          "Home Intelligence is still in development and planned to be open-sourced. I’m building it as both a practical smart-home toolkit and a broader experiment in what local-first AI can feel like when it belongs to the home, not the cloud."
+          "Home Intelligence is still in development and planned to be open-sourced. I'm building it as both a practical smart-home toolkit and a broader experiment in what local-first AI can feel like when it belongs to the home, not the cloud."
         ]
       }
     ],
@@ -254,7 +254,7 @@ export const projectPages: ProjectPage[] = [
       {
         heading: "Research and recognition",
         body: [
-          "Under the guidance of Prof. Roberto Lima, LabStocker became both a software project and a chemistry research project — eventually presented at national conferences and recognized among Brazil’s top student chemistry projects.",
+          "Under the guidance of Prof. Roberto Lima, LabStocker became both a software project and a chemistry research project — eventually presented at national conferences and recognized among Brazil's top student chemistry projects.",
           "In 2015, the project returned as *LabStocker.com*, a web platform for reagent management. That version emphasized productivity, waste reduction, safer storage through compatibility groups, cost planning, dashboards, statistical consumption forecasts, and simultaneous access across desktop, tablet, and smartphone devices.",
           "The project was also recognized among the top three Brazilian student chemistry projects at the National Brazilian Chemistry Congress in 2015 and 2016."
         ]
@@ -264,16 +264,15 @@ export const projectPages: ProjectPage[] = [
         body: [
           "LabStocker also became my first experience thinking about software as a product, not just an application.",
           "Together with two classmates, Amanda Myris and Bruno Valniery, I worked on business creation and development around the platform: who the users were, how laboratories might adopt it, how different institutions could have customized versions, and how a technical tool could become a service for schools, universities, and research labs.",
-          "That part mattered. It was the first time I saw engineering, user needs, research, and product strategy meet in the same project."
+          "That part mattered: it was the first time I saw engineering, user needs, research, and product strategy meet in the same project."
         ]
       },
       {
         heading: "Engineering depth",
         body: [
-          "Looking back, LabStocker was my first real systems project.",
-          "It forced me to think beyond screens and forms: relational data modeling, permissions, shared state across clients, reporting, forecasting with sparse historical data, and the boundaries between storage, business logic, and presentation.",
-          "It also taught me that useful software often starts from a very concrete pain. I had lived the lab problem myself, so the system was not abstract. It came from watching real people lose time, duplicate work, misplace materials, and make purchasing decisions without enough data.",
-          "Much of how I think about software today started here: understand the workflow, model the domain carefully, make the system legible, and build tools that help people make better decisions."
+          "LabStocker was one of the first projects where I had to connect engineering with real operational use cases: inventory workflows, lab safety, purchasing decisions, and the practical constraints of people sharing the same materials across different experiments.",
+          "It pushed me to think beyond code complexity alone. Beyond building screens and database tables, the challenge was modeling a real domain carefully enough that the system could support decisions: what was available, what was running low, what was expiring, what needed to be reordered, and how usage patterns could inform future demand.",
+          "That experience shaped how I think about software as product infrastructure — not just something that works technically, but as something that helps people coordinate, plan, and make better decisions in a real environment."
         ]
       }
     ],

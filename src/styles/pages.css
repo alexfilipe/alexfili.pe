@@ -486,11 +486,11 @@
   }
   .mu-violin-carousel-control--left {
     left: 0;
-    border-right: 1px solid var(--line);
+    border-right: 1px solid rgba(240, 237, 230, 0.22);
   }
   .mu-violin-carousel-control--right {
     right: 0;
-    border-left: 1px solid var(--line);
+    border-left: 1px solid rgba(240, 237, 230, 0.22);
   }
   .mu-violin-carousel-shell[data-can-scroll-left="true"] .mu-violin-carousel-control--left,
   .mu-violin-carousel-shell[data-can-scroll-right="true"] .mu-violin-carousel-control--right {
