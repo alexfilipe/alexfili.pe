@@ -88,7 +88,7 @@ export const projectPages: ProjectPage[] = [
         heading: "The idea",
         body: [
           "InspiraSonho began from a simple but powerful insight: many students are not missing ambition — they are missing access to information.",
-          "After returning from the Young Ambassadors program in the United States, my co-founder Larissa Moreira started giving talks in schools about exchange programs and academic opportunities. Again and again, students would say they had never heard of those programs before. The problem was not a lack of interest. The problem was that information about opportunities was not reaching the people who could benefit from it.",
+          "After returning from the Youth Ambassadors Program in the United States, my co-founder Larissa Moreira started giving talks in schools about exchange programs and academic opportunities. Again and again, students would say they had never heard of those programs before. The problem was not a lack of interest. The problem was that information about opportunities was not reaching the people who could benefit from it.",
           "Talks could inspire a room. The internet could reach a country.",
           "That became the premise of InspiraSonho: use the web to connect Brazilian students with meaningful learning experiences outside the classroom — opportunities that could expand their sense of possibility, strengthen their development, and help them imagine futures they had not been shown before."
         ]
