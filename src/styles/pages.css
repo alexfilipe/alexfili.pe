@@ -94,7 +94,7 @@
   .mu-sec { position: relative; padding: clamp(5rem, 12vw, 10rem) clamp(1.5rem, 6vw, 6rem); overflow: hidden;
     border-top: 1px solid var(--line); }
   .mu-sec::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .8; }
-  .mu-conducting { --conducting-baton-opacity: .18; isolation: isolate; }
+  .mu-conducting { --conducting-baton-opacity: .15; isolation: isolate; }
   .mu-conducting::before { background: radial-gradient(80% 60% at 78% 30%, rgba(200,169,110,.08), transparent 60%); }
   .mu-conducting::after {
     content: "";
@@ -164,7 +164,10 @@
     .mu-video { margin-top: clamp(10.25rem, 8.8vw, 11rem); }
   }
   @media (min-width: 1201px) {
-    .mu-conducting::after { width: clamp(41.4rem, 40.5vw, 46.8rem); }
+    .mu-conducting::after {
+      width: clamp(39.123rem, 38.2725vw, 44.226rem);
+      transform: translateX(-3rem) rotate(-5deg);
+    }
   }
   .mu-video-frame { position: relative; aspect-ratio: 16 / 9; border: 1px solid var(--line-strong);
     background: #000; overflow: hidden; box-shadow: 0 24px 70px rgba(0,0,0,.55); }
@@ -572,7 +575,7 @@
       right: -4.75rem;
       bottom: auto;
       width: min(96vw, 28rem);
-      --conducting-baton-opacity: .18;
+      --conducting-baton-opacity: .15;
     }
     .mu-conducting:has(.mu-conducting-body .reveal.is-in)::after { opacity: var(--conducting-baton-opacity); }
     .mu-piano { padding-top: 6.25rem; }
