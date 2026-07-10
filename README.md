@@ -242,7 +242,7 @@ Verified locally for the full Astro site:
 - `npm run check`
 - `npm run build:site`
 - `npm run build:production`
-- Static route generation for `/`, `/music/`, `/essays/`, writing detail pages, and `/404.html`
+- Static route generation for `/`, `/music`, `/essays`, writing detail pages, and `/404.html`
 - Sitemap generation
 - Draft writing exclusion from `dist`
 

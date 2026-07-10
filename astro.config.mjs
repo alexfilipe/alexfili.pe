@@ -4,6 +4,7 @@ import react from "@astrojs/react";
 
 export default defineConfig({
   site: process.env.PUBLIC_SITE_URL ?? "https://alexfili.pe",
+  trailingSlash: "never",
   integrations: [react(), mdx()],
   prefetch: true,
   devToolbar: {

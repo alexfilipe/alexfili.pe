@@ -138,7 +138,7 @@ export const seoPages = {
     schemaType: "ProfilePage"
   },
   projects: {
-    path: "/projects/",
+    path: "/projects",
     title: "Featured Work | Álex Filipe Santos",
     description:
       "Explore Álex Filipe Santos's featured software projects, from AI-first macOS sync and Home Assistant automation to education access and chemistry-lab systems.",
@@ -158,7 +158,7 @@ export const seoPages = {
     schemaType: "CollectionPage"
   },
   music: {
-    path: "/music/",
+    path: "/music",
     title: "Music | Violin, Piano & Conducting",
     description:
       "Violin, piano, and conducting in Álex Filipe Santos's life: 25 years of violin, piano recitals, and a conducting premiere with the Amherst Symphony Orchestra.",
@@ -184,7 +184,7 @@ export function getProjectSeo(project: ProjectPage): SeoEntry {
   const override = projectSeoOverrides[project.id];
 
   return {
-    path: `/projects/${project.id}/`,
+    path: `/projects/${project.id}`,
     title: override.title,
     description: override.description,
     socialTitle: `${project.name} by ${profile.name}`,
