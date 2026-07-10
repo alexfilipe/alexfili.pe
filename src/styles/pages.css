@@ -866,7 +866,7 @@
   .pp-cta svg { width: 15px; height: 15px; }
 
   .pp-visual { position: relative; grid-column: 2; grid-row: 1; display: grid; place-items: center; aspect-ratio: 4 / 3;
-    margin-top: .22rem; border: 1px solid var(--line); background: var(--card-wash); overflow: hidden; }
+    margin-top: 2.5rem; border: 1px solid var(--line); background: var(--card-wash); overflow: hidden; }
   .pp-visual--image { place-items: stretch; }
   .pp-visual-picture { display: block; width: 100%; height: 100%; }
   .pp-visual-picture img { display: block; width: 100%; height: 100%; object-fit: cover; }

@@ -174,7 +174,7 @@ export const violinPhotos: ViolinPhoto[] = [
     id: "early-lessons",
     src: "/images/music/violin/early-lessons.webp",
     alt: "A young Álex playing violin at a microphone.",
-    label: "Early performance in church",
+    label: "One of the earliest performances in church — Natal, 2003",
     width: 779,
     height: 584
   },
@@ -221,7 +221,7 @@ export const violinPhotos: ViolinPhoto[] = [
   {
     id: "us-embassy-performance",
     src: "/images/music/violin/us-embassy-performance.webp",
-    alt: "Álex playing violin at an event at the U.S. Embassy in Brasília.",
+    alt: "Álex playing violin at an event at an U.S. Embassy event in Brasília.",
     label: "Performance at U.S. Embassy event — Brasília, 2013",
     width: 1200,
     height: 900
@@ -229,7 +229,7 @@ export const violinPhotos: ViolinPhoto[] = [
   {
     id: "amherst-symphony",
     src: "/images/music/violin/amherst-symphony.webp",
-    alt: "Álex playing violin with the Amherst Symphony Orchestra.",
+    alt: "Álex preparing on stage for an Amherst Symphony Orchestra concert.",
     label: "Preparing for orchestra concert — Amherst, 2020",
     width: 1200,
     height: 900
