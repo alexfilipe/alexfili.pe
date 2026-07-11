@@ -395,6 +395,7 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
     canScrollRight: false
   });
   const [isCarouselHovered, setIsCarouselHovered] = useState(false);
+  const [isCarouselInView, setIsCarouselInView] = useState(false);
   const [autoScrollResetToken, setAutoScrollResetToken] = useState(0);
 
   const markPhotoLoaded = useCallback((photoId: string) => {
@@ -577,7 +578,22 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
   );
 
   useEffect(() => {
-    if (isCarouselHovered || photos.length < 2) return;
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsCarouselInView(entry.isIntersecting);
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(scroller);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isCarouselInView || isCarouselHovered || photos.length < 2) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let autoScroll: number;
@@ -604,7 +620,7 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
     autoScroll = window.setTimeout(runAutoScroll, 7000);
 
     return () => window.clearTimeout(autoScroll);
-  }, [isCarouselHovered, photos.length, scrollByDirection, autoScrollResetToken]);
+  }, [isCarouselInView, isCarouselHovered, photos.length, scrollByDirection, autoScrollResetToken]);
 
   return (
     <div
