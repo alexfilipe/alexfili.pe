@@ -1,4 +1,5 @@
 import { Fragment, useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { flushSync } from "react-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import SiteNav from "@/components/SiteNav";
 import {
@@ -645,6 +646,9 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
               role="listitem"
               key={photo.id}
               data-photo-id={photo.id}
+              onTouchStartCapture={() => {
+                flushSync(() => setActiveLabelPhotoId(photo.id));
+              }}
               onPointerEnter={(event) => {
                 // Mouse hover reveals a caption; touch is left to tap/scroll so
                 // it doesn't fight the tap handler. Either way, one label wins.
@@ -657,9 +661,6 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
                 aria-label={photo.alt}
                 aria-describedby={labelId}
                 aria-expanded={isLabelActive}
-                onPointerDown={(event) => {
-                  if (event.pointerType !== "mouse") setActiveLabelPhotoId(photo.id);
-                }}
                 onClick={() => setActiveLabelPhotoId(photo.id)}
               >
                 <span className="mu-violin-photo-media" aria-hidden="true">
