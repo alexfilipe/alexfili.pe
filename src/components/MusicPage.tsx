@@ -407,10 +407,6 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
     });
   }, []);
 
-  const togglePhotoLabel = useCallback((photoId: string) => {
-    setActiveLabelPhotoId((currentPhotoId) => (currentPhotoId === photoId ? null : photoId));
-  }, []);
-
   const cancelScrollAnimation = useCallback(() => {
     if (animationFrameRef.current !== null) {
       window.cancelAnimationFrame(animationFrameRef.current);
@@ -645,7 +641,10 @@ function ViolinPhotoCarousel({ photos }: { photos: ViolinPhoto[] }) {
                 aria-label={photo.alt}
                 aria-describedby={labelId}
                 aria-expanded={isLabelActive}
-                onClick={() => togglePhotoLabel(photo.id)}
+                onPointerDown={(event) => {
+                  if (event.pointerType !== "mouse") setActiveLabelPhotoId(photo.id);
+                }}
+                onClick={() => setActiveLabelPhotoId(photo.id)}
               >
                 <span className="mu-violin-photo-media" aria-hidden="true">
                   <img
