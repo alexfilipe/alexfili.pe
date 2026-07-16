@@ -537,6 +537,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
 
       scrollDirection = delta > 0 ? 1 : -1;
       scrollDistance = Math.min(420, scrollDistance + distance);
+      renderReducedMotionFrame();
     };
 
     const triggerScrollGlow = (time: number) => {
@@ -570,12 +571,12 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       key.userData.sparklePulse = Math.max(Number(key.userData.sparklePulse) || 0, 0.9);
     };
 
-    const updateVisualState = (time: number) => {
+    const updateVisualState = (time: number, immediate = false) => {
       const frameDelta = lastFrameTime
         ? Math.min(0.05, Math.max(0, time - lastFrameTime))
         : TARGET_FRAME_SECONDS;
       const frameScale = Math.min(MAX_FRAME_SCALE, frameDelta / TARGET_FRAME_SECONDS);
-      const keyEase = 1 - Math.pow(0.78, frameScale);
+      const keyEase = immediate ? 1 : 1 - Math.pow(0.78, frameScale);
       lastFrameTime = time;
       const glowDecay = Math.pow(0.988, frameScale);
       const activeSweep = sparkleSweep;
@@ -734,6 +735,15 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       });
     };
 
+    const renderReducedMotionFrame = () => {
+      if (!reduceMotion) {
+        return;
+      }
+
+      updateVisualState(performance.now() * 0.001, true);
+      renderer.render(scene, camera);
+    };
+
     const setPointer = (event: PointerEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
       pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -803,6 +813,8 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
           lastDragKey = activeKey;
         }
       }
+
+      renderReducedMotionFrame();
     };
 
     const clearActive = () => {
@@ -813,12 +825,14 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       pressedKey = null;
       lastDragKey = null;
       isPointerDown = false;
+      renderReducedMotionFrame();
     };
 
     const clearPressed = () => {
       pressedKey = null;
       lastDragKey = null;
       isPointerDown = false;
+      renderReducedMotionFrame();
     };
 
     const startSparkleSweep = () => {
@@ -861,6 +875,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       keyboardPressedNotes.add(mappedNote.note);
       key.userData.sparklePulse = 1;
       onPlayRef.current(mappedNote.note, mappedNote.freq);
+      renderReducedMotionFrame();
     };
 
     const releaseComputerKey = (event: KeyboardEvent) => {
@@ -873,6 +888,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       pressedComputerKeys.delete(keyboardKey);
       keyboardPressedNotes.delete(note);
       onLeaveRef.current(note);
+      renderReducedMotionFrame();
     };
 
     const clearComputerKeyboardState = () => {
@@ -881,6 +897,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
         onLeaveRef.current(note);
       });
       pressedComputerKeys.clear();
+      renderReducedMotionFrame();
     };
 
     const animate = (time = 0) => {
@@ -910,10 +927,15 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
       clearPressed();
     };
 
+    const handleResize = () => {
+      rebuild();
+      renderReducedMotionFrame();
+    };
+
     rebuild();
     animate();
 
-    window.addEventListener("resize", rebuild);
+    window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("keydown", pressComputerKey);
     window.addEventListener("keyup", releaseComputerKey);
@@ -926,7 +948,7 @@ function PerspectivePiano({ hovered, flash, onEnter, onPlay, onLeave }: Perspect
 
     return () => {
       window.cancelAnimationFrame(raf);
-      window.removeEventListener("resize", rebuild);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("keydown", pressComputerKey);
       window.removeEventListener("keyup", releaseComputerKey);

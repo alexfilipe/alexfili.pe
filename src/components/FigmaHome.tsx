@@ -178,6 +178,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
   const rotationVelocityRef = useRef({ x: 0, y: 0 });
   const scrollVelocityRef = useRef(0);
   const supportsHoverRef = useRef(false);
+  const requestInteractionDrawRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -246,15 +247,29 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
     let lastScrollY = window.scrollY;
     let lastFrameTime = 0;
 
+    let draw = (_time = 0) => {};
+    const requestInteractionDraw = () => {
+      if (!reduceMotion || animId) {
+        return;
+      }
+
+      animId = window.requestAnimationFrame((time) => {
+        animId = 0;
+        draw(time);
+      });
+    };
+    requestInteractionDrawRef.current = requestInteractionDraw;
+
     const handleScroll = () => {
       const nextScrollY = window.scrollY;
       scrollVelocityRef.current += (nextScrollY - lastScrollY) * 0.0014;
       lastScrollY = nextScrollY;
+      requestInteractionDraw();
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    const draw = (time = 0) => {
+    draw = (time = 0) => {
       const frameDelta = lastFrameTime
         ? Math.min(50, Math.max(0, time - lastFrameTime))
         : TARGET_FRAME_MS;
@@ -274,9 +289,14 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
       if (supportsHoverRef.current && isInteractingRef.current && !isDraggingRef.current) {
         const targetRy = cursorTargetRef.current.x * 0.86;
         const targetRx = 0.22 - cursorTargetRef.current.y * 0.56;
-        const hoverEase = 1 - Math.pow(0.88, frameScale);
-        ryCurrent += (targetRy - ryCurrent) * hoverEase;
-        rxCurrent += (targetRx - rxCurrent) * hoverEase;
+        if (reduceMotion) {
+          ryCurrent = targetRy;
+          rxCurrent = targetRx;
+        } else {
+          const hoverEase = 1 - Math.pow(0.88, frameScale);
+          ryCurrent += (targetRy - ryCurrent) * hoverEase;
+          rxCurrent += (targetRx - rxCurrent) * hoverEase;
+        }
       }
 
       const ry = ryCurrent + t * 0.2;
@@ -532,6 +552,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
     return () => {
       window.removeEventListener("scroll", handleScroll);
       cancelAnimationFrame(animId);
+      requestInteractionDrawRef.current = () => {};
     };
   }, [onReady]);
 
@@ -550,6 +571,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         isInteractingRef.current = true;
         updateCursorTarget(event);
         lastPointerRef.current = { x: event.clientX, y: event.clientY };
+        requestInteractionDrawRef.current();
       }}
       onPointerMove={(event) => {
         isInteractingRef.current = true;
@@ -563,11 +585,13 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
           updateCursorTarget(event);
           lastPointerRef.current = { x: event.clientX, y: event.clientY };
         }
+        requestInteractionDrawRef.current();
       }}
       onPointerLeave={() => {
         if (!isDraggingRef.current) {
           isInteractingRef.current = false;
         }
+        requestInteractionDrawRef.current();
       }}
       onPointerDown={(event) => {
         isInteractingRef.current = true;
@@ -575,16 +599,19 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
         updateCursorTarget(event);
         lastPointerRef.current = { x: event.clientX, y: event.clientY };
         event.currentTarget.setPointerCapture(event.pointerId);
+        requestInteractionDrawRef.current();
       }}
       onPointerUp={(event) => {
         isDraggingRef.current = false;
         isInteractingRef.current = false;
         event.currentTarget.releasePointerCapture(event.pointerId);
+        requestInteractionDrawRef.current();
       }}
       onPointerCancel={(event) => {
         isDraggingRef.current = false;
         isInteractingRef.current = false;
         event.currentTarget.releasePointerCapture(event.pointerId);
+        requestInteractionDrawRef.current();
       }}
     >
       <canvas ref={canvasRef} className="figma-artifact-canvas" />
