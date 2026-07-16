@@ -189,10 +189,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
       return;
     }
 
-    const dpr = window.devicePixelRatio || 1;
     const size = 200;
-    canvas.width = size * dpr;
-    canvas.height = size * dpr;
     canvas.style.width = `${size}px`;
     canvas.style.height = `${size}px`;
 
@@ -201,7 +198,21 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
       return;
     }
 
-    ctx.scale(dpr, dpr);
+    const syncCanvasResolution = () => {
+      const rect = canvas.getBoundingClientRect();
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      const pixelWidth = Math.max(1, Math.round(rect.width * pixelRatio));
+      const pixelHeight = Math.max(1, Math.round(rect.height * pixelRatio));
+      if (canvas.width === pixelWidth && canvas.height === pixelHeight) {
+        return;
+      }
+
+      canvas.width = pixelWidth;
+      canvas.height = pixelHeight;
+      ctx.setTransform(pixelWidth / size, 0, 0, pixelHeight / size, 0, 0);
+    };
+
+    syncCanvasResolution();
     supportsHoverRef.current = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const beamEdges = [...DENSE_EDGES, ...NEURAL];
     const vertexMotion = VISUAL_VERTS.map((vertex, index) => {
@@ -256,6 +267,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", syncCanvasResolution);
 
     const draw = (time = 0) => {
       const frameDelta = lastFrameTime
@@ -538,6 +550,7 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", syncCanvasResolution);
       cancelAnimationFrame(animId);
     };
   }, [onReady]);
