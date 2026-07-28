@@ -113,6 +113,9 @@ const imageJsonLd = {
   height: image.height,
   caption: image.alt
 };
+const isProfilePage = Array.isArray(schemaType)
+  ? schemaType.includes("ProfilePage")
+  : schemaType === "ProfilePage";
 const pageJsonLd = {
   "@type": schemaType,
   "@id": `${canonicalUrl}#webpage`,
@@ -128,9 +131,17 @@ const pageJsonLd = {
   primaryImageOfPage: {
     "@id": `${ogImageUrl}#primaryimage`
   },
-  author: {
-    "@id": `${siteRoot}#person`
-  },
+  ...(isProfilePage
+    ? {
+        mainEntity: {
+          "@id": `${siteRoot}#person`
+        }
+      }
+    : {
+        author: {
+          "@id": `${siteRoot}#person`
+        }
+      }),
   inLanguage: CONTENT_LANGUAGE,
   keywords: keywords.length > 0 ? keywords.join(", ") : undefined
 };
