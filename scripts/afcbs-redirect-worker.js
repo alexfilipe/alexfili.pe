@@ -1,4 +1,5 @@
 const TARGET_URL = "https://alexfili.pe/";
+const ALEXFILIPE_HOSTS = new Set(["alexfilipe.com", "www.alexfilipe.com"]);
 const AFCBS_PAGE_REDIRECTS = new Map([
   ["", TARGET_URL],
   ["/projects", "https://alexfili.pe/projects"],
@@ -19,6 +20,13 @@ function handleRequest(request) {
   const pathname = url.pathname.toLowerCase().replace(/\/$/, "");
   const fileRedirect = AFCBS_FILE_REDIRECTS.get(pathname);
   const pageRedirect = AFCBS_PAGE_REDIRECTS.get(pathname);
+
+  if (ALEXFILIPE_HOSTS.has(hostname)) {
+    const target = new URL(TARGET_URL);
+    target.pathname = url.pathname;
+    target.search = url.search;
+    return redirect(target.toString());
+  }
 
   if ((hostname === "afcbs.me" || hostname === "www.afcbs.me") && fileRedirect) {
     return redirect(fileRedirect);

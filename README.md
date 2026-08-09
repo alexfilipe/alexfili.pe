@@ -152,6 +152,11 @@ curl -s https://alexfili.pe/robots.txt
 `www` should redirect to the apex host, and `robots.txt` / `sitemap.xml` should
 reference `https://alexfili.pe`.
 
+The same production workflow also deploys `wrangler.redirects.jsonc` to the
+`afcbs-domain-redirect` Worker. That Worker handles the parked legacy domains;
+requests to `alexfilipe.com` and `www.alexfilipe.com` preserve their path and
+query string when redirecting permanently to `https://alexfili.pe`.
+
 ### Production placeholder fallback — manual only
 
 The old launch placeholder still exists as an intentional fallback path:
