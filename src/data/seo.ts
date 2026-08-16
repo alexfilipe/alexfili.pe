@@ -25,7 +25,7 @@ export type SeoEntry = {
 export const DEFAULT_SITE_URL = "https://alexfili.pe";
 export const CONTENT_LANGUAGE = "en-US";
 export const OPEN_GRAPH_LOCALE = "en_US";
-export const SEO_LASTMOD = "2026-07-10";
+export const SEO_LASTMOD = "2026-08-16";
 
 export const defaultShareImage: SocialImage = {
   src: "/og-image.png",

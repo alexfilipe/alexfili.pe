@@ -34,8 +34,8 @@ export default function PageFooter({
         </span>
         <span className="page-foot-studio">
           <span className="page-foot-sep">•</span>
-          <a href="https://livingintelligence.xyz" target="_blank" rel="noopener noreferrer">
-            Living Intelligence <span aria-hidden="true">↗</span>
+          <a href={profile.studio.url} target="_blank" rel="noopener noreferrer">
+            {profile.studio.name} <span aria-hidden="true">↗</span>
           </a>
         </span>
       </div>
