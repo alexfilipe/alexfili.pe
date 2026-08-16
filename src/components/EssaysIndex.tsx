@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import PageFooter from "@/components/PageFooter";
 import SiteNav from "@/components/SiteNav";
 import { essayEntries } from "@/data/essaysContent";
 
@@ -39,11 +40,7 @@ export default function EssaysIndex() {
             </a>
           ))}
         </div>
-        <footer className="el-foot">
-          <span>© 2026 Álex Filipe Santos</span>
-          <span className="el-foot-sep">·</span>
-          <span>San Francisco, CA</span>
-        </footer>
+        <PageFooter className="el-foot" showSocials={false} />
       </div>
     </div>
   );

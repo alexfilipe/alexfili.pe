@@ -731,7 +731,6 @@
 
   .el-foot { display: flex; align-items: center; margin-top: auto; padding-top: 1.1rem;
     border-top: 1px solid var(--line-soft); color: var(--text-faint); font-size: .82rem; }
-  .el-foot-sep { margin: 0 .6rem; }
 
 /* --------------------------------------------------------------------------
    Essay reader (.es-*)
@@ -800,8 +799,6 @@
   /* Shared footer (matches the other pages) */
   .es-foot { width: 100%; max-width: 1040px; margin: auto auto 0; padding: 1.1rem clamp(1.25rem, 4vw, 3rem) 3rem;
     display: flex; align-items: center; color: var(--text-faint); font-size: .82rem; }
-  .es-foot-sep { margin: 0 .6rem; }
-  .es-foot span { white-space: nowrap; }
 
   @media (prefers-reduced-motion: no-preference) {
     .es-fade { animation: es-fade .45s var(--ease) both; }
@@ -1108,6 +1105,24 @@
     gap: .35rem .5rem;
   }
 
+  .page-foot-identity,
+  .page-foot-studio {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem .5rem;
+    white-space: nowrap;
+  }
+
+  .page-foot-studio a {
+    color: var(--text-muted);
+    transition: color .18s var(--ease);
+  }
+
+  .page-foot-studio a:hover,
+  .page-foot-studio a:focus-visible {
+    color: var(--gold);
+  }
+
   .page-foot-links {
     gap: .45rem 1.15rem;
   }
@@ -1173,6 +1188,52 @@
     .page-foot-copy,
     .page-foot-links {
       justify-content: center;
+    }
+
+    .page-foot-studio {
+      flex-basis: 100%;
+      justify-content: center;
+    }
+
+    .page-foot-studio > .page-foot-sep {
+      display: none;
+    }
+  }
+
+  /* Keep the footer's two columns through tablet widths: only the studio link
+     moves beneath the identity row, while the social links remain at right. */
+  @media (min-width: 551px) and (max-width: 700px) {
+    .wk-foot,
+    .pp-foot,
+    .mu-foot {
+      align-items: center;
+      flex-direction: row;
+      gap: 1.5rem;
+      text-align: left;
+    }
+
+    .page-foot-copy {
+      display: flex;
+      flex: 1 1 auto;
+      min-width: 0;
+      justify-content: flex-start;
+    }
+
+    .page-foot-studio {
+      flex-basis: 100%;
+      justify-content: flex-start;
+    }
+
+    .page-foot-studio > .page-foot-sep {
+      display: none;
+    }
+
+    .page-foot-links {
+      align-self: flex-start;
+      flex: 0 0 auto;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      gap: .45rem 1.15rem;
     }
   }
 

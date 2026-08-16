@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import PageFooter from "@/components/PageFooter";
 import SiteNav from "@/components/SiteNav";
 import { essayEntries } from "@/data/essaysContent";
 
@@ -116,11 +117,7 @@ export default function EssayReader() {
         </div>
       </section>
 
-      <footer className="es-foot">
-        <span>© 2026 Álex Filipe Santos</span>
-        <span className="es-foot-sep">·</span>
-        <span>San Francisco, CA</span>
-      </footer>
+      <PageFooter className="es-foot" showSocials={false} />
     </div>
   );
 }

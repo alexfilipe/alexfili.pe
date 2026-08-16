@@ -11,10 +11,11 @@ type PageFooterProps = {
 };
 
 /**
- * PageFooter — the shared site footer: copyright · location on the left and the
- * social links on the right. Each page passes its own wrapper `className` so the
- * surrounding layout (margins, border, width) stays page-specific, while the
- * inner markup lives in one place. Pass `showSocials={false}` on the home page.
+ * PageFooter — the shared site footer: copyright, location, and studio link on
+ * the left; social links on the right. Each page passes its own wrapper
+ * `className` so the surrounding layout (margins, border, width) stays
+ * page-specific, while the inner markup lives in one place. Pass
+ * `showSocials={false}` on the home page.
  */
 export default function PageFooter({
   className,
@@ -26,9 +27,17 @@ export default function PageFooter({
   return (
     <footer className={["page-foot", className].filter(Boolean).join(" ")}>
       <div className="page-foot-copy">
-        <span>{copyright}</span>
-        <span className="page-foot-sep">•</span>
-        <span>{location}</span>
+        <span className="page-foot-identity">
+          <span>{copyright}</span>
+          <span className="page-foot-sep">•</span>
+          <span>{location}</span>
+        </span>
+        <span className="page-foot-studio">
+          <span className="page-foot-sep">•</span>
+          <a href="https://livingintelligence.xyz" target="_blank" rel="noopener noreferrer">
+            Living Intelligence <span aria-hidden="true">↗</span>
+          </a>
+        </span>
       </div>
       {showSocials ? (
         <nav className="page-foot-links" aria-label={socialLinksLabel}>
