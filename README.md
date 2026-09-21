@@ -158,9 +158,13 @@ requests to `alexfilipe.com` and `www.alexfilipe.com` preserve their path and
 query string when redirecting permanently to `https://alexfili.pe`.
 
 The workflow also deploys `wrangler.alexfsantos.jsonc` as a separate Worker.
-Cloudflare Custom Domains connect `alexfsantos.com` and `www.alexfsantos.com`
-to it, creating the DNS records and certificates. Both hosts redirect with
-HTTP 301 to `https://alexfili.pe`, preserving the path and query string.
+Its Custom Domains are attached once with
+`wrangler deploy --config wrangler.alexfsantos.domains.jsonc` using credentials
+with Workers Routes permission for the `alexfsantos.com` zone. Cloudflare then
+creates the DNS records and certificates for `alexfsantos.com` and
+`www.alexfsantos.com`. Both hosts redirect with HTTP 301 to
+`https://alexfili.pe`, preserving the path and query string. Routine workflow
+deploys leave the attached domains in place.
 
 ### Production placeholder fallback — manual only
 
