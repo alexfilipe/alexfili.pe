@@ -65,3 +65,11 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           wranglerVersion: "4.110.0"
           command: deploy --config wrangler.redirects.jsonc --message "Legacy-domain redirects deploy ${{ github.sha }}"
+
+      - name: Deploy alexfsantos.com redirects
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.110.0"
+          command: deploy --config wrangler.alexfsantos.jsonc --message "alexfsantos.com redirects deploy ${{ github.sha }}"

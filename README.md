@@ -157,6 +157,11 @@ The same production workflow also deploys `wrangler.redirects.jsonc` to the
 requests to `alexfilipe.com` and `www.alexfilipe.com` preserve their path and
 query string when redirecting permanently to `https://alexfili.pe`.
 
+The workflow also deploys `wrangler.alexfsantos.jsonc` as a separate Worker.
+Cloudflare Custom Domains connect `alexfsantos.com` and `www.alexfsantos.com`
+to it, creating the DNS records and certificates. Both hosts redirect with
+HTTP 301 to `https://alexfili.pe`, preserving the path and query string.
+
 ### Production placeholder fallback — manual only
 
 The old launch placeholder still exists as an intentional fallback path:
