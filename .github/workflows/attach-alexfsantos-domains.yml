@@ -1,0 +1,42 @@
+name: Attach alexfsantos.com domains
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type alexfsantos.com to attach both domains"
+        required: true
+        type: string
+
+jobs:
+  attach:
+    name: Attach domains to redirect Worker
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: read
+    steps:
+      - name: Confirm domain attachment
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+        run: test "$CONFIRM" = "alexfsantos.com"
+
+      - name: Attach Custom Domains via Cloudflare API
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          for host in alexfsantos.com www.alexfsantos.com; do
+            body=$(jq -n --arg host "$host" '{hostname: $host, service: "alexfsantos-domain-redirect", zone_id: "331d5ff2e7946bd10f7e05f9bd793712", zone_name: "alexfsantos.com"}')
+            response=$(curl --silent --show-error --request PUT \
+              "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/workers/domains" \
+              --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              --header "Content-Type: application/json" \
+              --data "$body")
+            if ! jq -e '.success == true' >/dev/null <<< "$response"; then
+              jq -r '.errors[]? | "Cloudflare error \(.code): \(.message)"' <<< "$response"
+              exit 1
+            fi
+            echo "Attached $host"
+          done
