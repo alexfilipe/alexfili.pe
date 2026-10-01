@@ -44,28 +44,6 @@ export const projects: Project[] = [
     }
   },
   {
-    title: "InspiraSonho",
-    description: "A social-impact platform that connected 20,000+ Brazilian students to opportunities beyond the classroom.",
-    focus: "Social impact",
-    year: "In progress",
-    period: {
-      start: "2015",
-      end: "2018"
-    },
-    href: "/projects/inspirasonho",
-    preview: {
-      webpSrc: "/images/project-previews/inspirasonho.webp",
-      pngSrc: "/images/project-previews/inspirasonho.png"
-    },
-    logo: {
-      initials: "IS",
-      accent: "#d8a85f",
-      webpSrc: "/images/project-logos/inspirasonho.webp",
-      pngSrc: "/images/project-logos/inspirasonho.png",
-      scale: 1.08
-    }
-  },
-  {
     title: "Home Intelligence",
     description: "An interface shaped by the home itself.",
     focus: "Open source",
@@ -85,6 +63,28 @@ export const projects: Project[] = [
       webpSrc: "/images/project-logos/home-intelligence.webp",
       pngSrc: "/images/project-logos/home-intelligence.png",
       scale: 1.18
+    }
+  },
+  {
+    title: "InspiraSonho",
+    description: "A social-impact platform that connected 20,000+ Brazilian students to opportunities beyond the classroom.",
+    focus: "Social impact",
+    year: "In progress",
+    period: {
+      start: "2015",
+      end: "2018"
+    },
+    href: "/projects/inspirasonho",
+    preview: {
+      webpSrc: "/images/project-previews/inspirasonho.webp",
+      pngSrc: "/images/project-previews/inspirasonho.png"
+    },
+    logo: {
+      initials: "IS",
+      accent: "#d8a85f",
+      webpSrc: "/images/project-logos/inspirasonho.webp",
+      pngSrc: "/images/project-logos/inspirasonho.png",
+      scale: 1.08
     }
   },
   {

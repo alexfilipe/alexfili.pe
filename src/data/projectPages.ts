@@ -77,6 +77,76 @@ export const projectPages: ProjectPage[] = [
     tags: ["macOS", "Swift", "Local-first", "Multi-cloud", "AI-first development", "Open source"]
   }  ,
   {
+    id: "home-intelligence",
+    name: "Home Intelligence",
+    focus: ["Spatial interfaces", "Shared home control"],
+    period: "2025–Present",
+    tagline: "An interface shaped by the home itself.",
+    lede: "Home Intelligence, a system I’m developing at [Living Intelligence](https://livingintelligence.xyz/), brings home automation, spatial interfaces, and custom hardware together into a single system. Built around the layout and daily life of each home, it makes connected spaces easier to understand, control, and enjoy.",
+    sections: [
+      {
+        heading: "What it does for the home",
+        body: [
+          "A home is understood through its rooms, the things we do in them, and the people we share them with. Its technology should follow that same familiar structure. Adjusting the lighting or choosing where music plays should feel connected to the space around you.",
+          "Home Intelligence uses the home itself to organize everything. You begin with a place, see what is happening there, and reach the controls relevant to what you want to do. Everyday actions stay close at hand, with more detailed control available when needed.",
+          "The aim is shared understanding: a home that feels approachable to the people who live there and to someone visiting for the first time, who should be able to change the lights around them without asking how. That means making the relationship between a control, a room, and its effect immediately clear."
+        ]
+      },
+      {
+        heading: "What I’m building",
+        body: [
+          "The foundation is a spatial interface that connects the whole home to its individual rooms, activities, and devices. Each home begins with its own layout and existing systems. Lighting, music, and other controls share one interface, with what’s on or playing shown in the room where it’s happening.",
+          "Music is a central focus of the current work: making playback easier to start in a room, move between spaces, and manage throughout the home. Alongside that, I’m developing more complete control of lighting and entertainment, with particular attention to making it clear where each action goes and what it will do.",
+          "I’m designing the software and hardware together, shaped by what it’s like to live in a space and what people need in the moment."
+        ]
+      },
+      {
+        heading: "Why it matters",
+        body: [
+          "This work began in my own home, through small moments of friction: adjusting music, changing the atmosphere of a room, or helping someone else use the systems around them. Those moments made the design problem concrete.",
+          "A shared space needs controls that belong to everyone in it.",
+          "As a musician and engineer, I care about how a space feels as much as how its systems work. Sound, light, responsiveness, and the ease of making a small adjustment all shape whether technology feels at home in a room.",
+          "Home Intelligence grows from the belief that people should be able to entrust routine complexity to a system while keeping authority over their surroundings. Automation should stay easy to follow and easy to correct. The measure of success is how much attention people can give back to the life happening around them."
+        ]
+      },
+      {
+        heading: "Engineering direction",
+        body: [
+          "The current system builds on Home Assistant, with custom interface work and integrations shaped by practical needs. I’m developing reusable foundations while keeping the layout, equipment, and preferences of each home distinct. Designing for daily life also means planning for setup, maintenance, and recovery from the beginning.",
+          "The engineering priorities are responsive control, local operation wherever practical, accurate device state, and clear behavior when something becomes unavailable. Interoperability matters because a useful system should help the equipment people already own work together, while leaving room for future choices.",
+          "Privacy and human agency guide the interaction design. Ordinary controls should remain dependable when AI or contextual sensing is unavailable. More adaptive behavior will be built around actions people can understand, correct, and override."
+        ]
+      },
+      {
+        heading: "Roadmap",
+        body: [
+          "Working prototypes are already in daily use in my home, where living with them is helping refine the design. The immediate focus is music in each room, moving playback between spaces, and whole-home controls, followed by deeper entertainment control and contextual behavior people can rely on.",
+          "Over time, I want Home Intelligence to grow more attuned to the relationships between people, rooms, and activities, with AI helping in ways people can always see and adjust. The direction stays grounded in everyday usefulness: a home that is easier to understand, more enjoyable to live in, and able to adapt while leaving people in control."
+        ]
+      }
+    ],
+    meta: {
+      Role: "Creator, product design & engineering",
+      Timeline: "2025–Present",
+      Stack: ["Home Assistant", "Python", "HTML", "CSS", "JavaScript", "YAML", "REST APIs"],
+      Focus: ["Spatial interfaces", "Shared home control", "Local-first automation"],
+      Status: ["Working prototypes", "In active development"]
+    },
+    // link: { label: "View on GitHub", href: "https://github.com/alexfilipe" },
+    preview: {
+      webpSrc: "/images/project-previews/home-intelligence.webp",
+      pngSrc: "/images/project-previews/home-intelligence.png"
+    },
+    logo: {
+      initials: "HI",
+      accent: "#8fb2df",
+      webpSrc: "/images/project-logos/home-intelligence.webp",
+      pngSrc: "/images/project-logos/home-intelligence.png",
+      scale: 1.18
+    },
+    tags: ["Home Assistant", "Python", "HTML", "CSS", "JavaScript", "YAML", "REST APIs", "Spatial interfaces", "Local-first"]
+  },
+  {
     id: "inspirasonho",
     name: "InspiraSonho",
     focus: ["Social impact", "Education"],
@@ -155,76 +225,6 @@ export const projectPages: ProjectPage[] = [
       scale: 1.08
     },
     tags: ["Social impact", "Education", "Full-stack", "Product strategy", "Databases"]
-  },
-  {
-    id: "home-intelligence",
-    name: "Home Intelligence",
-    focus: ["Spatial interfaces", "Shared home control"],
-    period: "2025–Present",
-    tagline: "An interface shaped by the home itself.",
-    lede: "Home Intelligence, a system I’m developing at [Living Intelligence](https://livingintelligence.xyz/), brings home automation, spatial interfaces, and custom hardware together into a single system. Built around the layout and daily life of each home, it makes connected spaces easier to understand, control, and enjoy.",
-    sections: [
-      {
-        heading: "What it does for the home",
-        body: [
-          "A home is understood through its rooms, the things we do in them, and the people we share them with. Its technology should follow that same familiar structure. Adjusting the lighting or choosing where music plays should feel connected to the space around you.",
-          "Home Intelligence uses the home itself to organize everything. You begin with a place, see what is happening there, and reach the controls relevant to what you want to do. Everyday actions stay close at hand, with more detailed control available when needed.",
-          "The aim is shared understanding: a home that feels approachable to the people who live there and to someone visiting for the first time, who should be able to change the lights around them without asking how. That means making the relationship between a control, a room, and its effect immediately clear."
-        ]
-      },
-      {
-        heading: "What I’m building",
-        body: [
-          "The foundation is a spatial interface that connects the whole home to its individual rooms, activities, and devices. Each home begins with its own layout and existing systems. Lighting, music, and other controls share one interface, with what’s on or playing shown in the room where it’s happening.",
-          "Music is a central focus of the current work: making playback easier to start in a room, move between spaces, and manage throughout the home. Alongside that, I’m developing more complete control of lighting and entertainment, with particular attention to making it clear where each action goes and what it will do.",
-          "I’m designing the software and hardware together, shaped by what it’s like to live in a space and what people need in the moment."
-        ]
-      },
-      {
-        heading: "Why it matters",
-        body: [
-          "This work began in my own home, through small moments of friction: adjusting music, changing the atmosphere of a room, or helping someone else use the systems around them. Those moments made the design problem concrete.",
-          "A shared space needs controls that belong to everyone in it.",
-          "As a musician and engineer, I care about how a space feels as much as how its systems work. Sound, light, responsiveness, and the ease of making a small adjustment all shape whether technology feels at home in a room.",
-          "Home Intelligence grows from the belief that people should be able to entrust routine complexity to a system while keeping authority over their surroundings. Automation should stay easy to follow and easy to correct. The measure of success is how much attention people can give back to the life happening around them."
-        ]
-      },
-      {
-        heading: "Engineering direction",
-        body: [
-          "The current system builds on Home Assistant, with custom interface work and integrations shaped by practical needs. I’m developing reusable foundations while keeping the layout, equipment, and preferences of each home distinct. Designing for daily life also means planning for setup, maintenance, and recovery from the beginning.",
-          "The engineering priorities are responsive control, local operation wherever practical, accurate device state, and clear behavior when something becomes unavailable. Interoperability matters because a useful system should help the equipment people already own work together, while leaving room for future choices.",
-          "Privacy and human agency guide the interaction design. Ordinary controls should remain dependable when AI or contextual sensing is unavailable. More adaptive behavior will be built around actions people can understand, correct, and override."
-        ]
-      },
-      {
-        heading: "Roadmap",
-        body: [
-          "Working prototypes are already in daily use in my home, where living with them is helping refine the design. The immediate focus is music in each room, moving playback between spaces, and whole-home controls, followed by deeper entertainment control and contextual behavior people can rely on.",
-          "Over time, I want Home Intelligence to grow more attuned to the relationships between people, rooms, and activities, with AI helping in ways people can always see and adjust. The direction stays grounded in everyday usefulness: a home that is easier to understand, more enjoyable to live in, and able to adapt while leaving people in control."
-        ]
-      }
-    ],
-    meta: {
-      Role: "Creator, product design & engineering",
-      Timeline: "2025–Present",
-      Stack: ["Home Assistant", "Python", "HTML", "CSS", "JavaScript", "YAML", "REST APIs"],
-      Focus: ["Spatial interfaces", "Shared home control", "Local-first automation"],
-      Status: ["Working prototypes", "In active development"]
-    },
-    // link: { label: "View on GitHub", href: "https://github.com/alexfilipe" },
-    preview: {
-      webpSrc: "/images/project-previews/home-intelligence.webp",
-      pngSrc: "/images/project-previews/home-intelligence.png"
-    },
-    logo: {
-      initials: "HI",
-      accent: "#8fb2df",
-      webpSrc: "/images/project-logos/home-intelligence.webp",
-      pngSrc: "/images/project-logos/home-intelligence.png",
-      scale: 1.18
-    },
-    tags: ["Home Assistant", "Python", "HTML", "CSS", "JavaScript", "YAML", "REST APIs", "Spatial interfaces", "Local-first"]
   },
   {
     id: "labstocker",
