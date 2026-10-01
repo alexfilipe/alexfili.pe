@@ -80,7 +80,7 @@ export const projectPages: ProjectPage[] = [
     id: "home-intelligence",
     name: "Home Intelligence",
     focus: ["Spatial interfaces", "Shared home control"],
-    period: "2025–Present",
+    period: "2025 — Present",
     tagline: "An interface shaped by the home itself.",
     lede: "Home Intelligence, a system I’m developing at [Living Intelligence](https://livingintelligence.xyz/), brings home automation, spatial interfaces, and custom hardware together into a single system. Built around the layout and daily life of each home, it makes connected spaces easier to understand, control, and enjoy.",
     sections: [
@@ -127,7 +127,7 @@ export const projectPages: ProjectPage[] = [
     ],
     meta: {
       Role: "Creator, product design & engineering",
-      Timeline: "2025–Present",
+      Timeline: "2025 — Present",
       Stack: ["Home Assistant", "Python", "HTML", "CSS", "JavaScript", "YAML", "REST APIs"],
       Focus: ["Spatial interfaces", "Shared home control", "Local-first automation"],
       Status: ["Working prototypes", "In active development"]
