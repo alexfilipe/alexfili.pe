@@ -44,15 +44,21 @@ OpenGraph or Twitter/X descriptions, do not change titles or normal
 
 For IndexNow on the current production full site:
 
-- Generate a fresh 32-hex-character key with `openssl rand -hex 16`.
-- Save it as `public/<key>.txt` containing exactly the key; verify `wc -c`
+- Reuse the existing committed `public/<key>.txt` by default. Confirm the
+  32-hex-character filename matches the file contents exactly and `wc -c`
   reports `32`.
-- Commit/push the source change, then run the GitHub Actions workflow **Deploy
-  alexfili.pe production** for that commit.
+- Generate a fresh key with `openssl rand -hex 16` only when no valid key
+  exists, the live key is missing or mismatched, or key rotation is explicitly
+  requested. Commit and push the new key before deployment.
+- Run lightweight checks, commit and push any source changes, then run the
+  GitHub Actions workflow **Deploy alexfili.pe production** for that exact
+  commit.
 - Verify `https://alexfili.pe/<key>.txt` and `https://alexfili.pe/robots.txt`
   return `200` as bare text files before pinging IndexNow.
 - Only after the production key file is live, ping
   `https://api.indexnow.org/indexnow?url=https://alexfili.pe/&key=<key>`.
+  HTTP `200` means the URL was submitted successfully. HTTP `202` means the
+  URL was accepted with key validation still pending.
 
 If the placeholder fallback is active instead, add only the active `/<key>.txt`
 root path to `STATIC_ASSETS` in `scripts/placeholder-worker.js`, repin

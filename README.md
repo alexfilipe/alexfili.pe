@@ -224,25 +224,43 @@ live at `https://alexfili.pe/<key>.txt`. Do **not** ping
 
 Current production full-site flow:
 
-1. Generate a fresh 32-character hex key:
+1. Reuse the existing committed IndexNow key by default. Find the active key
+   file and verify that its 32-character hexadecimal filename matches its
+   contents exactly, with no trailing newline:
+
+   ```bash
+   mapfile -t indexnow_key_paths < <(rg --files public | rg '^public/[0-9a-f]{32}\.txt$')
+   test "${#indexnow_key_paths[@]}" -eq 1
+   indexnow_key_path="${indexnow_key_paths[0]}"
+   indexnow_key=$(basename "$indexnow_key_path" .txt)
+   test "$(wc -c < "$indexnow_key_path")" -eq 32
+   test "$(cat "$indexnow_key_path")" = "$indexnow_key"
+   ```
+
+   `wc -c` should report `32`. The filename without `.txt` and the file
+   contents must be identical.
+
+2. Generate a fresh key only if no valid committed key exists, the live key is
+   missing or mismatched, or key rotation is explicitly requested:
 
    ```bash
    openssl rand -hex 16
    ```
 
-2. Save it as `public/<key>.txt` containing exactly the key. Avoid a trailing
-   newline; `wc -c public/<key>.txt` should report `32`.
-3. Remove any old IndexNow key file unless there is a reason to keep it active.
-4. Run lightweight checks:
+   Save it as `public/<key>.txt` containing exactly the key, without a trailing
+   newline. Remove the previous key file when intentionally rotating it.
+
+3. Run lightweight checks:
 
    ```bash
    npm run check
    npm run build:production
    ```
 
-5. Commit the source changes and push them to `main`.
-6. Run the **Deploy alexfili.pe production** workflow for that commit.
-7. Verify production before pinging IndexNow:
+4. Commit any source changes and push them to `main`. A reusable valid key does
+   not require a key-file change or a separate commit.
+5. Run the **Deploy alexfili.pe production** workflow for that exact commit.
+6. Verify production after the workflow succeeds and before pinging IndexNow:
 
    ```bash
    curl -i https://alexfili.pe/<key>.txt
@@ -250,14 +268,19 @@ Current production full-site flow:
    ```
 
    The key file and `robots.txt` should return `200` as bare text files.
+   Confirm that the live key response is exactly 32 bytes and matches the
+   committed key file.
 
-8. After the key file is verified live, send the one-time IndexNow signal:
+7. After the key file is verified live, send the IndexNow signal for the
+   production apex URL:
 
    ```bash
    curl -i "https://api.indexnow.org/indexnow?url=https://alexfili.pe/&key=<key>"
    ```
 
-   A successful submission usually returns `202`.
+   HTTP `200` means the URL was submitted successfully. HTTP `202` means the
+   URL was accepted with key validation still pending. Treat `4xx` responses
+   as failures to investigate before retrying.
 
 For the placeholder fallback, also add the active `/<key>.txt` root path to
 `STATIC_ASSETS` in `scripts/placeholder-worker.js`, repin `RAW_BASE`, bump
