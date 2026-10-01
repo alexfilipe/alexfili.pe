@@ -67,7 +67,7 @@ export const projects: Project[] = [
   },
   {
     title: "Home Intelligence",
-    description: "Orchestration plugins for adaptive ambience, energy insights, and agentic smart-speaker coordination in Home Assistant.",
+    description: "An interface shaped by the home itself.",
     focus: "Open source",
     year: "Selected",
     period: {

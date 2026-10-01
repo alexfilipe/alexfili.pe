@@ -60,11 +60,21 @@ function SpacedMetadata({ value }: { value: ProjectMetaValue }) {
 }
 
 function RenderInlineText({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  const parts = text.split(/(\[[^\]]+\]\(https?:\/\/[^)\s]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g);
 
   return (
     <>
       {parts.map((part, index) => {
+        const link = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)$/);
+
+        if (link) {
+          return (
+            <a key={`${part}-${index}`} href={link[2]} target="_blank" rel="noopener noreferrer">
+              {link[1]}
+            </a>
+          );
+        }
+
         if (part.startsWith("**") && part.endsWith("**")) {
           return <strong key={`${part}-${index}`}>{part.slice(2, -2)}</strong>;
         }
@@ -130,7 +140,7 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
             </span>
             <h1 className="pp-title">{project.name}</h1>
             <p className="pp-tagline">{project.tagline}</p>
-            <p className="pp-lede">{project.lede}</p>
+            <p className="pp-lede"><RenderInlineText text={project.lede} /></p>
             {project.link ? (
               <a className="pp-cta" href={project.link.href} target="_blank" rel="noopener noreferrer">
                 <span>{project.link.label}</span>
@@ -158,7 +168,7 @@ function ProjectDetail({ project }: { project: ProjectPage }) {
           </span>
           <h1 className="pp-title">{project.name}</h1>
           <p className="pp-tagline">{project.tagline}</p>
-          <p className="pp-lede">{project.lede}</p>
+          <p className="pp-lede"><RenderInlineText text={project.lede} /></p>
           <div className="pp-tags">
             {project.tags.map((t) => (
               <span className="tag" key={t}>{t}</span>

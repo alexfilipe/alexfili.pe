@@ -159,59 +159,58 @@ export const projectPages: ProjectPage[] = [
   {
     id: "home-intelligence",
     name: "Home Intelligence",
-    focus: ["Systems", "Automation"],
-    period: "2025 — Present",
-    tagline: "A home that adapts without becoming a black box.",
-    lede: "Home Assistant orchestration plugins in development for local-first, agentic smart-home automation — coordinating adaptive ambience, energy insights, and smart-speaker workflows across the devices people already live with.",
+    focus: ["Spatial interfaces", "Shared home control"],
+    period: "2025–Present",
+    tagline: "An interface shaped by the home itself.",
+    lede: "Home Intelligence, a system I’m developing at [Living Intelligence](https://livingintelligence.xyz/), brings home automation, spatial interfaces, and custom hardware together into a single system. Built around the layout and daily life of each home, it makes connected spaces easier to understand, control, and enjoy.",
     sections: [
       {
         heading: "What it does for the home",
         body: [
-          "Smart homes are powerful, but they often feel fragmented. Lights live in one place, speakers in another, energy usage in a utility portal, and automations become a pile of rules that work until they suddenly do not.",
-          "Home Intelligence is my attempt to make the smart home feel calmer, more legible, and more useful day to day. The goal is a home that can adapt to time, presence, daylight, media, energy usage, and user intent — while still making it clear what changed, why it changed, and when a human should approve the next action.",
-          "Instead of asking the user to constantly manage devices, Home Intelligence explores a coordination layer that helps the home act more like an environment: lights, displays, sound, speakers, and energy signals working together with privacy, readability, and control at the center."
+          "A home is understood through its rooms, the things we do in them, and the people we share them with. Its technology should follow that same familiar structure. Adjusting the lighting or choosing where music plays should feel connected to the space around you.",
+          "Home Intelligence uses the home itself to organize everything. You begin with a place, see what is happening there, and reach the controls relevant to what you want to do. Everyday actions stay close at hand, with more detailed control available when needed.",
+          "The aim is shared understanding: a home that feels approachable to the people who live there and to someone visiting for the first time, who should be able to change the lights around them without asking how. That means making the relationship between a control, a room, and its effect immediately clear."
         ]
       },
       {
-        heading: "What I'm building",
+        heading: "What I’m building",
         body: [
-          "The first area is **adaptive ambience**: orchestration across lights, displays, TVs, monitors, and sound. The goal is to let the home move naturally through modes like morning, focus, evening, cinema, and night — adjusting brightness, color temperature, screen behavior, and audio atmosphere together instead of treating each device as a separate toggle.",
-          "The second area is **energy intelligence**: PG&E electricity usage reports and alerts that make energy behavior easier to understand. Rather than only showing raw usage, the system is designed to surface useful signals such as usage spikes, projected bill changes, unusual baselines, and patterns worth acting on.",
-          "The third area is **smart-speaker coordination**: a bridge for more seamless behavior across AirPlay, Google speakers, and AI-enabled speaker workflows. The long-term goal is device-agnostic audio and voice automation — music, announcements, assistant actions, and room-aware behavior that can work across ecosystems while remaining observable and human-approved where needed."
+          "The foundation is a spatial interface that connects the whole home to its individual rooms, activities, and devices. Each home begins with its own layout and existing systems. Lighting, music, and other controls share one interface, with what’s on or playing shown in the room where it’s happening.",
+          "Music is a central focus of the current work: making playback easier to start in a room, move between spaces, and manage throughout the home. Alongside that, I’m developing more complete control of lighting and entertainment, with particular attention to making it clear where each action goes and what it will do.",
+          "I’m designing the software and hardware together, shaped by what it’s like to live in a space and what people need in the moment."
         ]
       },
       {
         heading: "Why it matters",
         body: [
-          "A smart home should reduce friction, not create a new kind of maintenance burden.",
-          "The useful version of automation is not a house that acts mysteriously. It is a house that helps with small daily decisions: dimming the room when media starts, lowering audio late at night, warning when energy usage changes, shifting displays into evening mode, or coordinating speakers without making the user remember which platform controls which device.",
-          "But those actions need trust. If the home changes something, the user should be able to understand why. If the action is sensitive — speaking through a room, changing volume after quiet hours, triggering an AI-assisted routine, or affecting multiple devices at once — the system should be able to ask first.",
-          "That is the design center of Home Intelligence: comfort without opacity, automation without surrendering control."
+          "This work began in my own home, through small moments of friction: adjusting music, changing the atmosphere of a room, or helping someone else use the systems around them. Those moments made the design problem concrete.",
+          "A shared space needs controls that belong to everyone in it.",
+          "As a musician and engineer, I care about how a space feels as much as how its systems work. Sound, light, responsiveness, and the ease of making a small adjustment all shape whether technology feels at home in a room.",
+          "Home Intelligence grows from the belief that people should be able to entrust routine complexity to a system while keeping authority over their surroundings. Automation should stay easy to follow and easy to correct. The measure of success is how much attention people can give back to the life happening around them."
         ]
       },
       {
         heading: "Engineering direction",
         body: [
-          "Home Intelligence is being designed as a set of small, composable Home Assistant plugins rather than one monolithic smart-home brain. Each plugin should solve a concrete home problem on its own, while also fitting into a broader orchestration layer.",
-          "The architecture prioritizes local execution, readable event flows, graceful degradation when devices drop, and explicit approval gates for agentic actions. Where AI is involved, the goal is not unchecked autonomy. It is a system that can reason about context, suggest useful actions, coordinate devices, and remain inspectable.",
-          "I'm building it from the belief that home automation should be understandable months later — not just by the person who wrote the rule, but by anyone trying to understand what the home is doing."
+          "The current system builds on Home Assistant, with custom interface work and integrations shaped by practical needs. I’m developing reusable foundations while keeping the layout, equipment, and preferences of each home distinct. Designing for daily life also means planning for setup, maintenance, and recovery from the beginning.",
+          "The engineering priorities are responsive control, local operation wherever practical, accurate device state, and clear behavior when something becomes unavailable. Interoperability matters because a useful system should help the equipment people already own work together, while leaving room for future choices.",
+          "Privacy and human agency guide the interaction design. Ordinary controls should remain dependable when AI or contextual sensing is unavailable. More adaptive behavior will be built around actions people can understand, correct, and override."
         ]
       },
       {
         heading: "Roadmap",
         body: [
-          "The first phase focuses on adaptive ambience, PG&E energy insights, and smart-speaker coordination across AirPlay, Google speakers, and AI-enabled workflows.",
-          "Planned integrations include Alexa and HomePod support, along with broader display and audio orchestration so ambience can adapt across lights, screens, and sound together.",
-          "Home Intelligence is still in development and planned to be open-sourced. I'm building it as both a practical smart-home toolkit and a broader experiment in what local-first AI can feel like when it belongs to the home, not the cloud."
+          "Working prototypes are already in daily use in my home, where living with them is helping refine the design. The immediate focus is music in each room, moving playback between spaces, and whole-home controls, followed by deeper entertainment control and contextual behavior people can rely on.",
+          "Over time, I want Home Intelligence to grow more attuned to the relationships between people, rooms, and activities, with AI helping in ways people can always see and adjust. The direction stays grounded in everyday usefulness: a home that is easier to understand, more enjoyable to live in, and able to adapt while leaving people in control."
         ]
       }
     ],
     meta: {
-      Role: "Author & maintainer",
-      Timeline: "2025 — Present",
-      Stack: ["Python", "Bash", "Home Assistant", "YAML", "REST APIs"],
-      Focus: ["Adaptive ambience", "Energy insights", "Smart-speaker coordination"],
-      Status: ["In development", "To be open-sourced"]
+      Role: "Creator, product design & engineering",
+      Timeline: "2025–Present",
+      Stack: ["Home Assistant", "Python", "HTML", "CSS", "JavaScript", "YAML", "REST APIs"],
+      Focus: ["Spatial interfaces", "Shared home control", "Local-first automation"],
+      Status: ["Working prototypes", "In active development"]
     },
     // link: { label: "View on GitHub", href: "https://github.com/alexfilipe" },
     preview: {
@@ -225,7 +224,7 @@ export const projectPages: ProjectPage[] = [
       pngSrc: "/images/project-logos/home-intelligence.png",
       scale: 1.18
     },
-    tags: ["Python", "Bash", "Home Assistant", "YAML", "REST APIs", "Local-first", "Agentic automation"]
+    tags: ["Home Assistant", "Python", "HTML", "CSS", "JavaScript", "YAML", "REST APIs", "Spatial interfaces", "Local-first"]
   },
   {
     id: "labstocker",

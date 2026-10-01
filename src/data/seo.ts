@@ -86,17 +86,22 @@ const projectSeoOverrides: Record<string, ProjectSeoOverride> = {
   "home-intelligence": {
     title: "Home Intelligence | Local-First Smart Home Automation",
     description:
-      "Home Intelligence is Álex Filipe Santos's local-first Home Assistant work for adaptive ambience, energy insights, and agentic smart-speaker coordination.",
+      "Home Intelligence is Álex Filipe Santos’s local-first Home Assistant system for spatial, shared control of the home.",
     socialDescription:
-      "Local-first Home Assistant plugins for adaptive ambience, energy insights, and agentic smart-speaker coordination.",
+      "A local-first smart home interface organized around rooms, activities, and the people who share them.",
     keywords: [
       "Home Intelligence",
       "Home Assistant",
-      "smart home automation",
-      "local-first AI",
-      "adaptive ambience",
-      "energy insights",
-      "smart speakers"
+      "smart home interface",
+      "spatial interfaces",
+      "local-first automation",
+      "shared home control",
+      "Python",
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "YAML",
+      "REST APIs"
     ]
   },
   labstocker: {
