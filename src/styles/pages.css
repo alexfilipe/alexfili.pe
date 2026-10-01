@@ -855,7 +855,7 @@
     font-size: clamp(1.12rem, 2.1vw, 1.48rem); font-weight: 500; letter-spacing: 0; line-height: 1.28; }
   .pp-lede { max-width: 40rem; margin: 1.75rem 0 0; border-left: 1.5px solid var(--gold-soft);
     padding-left: .9rem; color: var(--text-soft); font-size: 1.14rem; font-weight: 500; line-height: 1.62; }
-  .pp-tags { display: flex; flex-wrap: wrap; gap: .5rem; width: calc(173.913% + var(--pp-hero-gap)); margin-top: 1rem; }
+  .pp-tags { display: flex; flex-wrap: wrap; gap: .5rem; width: 100%; margin-top: 1rem; }
   .pp-page--no-cta .pp-tags { margin-top: 1.6rem; }
   .pp-tags > span { white-space: nowrap; }
   .pp-cta { display: inline-flex; align-items: center; gap: .55rem; margin-top: 1.5rem; margin-bottom: 1rem;
