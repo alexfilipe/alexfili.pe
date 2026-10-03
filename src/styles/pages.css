@@ -856,9 +856,9 @@
   .pp-lede { max-width: 40rem; margin: 1.75rem 0 0; border-left: 1.5px solid var(--gold-soft);
     padding-left: .9rem; color: var(--text-soft); font-size: 1.14rem; font-weight: 500; line-height: 1.62; }
   .pp-lede a { border-bottom: 1px solid rgba(211,178,112,.5); color: inherit;
-    transition: border-color .18s var(--ease); }
+    transition: border-color .18s var(--ease), color .18s var(--ease); }
   .pp-lede a:hover,
-  .pp-lede a:focus-visible { border-color: var(--gold); color: inherit; }
+  .pp-lede a:focus-visible { border-color: var(--gold); color: var(--text); }
   .pp-tags { display: flex; flex-wrap: wrap; gap: .5rem; width: 100%; margin-top: 1rem; }
   .pp-page--no-cta .pp-tags { margin-top: 1.6rem; }
   .pp-tags > span { white-space: nowrap; }
