@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { CSSProperties, ReactNode, SVGProps } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Mail } from "lucide-react";
+import type { CSSProperties, ReactNode } from "react";
+import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import PianoSeparator from "@/components/PianoSeparator";
 import PageFooter from "@/components/PageFooter";
 import { musicDisciplines } from "@/data/music";
@@ -8,26 +8,6 @@ import { profile } from "@/data/profile";
 import { projects, type Project } from "@/data/projects";
 
 const ACCENT = "#c8a96e";
-
-type BrandIconProps = SVGProps<SVGSVGElement> & {
-  size?: number;
-};
-
-function GitHubIcon({ size = 16, ...props }: BrandIconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" {...props}>
-      <path d="M12 1.9c-5.6 0-10.1 4.5-10.1 10.1 0 4.5 2.9 8.2 6.9 9.6.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 0 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 2.9.9.1-.7.4-1.1.7-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1.1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.8 1 .8-.2 1.6-.3 2.5-.3s1.7.1 2.5.3c1.9-1.3 2.8-1 2.8-1 .6 1.4.2 2.4.1 2.7.7.7 1.1 1.6 1.1 2.7 0 3.9-2.4 4.8-4.6 5 .4.3.7 1 .7 2v2.9c0 .3.2.6.7.5 4-1.3 6.9-5.1 6.9-9.6C22.1 6.4 17.6 1.9 12 1.9Z" />
-    </svg>
-  );
-}
-
-function LinkedInIcon({ size = 16, ...props }: BrandIconProps) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" {...props}>
-      <path d="M20.4 3.1H3.6c-.8 0-1.4.6-1.4 1.4v15c0 .8.6 1.4 1.4 1.4h16.8c.8 0 1.4-.6 1.4-1.4v-15c0-.8-.6-1.4-1.4-1.4ZM8.1 18H5.4V9.5h2.7V18ZM6.7 8.3c-.9 0-1.5-.6-1.5-1.4s.6-1.4 1.6-1.4c.9 0 1.5.6 1.5 1.4s-.6 1.4-1.6 1.4ZM18.7 18H16v-4.6c0-1.1-.4-1.9-1.4-1.9-.8 0-1.2.5-1.4 1-.1.2-.1.5-.1.7V18h-2.7V9.5h2.7v1.2c.4-.6 1-1.4 2.5-1.4 1.8 0 3.1 1.2 3.1 3.7V18Z" />
-    </svg>
-  );
-}
 
 const PHI = (1 + Math.sqrt(5)) / 2;
 const INORM = 1 / Math.sqrt(1 + PHI * PHI);
@@ -642,12 +622,6 @@ function GeometricArtifact({ onReady }: { onReady?: () => void }) {
   );
 }
 
-const socialLinks = [
-  { href: profile.linkedin, Icon: LinkedInIcon, label: "LinkedIn" },
-  { href: profile.github, Icon: GitHubIcon, label: "GitHub" },
-  { href: `mailto:${profile.email}`, Icon: Mail, label: "Email" }
-];
-
 const SCROLL_EDGE_EPSILON = 2;
 
 type CarouselScrollState = {
@@ -1106,17 +1080,7 @@ export default function FigmaHome() {
         <FeaturedWorkSection />
         <MusicSection />
 
-        <nav className="figma-socials" aria-label="Social links">
-          {socialLinks.map(({ href, Icon, label }) => (
-            <a key={label} href={href} className="figma-social-link" {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
-              <Icon size={16} className="figma-social-icon" aria-hidden="true" />
-              <span>{label}</span>
-              <ArrowUpRight size={14} className="figma-social-arrow" aria-hidden="true" />
-            </a>
-          ))}
-        </nav>
-
-        <PageFooter className="figma-home-copyright" showSocials={false} />
+        <PageFooter className="figma-home-footer" />
       </div>
     </div>
   );

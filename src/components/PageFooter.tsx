@@ -3,7 +3,7 @@ import { profile } from "@/data/profile";
 type PageFooterProps = {
   /** Wrapper class carrying each page's layout context (e.g. "wk-foot", "pp-foot", "mu-foot"). */
   className?: string;
-  /** Hide the LinkedIn/GitHub/Email row — used on the home page, where the socials already appear above the footer. */
+  /** Hide the LinkedIn/GitHub/Email row on pages with a deliberately compact footer. */
   showSocials?: boolean;
   copyright?: string;
   location?: string;
@@ -14,8 +14,7 @@ type PageFooterProps = {
  * PageFooter — the shared site footer: copyright, location, and studio link on
  * the left; social links on the right. Each page passes its own wrapper
  * `className` so the surrounding layout (margins, border, width) stays
- * page-specific, while the inner markup lives in one place. Pass
- * `showSocials={false}` on the home page.
+ * page-specific, while the inner markup lives in one place.
  */
 export default function PageFooter({
   className,
