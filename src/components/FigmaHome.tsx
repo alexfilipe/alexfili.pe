@@ -1106,8 +1106,6 @@ export default function FigmaHome() {
         <FeaturedWorkSection />
         <MusicSection />
 
-        <div className="figma-section-divider figma-music-social-divider" aria-hidden="true" />
-
         <nav className="figma-socials" aria-label="Social links">
           {socialLinks.map(({ href, Icon, label }) => (
             <a key={label} href={href} className="figma-social-link" {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>

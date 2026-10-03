@@ -621,10 +621,6 @@ select {
   margin-top: clamp(3.6rem, 6.2vw, 4.35rem);
 }
 
-.figma-music-social-divider {
-  margin-block: clamp(3.6rem, 6.2vw, 4.35rem) clamp(3rem, 5.2vw, 3.65rem);
-}
-
 .figma-section-header {
   margin-bottom: var(--figma-section-header-gap);
 }
@@ -1075,7 +1071,7 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-block: 0 clamp(2.7rem, 6vw, 3.6rem);
+  margin-block: clamp(3.375rem, 7.5vw, 4.5rem) clamp(2.7rem, 6vw, 3.6rem);
   padding-top: 0;
   gap: 0.6rem clamp(2.6rem, 6vw, 4.2rem);
 }
@@ -1181,7 +1177,7 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
 /* Short viewports need tighter vertical spacing, regardless of their width. */
 @media (max-width: 900px), (max-height: 700px) {
   .figma-socials {
-    margin-bottom: 2.25rem;
+    margin-block: 2.8125rem 2.25rem;
   }
 
   .figma-home-copyright {
@@ -1359,7 +1355,7 @@ a.figma-carousel-card:hover .figma-carousel-arrow {
   }
 
   .figma-socials {
-    margin-block: 0 2.25rem;
+    margin-block: 2.8125rem 2.25rem;
     gap: 0.6rem 1.9rem;
   }
 
