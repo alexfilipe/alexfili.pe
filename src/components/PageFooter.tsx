@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { profile } from "@/data/profile";
 
 type PageFooterProps = {
@@ -10,6 +11,26 @@ type PageFooterProps = {
   socialLinksLabel?: string;
 };
 
+function CurrentYear() {
+  const yearRef = useRef<HTMLTimeElement>(null);
+  const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    const year = String(new Date().getFullYear());
+
+    if (yearRef.current) {
+      yearRef.current.dateTime = year;
+      yearRef.current.textContent = year;
+    }
+  }, []);
+
+  return (
+    <time ref={yearRef} dateTime={String(currentYear)} suppressHydrationWarning>
+      {currentYear}
+    </time>
+  );
+}
+
 /**
  * PageFooter — the shared site footer: copyright, location, and studio link on
  * the left; social links on the right. Each page passes its own wrapper
@@ -19,7 +40,7 @@ type PageFooterProps = {
 export default function PageFooter({
   className,
   showSocials = true,
-  copyright = `© ${new Date().getFullYear()} Álex Filipe Santos`,
+  copyright,
   location = "San Francisco, CA",
   socialLinksLabel = "Social links"
 }: PageFooterProps) {
@@ -27,7 +48,7 @@ export default function PageFooter({
     <footer className={["page-foot", className].filter(Boolean).join(" ")}>
       <div className="page-foot-copy">
         <span className="page-foot-identity">
-          <span>{copyright}</span>
+          <span>{copyright ?? <>© <CurrentYear /> Álex Filipe Santos</>}</span>
           <span className="page-foot-sep">•</span>
           <span>{location}</span>
         </span>
