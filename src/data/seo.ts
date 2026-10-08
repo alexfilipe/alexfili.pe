@@ -139,7 +139,7 @@ export const seoPages = {
       "mathematical thought"
     ],
     image: defaultShareImage,
-    lastmod: SEO_LASTMOD,
+    lastmod: "2026-10-08T01:28:42+00:00",
     schemaType: "ProfilePage"
   },
   projects: {
