@@ -528,6 +528,22 @@ select {
   font-weight: 700;
 }
 
+.figma-bio a {
+  color: rgba(240, 237, 230, 0.74);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.24em;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
+}
+
+.figma-bio a:hover,
+.figma-bio a:focus-visible {
+  color: var(--gold);
+  text-decoration-color: currentColor;
+}
+
 .figma-intro-contact {
   display: flex;
   flex-wrap: wrap;

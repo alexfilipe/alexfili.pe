@@ -1070,6 +1070,13 @@ export default function FigmaHome() {
             design matters as much as technical execution.
           </p>
           <p>
+            I'm the founder of{" "}
+            <a href="https://livingintelligence.xyz" target="_blank" rel="noopener">
+              Living Intelligence
+            </a>
+            , where I bring these ideas to life through hardware and software.
+          </p>
+          <p>
             Classical music has shaped the way I listen. Through piano, violin, and conducting, I keep returning to the
             same question that draws me to systems built with care: <strong>what makes structure feel meaningful.</strong>
           </p>
